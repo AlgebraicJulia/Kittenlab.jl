@@ -1,0 +1,100 @@
+# Lecture 2: Category Theory {.unnumbered}
+
+Welcome to the second lecture in this series. I'm not going to repeat the introduction from the first lecture; you should know what to expect now. Specifically, it's going to go slowly. We start with (not-necessarily finite) sets.
+
+# Sets
+
+:::{.rmenv title=Definition}
+A **set** $X$ is a function from `Any` to `Bool`, which may or either be written in Julia or defined mathematically. If $X(x) = \mathbf{true}$, we write $x \in X$, and if $X(x) = \mathbf{false}$ we write $x \notin X$.
+:::
+
+Note that when we write down Julia definitions involving sets, we are implicitly assuming that the functions are written in Julia. However, there are some sets that we will use whose functions *cannot* be written down in Julia, so take the Julia definitions with a grain of salt.
+
+:::{.rmenv title=Example}
+For any finite set `A::𝔽`, the function `inA(x) = x ∈ A` is a set.
+:::
+
+:::{.rmenv title=Example}
+Any Julia type `T` defines a set, via the function `inT(x) = x isa T`.
+:::
+
+:::{.rmenv title=Definition}
+Given two sets $X$ and $Y$, their **intersection** $X \cap Y$ is defined by
+
+$$ (X \cap Y)(x) = X(x) \wedge Y(x) $$
+
+Their **union** $X \cup Y$ is defined by
+
+$$ (X \cup Y)(x) = X(x) \vee Y(x) $$
+:::
+
+```{julia}
+intersect(X,Y) = x -> X(x) && Y(x)
+union(X,Y) = x -> X(x) || Y(x)
+```
+
+:::{.rmenv title=Definition}
+Given two sets $X$ and $Y$, their **product** $X \times Y$ is the set of tuples $(x,y)$ where $x \in X$ and $y \in Y$. That is, $z \in X \times Y$ if and only if `z isa Tuple`, `length(z) = 2`, $z[1] \in X$ and $z[2] \in Y$.
+:::
+
+```{julia}
+product(X,Y) = z -> (z isa Tuple) &&
+  length(z) == 2 && X(z[1]) && Y(z[2])
+```
+
+:::{.rmenv title=Definition}
+We leave it to the reader to give a mathematical definition for **sum** given the following definition in Julia
+:::
+
+```{julia}
+struct Left
+  val::Any
+end
+
+struct Right
+  val::Any
+end
+
+sum(X,Y) = x ->
+  if x isa Left
+    X(x.val)
+  elseif x isa Right
+    Y(x.val)
+  else
+    false
+  end
+```
+
+:::{.rmenv title=Definition}
+Given two sets $A$ and $B$, the set $A \to B$ consists of all Julia callables $f$ such that $f(a) \in B$ for all $a \in A$.
+:::
+
+ Note that even if `A` and `B` are Julia functions, there is no way to check in Julia that a given `f` is an element of $A \to B$ because this would involve iterating through possibly infinitely many elements of $A$. Again, languages where this is not the case don't have good ODE solvers.
+ 
+Before we move on to categories, we briefly discuss some things that are not sets. There are some "collections of stuff" that are not sets by the definition we gave above. For instance, there is no "set of all sets", because not all sets are expressed by computable functions. Nevertheless, we will sometimes make reference to these collections that are "too large" to be called sets, and we will call them "classes". 
+
+# Categories
+
+The moment we've all be waiting for.
+
+:::{.rmenv title=Definition}
+A **small category** $C$ consists of
+
+- a set $C_0$ of **objects**
+- for every $x,y \in C_0$, a set $\mathrm{Hom}_C(x,y)$ of **morphisms** from $x$ to $y$
+- for every $x,y,z \in C_0$, a **composition function** $\circ \colon \mathrm{Hom}_C(y,z) \times \mathrm{Hom}_(x,y) \to \mathrm{Hom}(x,z)$
+- for every $x \in C_0$, an **identity morphism** $1_x \in \mathrm{Hom}_C(x,x)$
+
+such that
+
+- for all $x,y,z,w \in C_0$, $f \in \mathrm{Hom}_C(x,y)$, $g \in \mathrm{Hom}_C(y,z)$, $h \in \mathrm{Hom}_C(z,w)$,
+$$ h \circ (g \circ f) = (h \circ g) \circ f $$
+- for all $x,y \in C_0$, $f \in \mathrm{Hom}_C(x,y)$,
+$$ 1_y \circ f = f = f \circ 1_x $$
+
+These two laws are called the **associativity law** and **unitality law** respectively.
+:::
+
+:::{.rmenv title=Example}
+There is a category where the objects are finite sets and the morphisms are morphisms of finite sets, as defined in the previous lecture.
+:::

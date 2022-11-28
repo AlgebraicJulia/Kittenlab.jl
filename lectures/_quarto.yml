@@ -1,0 +1,28 @@
+project:
+  type: book
+
+book:
+  title: "Kittenlab lecture notes"
+  author: "Owen Lynch"
+  date: "11/26/2022"
+  chapters:
+    - index.qmd
+    - lecture1.qmd
+    - lecture2.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+execute:
+  echo: true
+  output: false
+
+format:
+  html:
+    theme: cosmo
+    css: main.css
+  pdf:
+    documentclass: scrreprt
+
+
+
