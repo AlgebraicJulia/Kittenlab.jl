@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 1: Formal Math</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./lecture2.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 1: Formal Math</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link active">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#definitions-propositions-and-examples" id="toc-definitions-propositions-and-examples" class="nav-link" data-scroll-target="#definitions-propositions-and-examples">Definitions, Propositions, and Examples</a>
+  <ul class="collapse">
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways">Takeaways</a></li>
+  </ul></li>
+  <li><a href="#finite-sets" id="toc-finite-sets" class="nav-link" data-scroll-target="#finite-sets">Finite Sets</a>
+  <ul class="collapse">
+  <li><a href="#takeaways-1" id="toc-takeaways-1" class="nav-link" data-scroll-target="#takeaways-1">Takeaways</a></li>
+  </ul></li>
+  <li><a href="#composition-and-isomorphisms" id="toc-composition-and-isomorphisms" class="nav-link" data-scroll-target="#composition-and-isomorphisms">Composition and Isomorphisms</a>
+  <ul class="collapse">
+  <li><a href="#takeaways-2" id="toc-takeaways-2" class="nav-link" data-scroll-target="#takeaways-2">Takeaways</a></li>
+  </ul></li>
+  <li><a href="#the-pigeonhole-principle" id="toc-the-pigeonhole-principle" class="nav-link" data-scroll-target="#the-pigeonhole-principle">The Pigeonhole Principle</a>
+  <ul class="collapse">
+  <li><a href="#takeaways-3" id="toc-takeaways-3" class="nav-link" data-scroll-target="#takeaways-3">Takeaways</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 1: Formal Math</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>These lectures are meant to go from 0 to category theory as efficiently as possible. This means that we are going to optimize for being precise, for being clear, and for opening up new possibilities for you. We are not going to optimize for being entertaining or engaging; this is not a “monads as burritos” blog post or a popsci article about category theory. The answer to “why do we care about this” is often going to be “because it’s important later on”, and you are just going to have to trust me on that.</p>
+<p>As we are going <em>from 0</em>, in this first lecture I plan to get you all aquainted with what it even means to “do math” at the level that category theory lives. This is a different kind of math than what you might have learned about in lower level math courses, and so sorting out from the beginning the mindset that you should have for the rest of the lectures is the most efficient use of this time. Generally, nobody tells you about this distinction and you have to work it out painfully over years of getting bad grades on university math homeworks; we don’t have time for that.</p>
+<p>However, we will have code examples for you to play with, because most of you are programmers and thus making a connection between math and code should speed the learning process.</p>
+<p>Finally, everyone at some point in this lecture will be frustrated by how pedantic I’m being. Sorry. I’m erring on the side of pedantry because there’s a “price is right” situation here: if I go too slow, we waste a bit of time, but if I go too fast we waste all of the time.</p>
+</section>
+<section id="definitions-propositions-and-examples" class="level1">
+<h1>Definitions, Propositions, and Examples</h1>
+<p>Pure math consists of a series of <em>definitions</em>, <em>propositions</em>, and <em>examples</em>. In this document, we typeset these like</p>
+<div class="rmenv" title="Definition">
+
+</div>
+<div class="rmenv" title="Proposition">
+
+</div>
+<div class="rmenv" title="Example">
+
+</div>
+<p>A <strong>definition</strong> introduces a new word, and I will always put that new word in bold. In normal speech, words have meanings given by context, by association, and only sometimes by explicit definition. In math, it is not like that. Every technical word has a single definition. That definition may not be written down explicitly; it may be agreed implicitly between mathematicians based on shared experience. However, in theory there is always a precise definition for every mathematical concept. It is expected that all participants in a mathematical conversation could be locked up in a cell, given paper, a pencil and a great deal of time, and then write down a fully rigorous formulation of each of the words they are using. Moreover, each of these formulations for each of the mathematicians might not be exactly the same, but they should be able to be proven equivalent.</p>
+<p>Until you learn mathematical logic, which we will not cover here, this expectation cannot be realized because you don’t know a precise definition of “fully rigorous”. The level of rigor that will suffice for now is that you should be able to expand every definition to a level where it can be explained to a smart, patient human who knows no category theory, by going backwards and defining each of the terms used in that definition until you get to very basic concepts, like sets, functions, and equations.</p>
+<p>The extremely important corollary to all of this is that if you feel like your understanding of a definition does <em>not</em> reach this level, YOU ARE CONFUSED. This is OK. It is good to be confused. It is far better to be confused and not yet wrong than it is to be unconfused and wrong.</p>
+<p>What should you do when you are confused? First of all, GO BACKWARDS. Read the previous section of a textbook. If you are still confused, keep going backwards until you hit something that makes sense, and then work your way back up. Secondly, GO SIDEWAYS. Read another textbook that treats the same material in a different way. Then finally, if neither of those work, ASK AN EXPERT, and keep asking until you feel unconfused. The MOST IMPORTANT SKILL in math is to know when you are confused and don’t continue until you are unconfused! If you continue on, you will get <em>hopelessly</em> confused; if you turn back immediately there is still hope.</p>
+<p>Definitions are the most important part of higher math. Understanding the definitions is often half the battle, and it is most of the battle for category theory.</p>
+<p>A <strong>proposition</strong> is an assertion that one logical statement (the conclusion) follows from several logical statements (the premises). Each proposition comes along with a <strong>proof</strong>. Just like definitions, it is expected that the participants in a mathematical conversation could expand a proof out to a fully rigorous level, even if the given proof is very vague. What you write down as a proof should be seen as a “hint” for the construction of the actual, fully rigorous proof; mathematicians come to cultural agreements for how much of a hint is needed in different circumstances.</p>
+<p>As a mathematical learner, proofs are your window into the thought processes of subject experts. Thus, they are very good to study and understand. However, they are not as critical to understand as definitions. It is absolutely essential to fully understand definitions, but proofs can be “blackboxed” sometimes, and you can just remember the proposition without understanding fully the proof.</p>
+<p>Propositions are also known as <strong>theorems</strong>, <strong>lemmas</strong>, and <strong>corollaries</strong>. A theorem is an important proposition, a lemma is a small proposition mainly used to prove other propositions, and a corollary is a proposition whose proof is easy because of another proposition, for example a special case. Really, these are just vibes that mathematicians add to propositions.</p>
+<p>Finally, an <strong>example</strong> is a definition or proposition that falls under one of three categories.</p>
+<ol type="1">
+<li>The purpose is mainly pedagogical; the example gives you intuition for another definition or proposition.</li>
+<li>The purpose is mainly application-oriented; the example shows you how to apply something abstract in the real world.</li>
+<li>It’s a normal proposition or definition, except it’s slightly less abstract than some previous proposition or definition. This is often the case in category theory; category theory is known as the subject where “the examples have examples.”</li>
+</ol>
+<p>A pure math document consists of a sequence of definitions, propositions, and examples, punctuated with interleaving prose that attempts to give intuition for <em>what</em> the definitions, propositions, and examples are saying, and <em>why</em> one should care about those definitions, propositions, and examples. Intuition is a very important part of math; it is what allows mathematicians to elaborate definitions, discover proofs, and most importantly, to figure out what is important to study in the first place. However, intuition is no substitute for rigor. Intuition allows you to leap off cliffs; rigor is what allows you to build a bridge underneath you before you hit the ground.</p>
+<p>In the foundations of math, we also have two more types of statement: <strong>axioms</strong> and <strong>undefined terms</strong>. Definitions and propositions should always “bottom out” at axioms and undefined terms. However, most mathematicians do <em>not</em> do this, instead leaving it to the reader to choose a suitable foundations of math in which to fully formalize their theories. Surprisingly, most interesting math can be fully formalized in many foundations, so this normally works out fine.</p>
+<p>For us, our “reality” will be what happens on the computer. So we will try to “bottom out” on concepts in the computer.</p>
+<section id="takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="takeaways">Takeaways</h2>
+<ul>
+<li>Pure math consists of definitions, propositions, and examples.</li>
+<li>These are specified in enough detail so that participants in a mathematical conversation could independently come up with equivalent elaborations.</li>
+<li>If you feel you could <em>not</em> do this at any point, then you are in a perfectly normal situation and should not feel ashamed whatsoever. However, continuing on without first going back and understanding what you are confused about is a bad idea.</li>
+</ul>
+</section>
+</section>
+<section id="finite-sets" class="level1">
+<h1>Finite Sets</h1>
+<p>We will now demonstrate the previous concepts by studying finite sets. We will not get to category theory today. Instead, we will revisit some things that should be familiar to you and treat them in the style that we will be using for the rest of the lectures.</p>
+<p>Finite sets will be important for most of the applications of category theory that we will learn in the next lectures, and also most of the concepts of category theory are well-illustrated by finite sets. So a firm grasp of finite sets will be an immense aid in the coming weeks.</p>
+<p>We start with a basic universe of discourse. It is traditional to be minimalistic with this universe of discourse, and say that everything is a set, or everything is a natural number. However, we choose to be untraditional.</p>
+<div class="rmenv" title="Definition">
+<p>A <strong>primitive thing</strong> is any possible value of a Julia variable.</p>
+</div>
+<div class="rmenv" title="Example">
+<p><code>1</code>, <code>:a</code>, <code>[1.0 0; 0 1]</code> are all primitive things</p>
+</div>
+<div class="rmenv" title="Definition">
+<p>A <strong>finite set</strong> is a list of primitive things. We typically write curly braces around this list.</p>
+</div>
+<div class="rmenv" title="Example">
+<p><span class="math inline">\(\{1,2,3,4\}\)</span>, <span class="math inline">\(\{\mathbf{a},\mathbf{b},4,2,2,6\}\)</span> are both finite sets.</p>
+</div>
+<p>We might represent this in Julia with the following data structure.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> 𝔽 <span class="kw">end</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Vec𝔽 <span class="op">&lt;:</span><span class="dt"> 𝔽</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  elems<span class="op">::</span><span class="dt">Vector{Any}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> a <span class="op">∈</span> A.elems</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(A.elems)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(A.elems, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="op">:</span>carrots, <span class="op">:</span>peas])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">8</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that this is <em>not the only possible representation of a finite set</em>. Definitions in math always can be translated into code in many ways; the choice of a particular way is a delicate balancing act between simplicity, performance, clarity, and completeness.</p>
+<p>Another possible representation of finite sets is</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Int𝔽 <span class="op">&lt;:</span><span class="dt"> 𝔽</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  n<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Int𝔽</span>) <span class="op">=</span> <span class="fl">1</span> <span class="op">&lt;=</span> a <span class="op">&lt;=</span> A.n</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Int𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(<span class="fl">1</span><span class="op">:</span>A.n)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Int𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(<span class="fl">1</span><span class="op">:</span>A.n, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This represents the finite set <span class="math inline">\(\{1,\ldots,n\}\)</span>. Here we have traded performance over completeness; we can only represent some finite sets, but we represent those finite sets more efficiently.</p>
+<div class="rmenv" title="Definition">
+<p>A <strong>function</strong> <span class="math inline">\(f\)</span> from a finite set <span class="math inline">\(A\)</span> to a finite set <span class="math inline">\(B\)</span> is something that associates a value <span class="math inline">\(f(a)\)</span> in <span class="math inline">\(B\)</span> to every thing <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>. <span class="math inline">\(A\)</span> is called the <strong>domain</strong> of <span class="math inline">\(f\)</span>, and <span class="math inline">\(B\)</span> is called the <strong>codomain</strong> of <span class="math inline">\(f\)</span>. We write <span class="math inline">\(f\)</span> along with its domain and codomain as <span class="math inline">\(f \colon A \to B\)</span>.</p>
+</div>
+<p>It is important to note that even if <span class="math inline">\(a\)</span> is listed multiple times in <span class="math inline">\(A\)</span>, <span class="math inline">\(f(a)\)</span> only has one value.</p>
+<p>We might represent a function between <code>𝔽</code>s, also known as a morphism of finite sets, with the following data structure.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> 𝔽Mor</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">𝔽</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">𝔽</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  vals<span class="op">::</span><span class="dt">Dict{Any,Any}</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>(f<span class="op">::</span><span class="dt">𝔽Mor</span>)(x) <span class="op">=</span> f.vals[x]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fu">𝔽Mor</span>(A, B, <span class="fu">Dict</span>(<span class="op">:</span>carrots <span class="op">=&gt;</span> <span class="fl">3</span>, <span class="op">:</span>peas <span class="op">=&gt;</span> <span class="fl">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>However, not all instances of this data structure represent functions. The following Julia function determines whether a morphism of finite sets is valid.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isvalid</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">all</span>(x <span class="op">∈</span> <span class="fu">keys</span>(f.vals) <span class="op">&amp;&amp;</span> <span class="fu">f</span>(x) <span class="op">∈</span> f.codom <span class="cf">for</span> x <span class="kw">in</span> f.dom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>[</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">isvalid</span>(f), </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">isvalid</span>(<span class="fu">𝔽Mor</span>(A, B, <span class="fu">Dict</span>(<span class="op">:</span>peas <span class="op">=&gt;</span> <span class="fl">3</span>))),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">isvalid</span>(<span class="fu">𝔽Mor</span>(A, B, <span class="fu">Dict</span>(<span class="op">:</span>peas <span class="op">=&gt;</span> <span class="fl">5</span>, <span class="op">:</span>carrots <span class="op">=&gt;</span> <span class="fl">3</span>)))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>3-element Vector{Bool}:
+ 1
+ 0
+ 0</code></pre>
+</div>
+</div>
+<p>Frequently we will write down Julia types representing mathematical concepts where not all values of that type are valid representations of that mathematical concept. This is unavoidable because Julia types do not have the specificity to narrow down the space of values enough. There are languages where the types can narrow down the space of values sufficiently, but none of those languages have well-maintained BLAS/LAPACK bindings.</p>
+<p>For finite sets implemented by <code>Int𝔽</code>, we can give a more efficient encoding of morphism.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Int𝔽Mor</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">Int𝔽</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">Int𝔽</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  vals<span class="op">::</span><span class="dt">Vector{Int}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>(f<span class="op">::</span><span class="dt">Int𝔽Mor</span>)(i) <span class="op">=</span> f.vals[i]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>with corresponding validation function</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isvalid</span>(f<span class="op">::</span><span class="dt">Int𝔽Mor</span>) <span class="op">=</span> <span class="fu">length</span>(f.vals) <span class="op">==</span> f.dom.n <span class="op">&amp;&amp;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">all</span>(<span class="fu">f</span>(x) <span class="op">∈</span> f.codom <span class="cf">for</span> x <span class="kw">in</span> f.dom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isvalid</span>(<span class="fu">Int𝔽Mor</span>(<span class="fu">Int𝔽</span>(<span class="fl">3</span>), <span class="fu">Int𝔽</span>(<span class="fl">2</span>), [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>From now on, we will work with only <code>Vec𝔽</code>s and <code>𝔽Mor</code>s, and leave the implementation of more efficient code to the reader.</p>
+<section id="takeaways-1" class="level2">
+<h2 class="anchored" data-anchor-id="takeaways-1">Takeaways</h2>
+<ul>
+<li>A finite set is a list of things</li>
+<li>A morphism of finite sets from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> sends each unique element of <span class="math inline">\(A\)</span> to an element of <span class="math inline">\(B\)</span></li>
+<li>There are multiple ways of implementing representations of finite sets and morphisms between them on the computer</li>
+</ul>
+</section>
+</section>
+<section id="composition-and-isomorphisms" class="level1">
+<h1>Composition and Isomorphisms</h1>
+<p>We now introduce the operation at the core of all category theory: composition!</p>
+<div class="rmenv" title="Definition">
+<p>Given finite sets <span class="math inline">\(A,B,C\)</span> and morphisms <span class="math inline">\(f \colon A \to B\)</span> and <span class="math inline">\(g \colon B \to C\)</span>, their <strong>composite</strong> <span class="math inline">\(g \circ f\)</span> is a morphism from <span class="math inline">\(A\)</span> to <span class="math inline">\(C\)</span> defined by <span class="math display">\[ (g \circ f)(a) = g(f(a)) \]</span> for all <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>. We call <span class="math inline">\(\circ\)</span> the operation of <strong>composition</strong>, and we say that we <strong>compose</strong> <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> to form <span class="math inline">\(g \circ f\)</span>.</p>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">compose</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>, g<span class="op">::</span><span class="dt">𝔽Mor</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> f.codom <span class="op">==</span> g.dom</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">𝔽Mor</span>(f.dom, g.codom, <span class="fu">Dict</span>(a <span class="op">=&gt;</span> <span class="fu">g</span>(<span class="fu">f</span>(a)) <span class="cf">for</span> a <span class="kw">in</span> f.dom))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>A,B,C <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]), <span class="fu">Vec𝔽</span>([<span class="op">:</span>a,<span class="op">:</span>b]), <span class="fu">Vec𝔽</span>([<span class="st">"s"</span>, <span class="st">"t"</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fu">𝔽Mor</span>(A,B,<span class="fu">Dict</span>(<span class="fl">1</span><span class="op">=&gt;:</span>a,<span class="fl">2</span><span class="op">=&gt;:</span>a,<span class="fl">3</span><span class="op">=&gt;:</span>b))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> <span class="fu">𝔽Mor</span>(B,C,<span class="fu">Dict</span>(<span class="op">:</span>a<span class="op">=&gt;</span><span class="st">"t"</span>,<span class="op">:</span>b<span class="op">=&gt;</span><span class="st">"s"</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">compose</span>(f,g).vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>Dict{Any, Any} with 3 entries:
+  2 =&gt; "t"
+  3 =&gt; "s"
+  1 =&gt; "t"</code></pre>
+</div>
+</div>
+<p>We now come to an issue that is <em>everywhere</em> in category theory: equality. If you have seen any set theory before, you might think that <span class="math inline">\(\{1,2,3,3\}\)</span> and <span class="math inline">\(\{3,2,1\}\)</span> are “the same” set. Note however that when I defined finite set, I just said that a finite set was a list of things surrounded by curly braces. Additionally,</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>A, A′ <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">3</span>]), <span class="fu">Vec𝔽</span>([<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">1</span>])</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>A <span class="op">==</span> A′</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>false</code></pre>
+</div>
+</div>
+<p>So it seems like something is wrong with our definition. One way one might try to fix this would be by using <code>Set{Any}</code> instead of <code>Vector{Any}</code>. This certainly makes more of our Julia values equal.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Set𝔽</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  elems<span class="op">::</span><span class="dt">Set{Any}</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> a <span class="op">∈</span> A.elems</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(A.elems)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(A.elems, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But let’s think about why we typically choose to make <span class="math inline">\(\{1,2,3,3\}\)</span> and <span class="math inline">\(\{3,2,1\}\)</span> “the same” set. One good reason is that any morphism out of <span class="math inline">\(\{1,2,3,3\}\)</span> can be seen as a morphism out of <span class="math inline">\(\{3,2,1\}\)</span>, and the same goes for incoming morphisms.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">convertAA′</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">𝔽Mor</span>(A′,f.codom,f.vals)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">convertA′A</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">𝔽Mor</span>(A,f.codom,f.vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If <code>f</code> is a valid <code>𝔽Mor</code> with <code>f.dom == A</code> then <code>f′ = convertAA′(f)</code> is a valid <code>𝔽Mor</code> with <code>f′.dom == A′</code>, and the same the other way around. Moreover, <code>convertA′A(convertAA′(f)) == f</code> and <code>convertAA′(convertA′A(f′)) == f′</code>. We could define similar functions for morphisms into <code>A</code> and <code>A′</code>.</p>
+<p>Therefore, from a “morphism’s-eye” perspective, <code>A</code> and <code>A′</code> behave the exact same way; defining a morphism in or out of <code>A</code> is equivalent to defining a morphism in or out of <code>A′</code>.</p>
+<p>But if we take this to its logical conclusion, we find that this is true not only of <span class="math inline">\(\{1,2,3,3\}\)</span> and of <span class="math inline">\(\{3,2,1\}\)</span>, but also of <span class="math inline">\(\{1,2,3\}\)</span> and <span class="math inline">\(\{\mathbf{a},\mathbf{b},\mathbf{c}\}\)</span>! Specifically, we can do the following.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>B, B′ <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]), <span class="fu">Vec𝔽</span>([<span class="op">:</span>a,<span class="op">:</span>b,<span class="op">:</span>c])</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fu">𝔽Mor</span>(B, B′, <span class="fu">Dict</span>(<span class="fl">1</span> <span class="op">=&gt;</span> <span class="op">:</span>a, <span class="fl">2</span> <span class="op">=&gt;</span> <span class="op">:</span>b, <span class="fl">3</span> <span class="op">=&gt;</span> <span class="op">:</span>c))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> <span class="fu">𝔽Mor</span>(B′, B, <span class="fu">Dict</span>(<span class="op">:</span>a <span class="op">=&gt;</span> <span class="fl">1</span>, <span class="op">:</span>b <span class="op">=&gt;</span> <span class="fl">2</span>, <span class="op">:</span>c <span class="op">=&gt;</span> <span class="fl">3</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">convertBB′</span>(h<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">compose</span>(g,h)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">convertB′B</span>(h<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">compose</span>(f,h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can use <code>f</code> and <code>g</code> to convert freely between morphisms out of <code>B</code> and morphisms out of <code>B′</code>. Thus, <code>B</code> and <code>B′</code> also are equivalent in some sense. But there are many ways of “forming” this equivalence; we could use <code>f.vals = Dict(1 =&gt; :b, 2 =&gt; :a, 3 =&gt; :c)</code>, for instance.</p>
+<p>All of this motivates the next few definitions.</p>
+<div class="rmenv" title="Definition">
+<p>The <strong>identity function</strong> <span class="math inline">\(1_A\)</span> on a finite set <span class="math inline">\(A\)</span> has domain and codomain <span class="math inline">\(A\)</span> and is defined by <span class="math inline">\(1_A(a) = a\)</span>.</p>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identity</span>(A<span class="op">::</span><span class="dt">𝔽) = 𝔽Mor</span>(A, A, <span class="fu">Dict</span>(a <span class="op">=&gt;</span> a <span class="cf">for</span> a <span class="kw">in</span> A))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Definition">
+<p>We say that two finite sets <span class="math inline">\(A\)</span> and <span class="math inline">\(A^\prime\)</span> are <strong>isomorphic</strong> if there exists morphisms <span class="math inline">\(f \colon A \to A^\prime\)</span> and <span class="math inline">\(g \colon A^\prime \to A\)</span> such that <span class="math inline">\(g \circ f = 1_{A}\)</span> and <span class="math inline">\(f \circ g = 1_{A^\prime}\)</span>. Moreover, if this is the case we call <span class="math inline">\(f\)</span> an <strong>isomorphism</strong> from <span class="math inline">\(A\)</span> to <span class="math inline">\(A\prime\)</span>, and <span class="math inline">\(g\)</span> an isomorphism from <span class="math inline">\(A^\prime\)</span> to <span class="math inline">\(A\)</span>, and we say that <span class="math inline">\(g\)</span> is the <strong>inverse</strong> of <span class="math inline">\(f\)</span>.</p>
+</div>
+<p>You can remember the reasoning about why we care isomorphism means by thinking “isomorphic = same morphisms”. That is, if we have an isomorphism between <span class="math inline">\(A\)</span> and <span class="math inline">\(A^\prime\)</span>, then there are “the same morphisms” out of <span class="math inline">\(A\)</span> and out of <span class="math inline">\(A\prime\)</span>.</p>
+<p>However, as noted before, there might be several distinct isomorphisms between <span class="math inline">\(A\)</span> and <span class="math inline">\(A^\prime\)</span>. Thus, one must be careful to specify <em>which</em> isomorphism when you are talking about isomorphic finite sets.</p>
+<p>Anyways, this is why it’s not a big problem to use a vector to represent a finite set. There are only rare cases where you can find a representation of your mathematical objects such that two representations are equal if and only if the mathematical objects are isomorphic. If you are lucky enough to find this, it’s called a “canonical form” and it’s a big deal. As a practical matter, we might use <code>Set</code> instead of <code>Vector</code> because it gets a bit <em>closer</em> to a canonical form, but I wanted to start with <code>Vector</code> to make the point that the <em>representation</em> of your mathematical object on a computer in general <em>will not</em> be canonical.</p>
+<p>We now prove a theorem about isomorphisms of finite sets.</p>
+<div class="rmenv" title="Definition">
+<p>The <strong>cardinality</strong> of a finite set is the number of unique elements listed in that finite set.</p>
+</div>
+<div class="rmenv" title="Theorem">
+<p>If two sets have the same cardinality, then they are isomorphic.</p>
+</div>
+<p>We prove this with a program.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">find_isomorphism</span>(A<span class="op">::</span><span class="dt">𝔽, B</span>:<span class="op">:</span>𝔽)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  A_vec, B_vec <span class="op">=</span> <span class="fu">unique!</span>.([<span class="dt">Any</span>[A<span class="op">...</span>], <span class="dt">Any</span>[B<span class="op">...</span>]])</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">length</span>(A_vec) <span class="op">==</span> <span class="fu">length</span>(B_vec)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> <span class="fu">length</span>(A_vec)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">𝔽Mor</span>(A, B, <span class="fu">Dict</span>(A_vec[i] <span class="op">=&gt;</span> B_vec[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find_isomorphism</span>(<span class="fu">Vec𝔽</span>([<span class="op">:</span>c, <span class="op">:</span>b, <span class="op">:</span>a, <span class="op">:</span>b]), <span class="fu">Int𝔽</span>(<span class="fl">3</span>)).vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>Dict{Any, Any} with 3 entries:
+  :a =&gt; 3
+  :b =&gt; 2
+  :c =&gt; 1</code></pre>
+</div>
+</div>
+<section id="takeaways-2" class="level2">
+<h2 class="anchored" data-anchor-id="takeaways-2">Takeaways</h2>
+<ul>
+<li>You can compose morphisms between finite sets</li>
+<li>Isomorphisms tell you which finite sets are equivalent from the point of view of morphisms</li>
+<li>You can tell which finite sets are isomorphic by looking at their cardinalities</li>
+</ul>
+</section>
+</section>
+<section id="the-pigeonhole-principle" class="level1">
+<h1>The Pigeonhole Principle</h1>
+<p>The point of this first lecture is to introduce you to finite sets and pure math, not category theory. Therefore, we end with a discussion of a theorem from combinatorics (come back after lecture 2).</p>
+<div class="rmenv" title="Theorem">
+<p>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are finite sets, and <span class="math inline">\(X\)</span> has a larger cardinality than <span class="math inline">\(Y\)</span>, then for any morphism <span class="math inline">\(f \colon X \to Y\)</span>, there exist distinct elements <span class="math inline">\(x_1, x_2 \in X\)</span> such that <span class="math inline">\(f(x_1) = f(x_2)\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Suppose that no such <span class="math inline">\(x_1,x_2\)</span> existed. Then if <span class="math inline">\(X = \{x_1,\ldots,x_n\}\)</span> with <span class="math inline">\(x_i \neq x_j\)</span> for all <span class="math inline">\(i,j\)</span>, we have <span class="math inline">\(f(x_1),\ldots,f(x_n)\)</span> all distinct. Therefore, there are at least <span class="math inline">\(n\)</span> distinct elements of <span class="math inline">\(Y\)</span>, which contradicts the statement that <span class="math inline">\(Y\)</span> has a smaller cardinality than <span class="math inline">\(X\)</span>. We are done.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>Suppose that <span class="math inline">\(x_1,\ldots,x_5\)</span> are points on a sphere. I.e., each <span class="math inline">\(x_i\)</span> is a 3-dimensional vector with distance from the origin 1. Then there is a hemisphere that contains 4 of the points.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Pick any two points. These two points determine a great circle of the sphere. Then at least two of the other three points must fall on one of the hemispheres determined by that great circle.</p>
+</div>
+<p>We can implement the pigeonhole principle in Julia.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pigeonhole</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">length</span>(<span class="fu">unique!</span>([f.dom<span class="op">...</span>])) <span class="op">&gt;</span> <span class="fu">length</span>(<span class="fu">unique!</span>([f.codom<span class="op">...</span>]))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  holes <span class="op">=</span> <span class="fu">Dict</span>(y <span class="op">=&gt;</span> <span class="dt">Any</span>[] <span class="cf">for</span> y <span class="kw">in</span> f.codom)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> pigeon <span class="kw">in</span> f.dom</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">push!</span>(holes[<span class="fu">f</span>(pigeon)], pigeon)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> hole <span class="kw">in</span> holes</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="fu">length</span>(hole) <span class="op">&gt;</span> <span class="fl">1</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> hole</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There isn’t much else to this part, but hopefully this has served as a more concrete illustration of how finite sets work in Julia.</p>
+<section id="takeaways-3" class="level2">
+<h2 class="anchored" data-anchor-id="takeaways-3">Takeaways</h2>
+<ul>
+<li>You can do basic combinatorics in the framework we have developed in this lecture</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./lecture2.html" class="pagination-link">
+        <span class="nav-page-text">Lecture 2: Category Theory</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

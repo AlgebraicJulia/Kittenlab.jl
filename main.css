@@ -1,0 +1,40 @@
+.proof {}
+div.proof:after {
+  content: "\25A2";
+  float: right;
+  margin-top: -3.4rem;
+}
+
+.rmenv,
+.itenv {
+  padding-left: 0.75em;
+  margin-bottom: 1.5em;
+  border-left: 1px solid #007481;
+}
+
+.itenv {
+  font-style: italic;
+}
+.itenv em {
+  font-style: normal !important;
+}
+
+.itenv:before,
+.rmenv:before {
+  content: attr(title)".";
+  font-style: normal;
+  font-weight: 600;
+  padding-right: 0.5em;
+  display: inline;
+}
+
+.itenv > p:first-of-type,
+.rmenv > p:first-of-type {
+  margin-top: 0 !important;
+  display: inline;
+}
+
+.itenv > :last-child,
+.rmenv > :last-child {
+  margin-bottom: 0 !important;
+}
