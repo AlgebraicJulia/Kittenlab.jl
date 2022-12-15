@@ -106,10 +106,10 @@ struct Set𝔽
   elems::Set{Any}
 end
 
-Base.:(∈)(a, A::Vec𝔽) = a ∈ A.elems
+Base.:(∈)(a, A::Set𝔽) = a ∈ A.elems
 
-Base.iterate(A::Vec𝔽) = iterate(A.elems)
-Base.iterate(A::Vec𝔽, k) = iterate(A.elems, k)
+Base.iterate(A::Set𝔽) = iterate(A.elems)
+Base.iterate(A::Set𝔽, k) = iterate(A.elems, k)
 ```
 </details>
 
