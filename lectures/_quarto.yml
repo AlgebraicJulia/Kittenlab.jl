@@ -21,8 +21,3 @@ format:
   html:
     theme: cosmo
     css: main.css
-  pdf:
-    documentclass: scrreprt
-
-
-

@@ -134,14 +134,14 @@ But if we take this to its logical conclusion, we find that this is true not onl
 To see this, let $B = \{1,2,3\}$, $B^\prime = \{\mathbf{a}, \mathbf{b}, \mathbf{c}\}$, and define $f \colon B \to B^\prime$ and $g \colon B^\prime \to B$ by
 
 $$ f(x) = \begin{cases}
-  \mathbf{a} & \text{if $x = 1$}
-  \mathbf{b} & \text{if $x = 2$}
+  \mathbf{a} & \text{if $x = 1$} \\
+  \mathbf{b} & \text{if $x = 2$} \\
   \mathbf{c} & \text{if $x = 3$}
 \end{cases} $$
 
 $$ g(y) = \begin{cases}
-  1 & \text{if $y = \mathbf{a}$}
-  2 & \text{if $y = \mathbf{b}$}
+  1 & \text{if $y = \mathbf{a}$} \\
+  2 & \text{if $y = \mathbf{b}$} \\
   3 & \text{if $y = \mathbf{c}$}
 \end{cases} $$
 
@@ -288,7 +288,7 @@ If $A$ and $B$ both have $0$ elements, then they are the same set! So the identi
 Now, suppose that there exist isomorphisms between all sets of cardinality $n$, and let $A$ and $B$ be sets of cardinality $n+1$. Then we can write $A = \{a\} \cup A^\prime$ and $B = \{b\} \cup B^\prime$ for $A^\prime$ and $B^\prime$ sets of cardinality $n$. By the induction hypothesis, there exists an isomorphism $f^{\prime} \colon A^\prime \to B^\prime$. Define $f \colon A \to B$ by
 
 $$ f(x) = \begin{cases}
-  b & \text{if $x = a$}
+  b & \text{if $x = a$} \\
   f^\prime(x) & \text{if $x \in A^\prime$}
 \end{cases} $$
 
