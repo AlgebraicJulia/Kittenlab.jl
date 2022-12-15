@@ -170,7 +170,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: Category Theory</a>
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -195,14 +195,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#finite-sets" id="toc-finite-sets" class="nav-link" data-scroll-target="#finite-sets">Finite Sets</a>
   <ul class="collapse">
   <li><a href="#takeaways-1" id="toc-takeaways-1" class="nav-link" data-scroll-target="#takeaways-1">Takeaways</a></li>
-  </ul></li>
-  <li><a href="#composition-and-isomorphisms" id="toc-composition-and-isomorphisms" class="nav-link" data-scroll-target="#composition-and-isomorphisms">Composition and Isomorphisms</a>
-  <ul class="collapse">
-  <li><a href="#takeaways-2" id="toc-takeaways-2" class="nav-link" data-scroll-target="#takeaways-2">Takeaways</a></li>
-  </ul></li>
-  <li><a href="#the-pigeonhole-principle" id="toc-the-pigeonhole-principle" class="nav-link" data-scroll-target="#the-pigeonhole-principle">The Pigeonhole Principle</a>
-  <ul class="collapse">
-  <li><a href="#takeaways-3" id="toc-takeaways-3" class="nav-link" data-scroll-target="#takeaways-3">Takeaways</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -384,152 +376,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>A morphism of finite sets from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> sends each unique element of <span class="math inline">\(A\)</span> to an element of <span class="math inline">\(B\)</span></li>
 <li>There are multiple ways of implementing representations of finite sets and morphisms between them on the computer</li>
 </ul>
-</section>
-</section>
-<section id="composition-and-isomorphisms" class="level1">
-<h1>Composition and Isomorphisms</h1>
-<p>We now introduce the operation at the core of all category theory: composition!</p>
-<div class="rmenv" title="Definition">
-<p>Given finite sets <span class="math inline">\(A,B,C\)</span> and morphisms <span class="math inline">\(f \colon A \to B\)</span> and <span class="math inline">\(g \colon B \to C\)</span>, their <strong>composite</strong> <span class="math inline">\(g \circ f\)</span> is a morphism from <span class="math inline">\(A\)</span> to <span class="math inline">\(C\)</span> defined by <span class="math display">\[ (g \circ f)(a) = g(f(a)) \]</span> for all <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>. We call <span class="math inline">\(\circ\)</span> the operation of <strong>composition</strong>, and we say that we <strong>compose</strong> <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> to form <span class="math inline">\(g \circ f\)</span>.</p>
-</div>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">compose</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>, g<span class="op">::</span><span class="dt">𝔽Mor</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> f.codom <span class="op">==</span> g.dom</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">𝔽Mor</span>(f.dom, g.codom, <span class="fu">Dict</span>(a <span class="op">=&gt;</span> <span class="fu">g</span>(<span class="fu">f</span>(a)) <span class="cf">for</span> a <span class="kw">in</span> f.dom))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>A,B,C <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]), <span class="fu">Vec𝔽</span>([<span class="op">:</span>a,<span class="op">:</span>b]), <span class="fu">Vec𝔽</span>([<span class="st">"s"</span>, <span class="st">"t"</span>])</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fu">𝔽Mor</span>(A,B,<span class="fu">Dict</span>(<span class="fl">1</span><span class="op">=&gt;:</span>a,<span class="fl">2</span><span class="op">=&gt;:</span>a,<span class="fl">3</span><span class="op">=&gt;:</span>b))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> <span class="fu">𝔽Mor</span>(B,C,<span class="fu">Dict</span>(<span class="op">:</span>a<span class="op">=&gt;</span><span class="st">"t"</span>,<span class="op">:</span>b<span class="op">=&gt;</span><span class="st">"s"</span>))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">compose</span>(f,g).vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<pre><code>Dict{Any, Any} with 3 entries:
-  2 =&gt; "t"
-  3 =&gt; "s"
-  1 =&gt; "t"</code></pre>
-</div>
-</div>
-<p>We now come to an issue that is <em>everywhere</em> in category theory: equality. If you have seen any set theory before, you might think that <span class="math inline">\(\{1,2,3,3\}\)</span> and <span class="math inline">\(\{3,2,1\}\)</span> are “the same” set. Note however that when I defined finite set, I just said that a finite set was a list of things surrounded by curly braces. Additionally,</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>A, A′ <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">3</span>]), <span class="fu">Vec𝔽</span>([<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">1</span>])</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>A <span class="op">==</span> A′</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>false</code></pre>
-</div>
-</div>
-<p>So it seems like something is wrong with our definition. One way one might try to fix this would be by using <code>Set{Any}</code> instead of <code>Vector{Any}</code>. This certainly makes more of our Julia values equal.</p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Set𝔽</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  elems<span class="op">::</span><span class="dt">Set{Any}</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> a <span class="op">∈</span> A.elems</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(A.elems)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(A.elems, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>But let’s think about why we typically choose to make <span class="math inline">\(\{1,2,3,3\}\)</span> and <span class="math inline">\(\{3,2,1\}\)</span> “the same” set. One good reason is that any morphism out of <span class="math inline">\(\{1,2,3,3\}\)</span> can be seen as a morphism out of <span class="math inline">\(\{3,2,1\}\)</span>, and the same goes for incoming morphisms.</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">convertAA′</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">𝔽Mor</span>(A′,f.codom,f.vals)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">convertA′A</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">𝔽Mor</span>(A,f.codom,f.vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>If <code>f</code> is a valid <code>𝔽Mor</code> with <code>f.dom == A</code> then <code>f′ = convertAA′(f)</code> is a valid <code>𝔽Mor</code> with <code>f′.dom == A′</code>, and the same the other way around. Moreover, <code>convertA′A(convertAA′(f)) == f</code> and <code>convertAA′(convertA′A(f′)) == f′</code>. We could define similar functions for morphisms into <code>A</code> and <code>A′</code>.</p>
-<p>Therefore, from a “morphism’s-eye” perspective, <code>A</code> and <code>A′</code> behave the exact same way; defining a morphism in or out of <code>A</code> is equivalent to defining a morphism in or out of <code>A′</code>.</p>
-<p>But if we take this to its logical conclusion, we find that this is true not only of <span class="math inline">\(\{1,2,3,3\}\)</span> and of <span class="math inline">\(\{3,2,1\}\)</span>, but also of <span class="math inline">\(\{1,2,3\}\)</span> and <span class="math inline">\(\{\mathbf{a},\mathbf{b},\mathbf{c}\}\)</span>! Specifically, we can do the following.</p>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>B, B′ <span class="op">=</span> <span class="fu">Vec𝔽</span>([<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]), <span class="fu">Vec𝔽</span>([<span class="op">:</span>a,<span class="op">:</span>b,<span class="op">:</span>c])</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fu">𝔽Mor</span>(B, B′, <span class="fu">Dict</span>(<span class="fl">1</span> <span class="op">=&gt;</span> <span class="op">:</span>a, <span class="fl">2</span> <span class="op">=&gt;</span> <span class="op">:</span>b, <span class="fl">3</span> <span class="op">=&gt;</span> <span class="op">:</span>c))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> <span class="fu">𝔽Mor</span>(B′, B, <span class="fu">Dict</span>(<span class="op">:</span>a <span class="op">=&gt;</span> <span class="fl">1</span>, <span class="op">:</span>b <span class="op">=&gt;</span> <span class="fl">2</span>, <span class="op">:</span>c <span class="op">=&gt;</span> <span class="fl">3</span>))</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">convertBB′</span>(h<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">compose</span>(g,h)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">convertB′B</span>(h<span class="op">::</span><span class="dt">𝔽Mor</span>) <span class="op">=</span> <span class="fu">compose</span>(f,h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>We can use <code>f</code> and <code>g</code> to convert freely between morphisms out of <code>B</code> and morphisms out of <code>B′</code>. Thus, <code>B</code> and <code>B′</code> also are equivalent in some sense. But there are many ways of “forming” this equivalence; we could use <code>f.vals = Dict(1 =&gt; :b, 2 =&gt; :a, 3 =&gt; :c)</code>, for instance.</p>
-<p>All of this motivates the next few definitions.</p>
-<div class="rmenv" title="Definition">
-<p>The <strong>identity function</strong> <span class="math inline">\(1_A\)</span> on a finite set <span class="math inline">\(A\)</span> has domain and codomain <span class="math inline">\(A\)</span> and is defined by <span class="math inline">\(1_A(a) = a\)</span>.</p>
-</div>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identity</span>(A<span class="op">::</span><span class="dt">𝔽) = 𝔽Mor</span>(A, A, <span class="fu">Dict</span>(a <span class="op">=&gt;</span> a <span class="cf">for</span> a <span class="kw">in</span> A))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="rmenv" title="Definition">
-<p>We say that two finite sets <span class="math inline">\(A\)</span> and <span class="math inline">\(A^\prime\)</span> are <strong>isomorphic</strong> if there exists morphisms <span class="math inline">\(f \colon A \to A^\prime\)</span> and <span class="math inline">\(g \colon A^\prime \to A\)</span> such that <span class="math inline">\(g \circ f = 1_{A}\)</span> and <span class="math inline">\(f \circ g = 1_{A^\prime}\)</span>. Moreover, if this is the case we call <span class="math inline">\(f\)</span> an <strong>isomorphism</strong> from <span class="math inline">\(A\)</span> to <span class="math inline">\(A\prime\)</span>, and <span class="math inline">\(g\)</span> an isomorphism from <span class="math inline">\(A^\prime\)</span> to <span class="math inline">\(A\)</span>, and we say that <span class="math inline">\(g\)</span> is the <strong>inverse</strong> of <span class="math inline">\(f\)</span>.</p>
-</div>
-<p>You can remember the reasoning about why we care isomorphism means by thinking “isomorphic = same morphisms”. That is, if we have an isomorphism between <span class="math inline">\(A\)</span> and <span class="math inline">\(A^\prime\)</span>, then there are “the same morphisms” out of <span class="math inline">\(A\)</span> and out of <span class="math inline">\(A\prime\)</span>.</p>
-<p>However, as noted before, there might be several distinct isomorphisms between <span class="math inline">\(A\)</span> and <span class="math inline">\(A^\prime\)</span>. Thus, one must be careful to specify <em>which</em> isomorphism when you are talking about isomorphic finite sets.</p>
-<p>Anyways, this is why it’s not a big problem to use a vector to represent a finite set. There are only rare cases where you can find a representation of your mathematical objects such that two representations are equal if and only if the mathematical objects are isomorphic. If you are lucky enough to find this, it’s called a “canonical form” and it’s a big deal. As a practical matter, we might use <code>Set</code> instead of <code>Vector</code> because it gets a bit <em>closer</em> to a canonical form, but I wanted to start with <code>Vector</code> to make the point that the <em>representation</em> of your mathematical object on a computer in general <em>will not</em> be canonical.</p>
-<p>We now prove a theorem about isomorphisms of finite sets.</p>
-<div class="rmenv" title="Definition">
-<p>The <strong>cardinality</strong> of a finite set is the number of unique elements listed in that finite set.</p>
-</div>
-<div class="rmenv" title="Theorem">
-<p>If two sets have the same cardinality, then they are isomorphic.</p>
-</div>
-<p>We prove this with a program.</p>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">find_isomorphism</span>(A<span class="op">::</span><span class="dt">𝔽, B</span>:<span class="op">:</span>𝔽)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  A_vec, B_vec <span class="op">=</span> <span class="fu">unique!</span>.([<span class="dt">Any</span>[A<span class="op">...</span>], <span class="dt">Any</span>[B<span class="op">...</span>]])</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">length</span>(A_vec) <span class="op">==</span> <span class="fu">length</span>(B_vec)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> <span class="fu">length</span>(A_vec)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">𝔽Mor</span>(A, B, <span class="fu">Dict</span>(A_vec[i] <span class="op">=&gt;</span> B_vec[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n))</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find_isomorphism</span>(<span class="fu">Vec𝔽</span>([<span class="op">:</span>c, <span class="op">:</span>b, <span class="op">:</span>a, <span class="op">:</span>b]), <span class="fu">Int𝔽</span>(<span class="fl">3</span>)).vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>Dict{Any, Any} with 3 entries:
-  :a =&gt; 3
-  :b =&gt; 2
-  :c =&gt; 1</code></pre>
-</div>
-</div>
-<section id="takeaways-2" class="level2">
-<h2 class="anchored" data-anchor-id="takeaways-2">Takeaways</h2>
-<ul>
-<li>You can compose morphisms between finite sets</li>
-<li>Isomorphisms tell you which finite sets are equivalent from the point of view of morphisms</li>
-<li>You can tell which finite sets are isomorphic by looking at their cardinalities</li>
-</ul>
-</section>
-</section>
-<section id="the-pigeonhole-principle" class="level1">
-<h1>The Pigeonhole Principle</h1>
-<p>The point of this first lecture is to introduce you to finite sets and pure math, not category theory. Therefore, we end with a discussion of a theorem from combinatorics (come back after lecture 2).</p>
-<div class="rmenv" title="Theorem">
-<p>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are finite sets, and <span class="math inline">\(X\)</span> has a larger cardinality than <span class="math inline">\(Y\)</span>, then for any morphism <span class="math inline">\(f \colon X \to Y\)</span>, there exist distinct elements <span class="math inline">\(x_1, x_2 \in X\)</span> such that <span class="math inline">\(f(x_1) = f(x_2)\)</span>.</p>
-</div>
-<div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>Suppose that no such <span class="math inline">\(x_1,x_2\)</span> existed. Then if <span class="math inline">\(X = \{x_1,\ldots,x_n\}\)</span> with <span class="math inline">\(x_i \neq x_j\)</span> for all <span class="math inline">\(i,j\)</span>, we have <span class="math inline">\(f(x_1),\ldots,f(x_n)\)</span> all distinct. Therefore, there are at least <span class="math inline">\(n\)</span> distinct elements of <span class="math inline">\(Y\)</span>, which contradicts the statement that <span class="math inline">\(Y\)</span> has a smaller cardinality than <span class="math inline">\(X\)</span>. We are done.</p>
-</div>
-<div class="rmenv" title="Example">
-<p>Suppose that <span class="math inline">\(x_1,\ldots,x_5\)</span> are points on a sphere. I.e., each <span class="math inline">\(x_i\)</span> is a 3-dimensional vector with distance from the origin 1. Then there is a hemisphere that contains 4 of the points.</p>
-</div>
-<div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>Pick any two points. These two points determine a great circle of the sphere. Then at least two of the other three points must fall on one of the hemispheres determined by that great circle.</p>
-</div>
-<p>We can implement the pigeonhole principle in Julia.</p>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pigeonhole</span>(f<span class="op">::</span><span class="dt">𝔽Mor</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">length</span>(<span class="fu">unique!</span>([f.dom<span class="op">...</span>])) <span class="op">&gt;</span> <span class="fu">length</span>(<span class="fu">unique!</span>([f.codom<span class="op">...</span>]))</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  holes <span class="op">=</span> <span class="fu">Dict</span>(y <span class="op">=&gt;</span> <span class="dt">Any</span>[] <span class="cf">for</span> y <span class="kw">in</span> f.codom)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> pigeon <span class="kw">in</span> f.dom</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">push!</span>(holes[<span class="fu">f</span>(pigeon)], pigeon)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> hole <span class="kw">in</span> holes</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="fu">length</span>(hole) <span class="op">&gt;</span> <span class="fl">1</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> hole</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>There isn’t much else to this part, but hopefully this has served as a more concrete illustration of how finite sets work in Julia.</p>
-<section id="takeaways-3" class="level2">
-<h2 class="anchored" data-anchor-id="takeaways-3">Takeaways</h2>
-<ul>
-<li>You can do basic combinatorics in the framework we have developed in this lecture</li>
-</ul>
 
 
 </section>
@@ -677,7 +523,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./lecture2.html" class="pagination-link">
-        <span class="nav-page-text">Lecture 2: Category Theory</span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Lecture 2: The Category Theory of Finite Sets</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
