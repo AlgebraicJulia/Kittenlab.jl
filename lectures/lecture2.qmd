@@ -1,100 +1,370 @@
-# Lecture 2: Category Theory {.unnumbered}
+# Lecture 2: The Category Theory of Finite Sets {.unnumbered}
 
-Welcome to the second lecture in this series. I'm not going to repeat the introduction from the first lecture; you should know what to expect now. Specifically, it's going to go slowly. We start with (not-necessarily finite) sets.
-
-# Sets
-
-:::{.rmenv title=Definition}
-A **set** $X$ is a function from `Any` to `Bool`, which may or either be written in Julia or defined mathematically. If $X(x) = \mathbf{true}$, we write $x \in X$, and if $X(x) = \mathbf{false}$ we write $x \notin X$.
-:::
-
-Note that when we write down Julia definitions involving sets, we are implicitly assuming that the functions are written in Julia. However, there are some sets that we will use whose functions *cannot* be written down in Julia, so take the Julia definitions with a grain of salt.
-
-:::{.rmenv title=Example}
-For any finite set `A::𝔽`, the function `inA(x) = x ∈ A` is a set.
-:::
-
-:::{.rmenv title=Example}
-Any Julia type `T` defines a set, via the function `inT(x) = x isa T`.
-:::
-
-:::{.rmenv title=Definition}
-Given two sets $X$ and $Y$, their **intersection** $X \cap Y$ is defined by
-
-$$ (X \cap Y)(x) = X(x) \wedge Y(x) $$
-
-Their **union** $X \cup Y$ is defined by
-
-$$ (X \cup Y)(x) = X(x) \vee Y(x) $$
-:::
+<details>
+<summary>
+Julia from last lecture
+</summary>
 
 ```{julia}
-intersect(X,Y) = x -> X(x) && Y(x)
-union(X,Y) = x -> X(x) || Y(x)
-```
+abstract type 𝔽 end
 
-:::{.rmenv title=Definition}
-Given two sets $X$ and $Y$, their **product** $X \times Y$ is the set of tuples $(x,y)$ where $x \in X$ and $y \in Y$. That is, $z \in X \times Y$ if and only if `z isa Tuple`, `length(z) = 2`, $z[1] \in X$ and $z[2] \in Y$.
-:::
-
-```{julia}
-product(X,Y) = z -> (z isa Tuple) &&
-  length(z) == 2 && X(z[1]) && Y(z[2])
-```
-
-:::{.rmenv title=Definition}
-We leave it to the reader to give a mathematical definition for **sum** given the following definition in Julia
-:::
-
-```{julia}
-struct Left
-  val::Any
+struct Vec𝔽 <: 𝔽
+  elems::Vector{Any}
 end
 
-struct Right
-  val::Any
+Base.:(∈)(a, A::Vec𝔽) = a ∈ A.elems
+
+Base.iterate(A::Vec𝔽) = iterate(A.elems)
+Base.iterate(A::Vec𝔽, k) = iterate(A.elems, k)
+Base.length(A::Vec𝔽) = length(A.elems)
+
+struct Int𝔽 <: 𝔽
+  n::Int
 end
 
-sum(X,Y) = x ->
-  if x isa Left
-    X(x.val)
-  elseif x isa Right
-    Y(x.val)
-  else
-    false
+Base.:(∈)(a, A::Int𝔽) = 1 <= a <= A.n
+
+Base.iterate(A::Int𝔽) = iterate(1:A.n)
+Base.iterate(A::Int𝔽, k) = iterate(1:A.n, k)
+
+struct 𝔽Mor
+  dom::𝔽
+  codom::𝔽
+  vals::Dict{Any,Any}
+end
+
+(f::𝔽Mor)(x) = f.vals[x]
+
+struct Int𝔽Mor
+  dom::Int𝔽
+  codom::Int𝔽
+  vals::Vector{Int}
+end
+
+(f::Int𝔽Mor)(i) = f.vals[i]
+```
+</details>
+
+# Composition and Isomorphisms
+
+We now introduce the operation at the core of all category theory: composition!
+
+:::{.rmenv title=Definition}
+Given finite sets $A,B,C$ and morphisms $f \colon A \to B$ and $g \colon B \to C$, their **composite** $g \circ f$ is a morphism from $A$ to $C$ defined by
+$$ (g \circ f)(a) = g(f(a)) $$
+for all $a$ in $A$. We call $\circ$ the operation of **composition**, and we say that we **compose** $f$ and $g$ to form $g \circ f$.
+:::
+
+<details>
+<summary>
+Julia version
+</summary>
+
+```{julia}
+function compose(f::𝔽Mor, g::𝔽Mor)
+  @assert f.codom == g.dom
+  𝔽Mor(f.dom, g.codom, Dict(a => g(f(a)) for a in f.dom))
+end
+```
+
+```{julia}
+#| output: true
+A,B,C = Vec𝔽([1,2,3]), Vec𝔽([:a,:b]), Vec𝔽(["s", "t"])
+f = 𝔽Mor(A,B,Dict(1=>:a,2=>:a,3=>:b))
+g = 𝔽Mor(B,C,Dict(:a=>"t",:b=>"s"))
+compose(f,g).vals
+```
+</details>
+
+
+We now come to an issue that is *everywhere* in category theory: equality. If you have seen any set theory before, you might think that $\{1,2,3,3\}$ and $\{3,2,1\}$ are "the same" set. Note however that when I defined finite set, I just said that a finite set was a list of things surrounded by curly braces.
+
+<details>
+<summary>
+Julia version
+</summary>
+The equality between two different `Vec𝔽` is sensitive to ordering and duplicates.
+```{julia}
+#| output: true
+A, A′ = Vec𝔽([1,2,3,3]), Vec𝔽([3,2,1])
+A == A′
+```
+</details>
+
+So it seems like something is wrong with our definition.
+
+
+<details>
+<summary>
+Possible fix in Julia
+</summary>
+
+One way one might try to fix this would be by using `Set{Any}` instead of `Vector{Any}`. This certainly makes more of our Julia values equal.
+
+```{julia}
+struct Set𝔽
+  elems::Set{Any}
+end
+
+Base.:(∈)(a, A::Vec𝔽) = a ∈ A.elems
+
+Base.iterate(A::Vec𝔽) = iterate(A.elems)
+Base.iterate(A::Vec𝔽, k) = iterate(A.elems, k)
+```
+</details>
+
+But let's think about why we typically choose to make $\{1,2,3,3\}$ and $\{3,2,1\}$ "the same" set. One good reason is that any morphism out of $\{1,2,3,3\}$ can be seen as a morphism out of $\{3,2,1\}$, and the same goes for incoming morphisms.
+
+<details>
+<summary>
+Julia implementation
+</summary>
+With this code, we can change the domain of a morphism from `A` to `A′`, and vice versa, and the morphism remains valid.
+```{julia}
+convertAA′(f::𝔽Mor) = 𝔽Mor(A′,f.codom,f.vals)
+convertA′A(f::𝔽Mor) = 𝔽Mor(A,f.codom,f.vals)
+```
+We could also change codomains in the same way.
+</details>
+
+Therefore, from a "morphism's-eye" perspective, $\{1,2,3,3\}$ and $\{3,2,1\}$ behave the exact same way; defining a morphism out of one is the same as defining a morphism out of the other.
+
+But if we take this to its logical conclusion, we find that this is true not only of $\{1,2,3,3\}$ and of $\{3,2,1\}$, but also of $\{1,2,3\}$ and $\{\mathbf{a},\mathbf{b},\mathbf{c}\}$!
+
+To see this, let $B = \{1,2,3\}$, $B^\prime = \{\mathbf{a}, \mathbf{b}, \mathbf{c}\}$, and define $f \colon B \to B^\prime$ and $g \colon B^\prime \to B$ by
+
+$$ f(x) = \begin{cases}
+  \mathbf{a} & \text{if $x = 1$}
+  \mathbf{b} & \text{if $x = 2$}
+  \mathbf{c} & \text{if $x = 3$}
+\end{cases} $$
+
+$$ g(y) = \begin{cases}
+  1 & \text{if $y = \mathbf{a}$}
+  2 & \text{if $y = \mathbf{b}$}
+  3 & \text{if $y = \mathbf{c}$}
+\end{cases} $$
+
+Then given $h \colon B \to C$, we can produce $h^\prime \colon B^\prime \to C$ via $h^\prime = h \circ g$, and vice versa. Moreover, when we start out with a function out of $B$, compose it with $g$ to make a function out of $B^\prime$ and then compose it with $f$ to make a function out of $B$, we get the same function back.
+
+<details>
+<summary>
+Julia version
+</summary>
+Specifically, we can do the following.
+
+```{julia}
+B, B′ = Vec𝔽([1,2,3]), Vec𝔽([:a,:b,:c])
+f = 𝔽Mor(B, B′, Dict(1 => :a, 2 => :b, 3 => :c))
+g = 𝔽Mor(B′, B, Dict(:a => 1, :b => 2, :c => 3))
+convertBB′(h::𝔽Mor) = compose(g,h)
+convertB′B(h::𝔽Mor) = compose(f,h)
+```
+</details>
+
+All of this motivates the next few definitions.
+
+:::{.rmenv title=Definition}
+The **identity function** $1_A$ on a finite set $A$ has domain and codomain $A$ and is defined by $1_A(a) = a$.
+:::
+
+<details>
+<summary>
+Julia implementation
+</summary>
+```{julia}
+identity(A::𝔽) = 𝔽Mor(A, A, Dict(a => a for a in A))
+```
+</details>
+
+:::{.rmenv title=Definition}
+We say that two finite sets $A$ and $A^\prime$ are **isomorphic** if there exists morphisms $f \colon A \to A^\prime$ and $g \colon A^\prime \to A$ such that $g \circ f = 1_{A}$ and $f \circ g = 1_{A^\prime}$. Moreover, if this is the case we call $f$ an **isomorphism** from $A$ to $A\prime$, and $g$ an isomorphism from $A^\prime$ to $A$, and we say that $g$ is the **inverse** of $f$.
+:::
+
+You can remember the reasoning for why the name "isomorphic" by thinking "isomorphic = same morphisms". That is, if we have an isomorphism between $A$ and $A^\prime$, then there are "the same morphisms" out of $A$ and out of $A\prime$.
+
+However, as noted before, there might be several distinct isomorphisms between $A$ and $A^\prime$. Thus, one must be careful to specify *which* isomorphism when you are talking about isomorphic finite sets.
+
+Anyways, this is why it's not a terrible problem to use a vector to represent a finite set. There are only rare cases where you can find a representation of your mathematical objects such that two representations are equal if and only if the mathematical objects are isomorphic. If you are lucky enough to find this, it's called a "canonical form" and it's a big deal. As a practical matter, we might use `Set` instead of `Vector` because it gets a bit *closer* to a canonical form, but I wanted to start with `Vector` to make the point that the *representation* of your mathematical object on a computer in general *will not* be canonical.
+
+## Takeaways
+
+- You can compose morphisms between finite sets
+- Isomorphisms tell you which finite sets are equivalent from the point of view of morphisms
+
+# Injectivity, Surjectivity, and Cardinality
+
+We now discuss some more properties of finite sets and their maps.
+
+:::{.rmenv title=Definition}
+A function $f \colon A \to B$ is **surjective** if for every element $b \in B$, there exists an $a \in A$ such that $f(a) = b$.
+:::
+
+:::{.rmenv title=Example}
+The function $f \colon \{1,2,3\} \to \{1,2\}$ sending 1 to 1, 2 to 2, and 3 to 2 is surjective.
+:::
+
+:::{.rmenv title=Example}
+The function $f \colon \{1,2\} \to \{1,2,3\}$ sending 1 to 1 and 2 to 2 is not surjective.
+:::
+
+This is a good opportunity to discuss something very critical in math: ordering of quantifiers. Quantifiers are phrases like "for every ..." or "there exists ...". In the previous definition, if we had instead said "there exists an $a \in A$ such that for every $b \in B$, $f(a) = b$", this could only be true if $B$ had only a single element! The fact that the "there exists" comes *after* the "for every" allows us to choose a different $a$ for each $b$.
+
+<details>
+<summary>
+Julia implementation
+</summary>
+```{julia}
+#| output: true
+function is_surjective(f::𝔽Mor)
+  seen = Set([f(x) for x in f.dom])
+  all(y ∈ seen for y in f.codom)
+end
+
+is_surjective(𝔽Mor(
+  Vec𝔽([1,2,3]),
+  Vec𝔽([1,2]),
+  Dict(1 => 1, 2 => 2, 3 => 2)
+))
+```
+</details>
+
+:::{.rmenv title=Definition}
+A function $f \colon A \to B$ is **injective** if whenever $a,a^{\prime} \in A$ are such that $a \neq a^{\prime}$, then $f(a) \neq f(a^{\prime})$.
+:::
+
+:::{.rmenv title=Example}
+The function $f \colon \{1,2,3\} \to \{1,2\}$ sending 1 to 1, 2 to 2, and 3 to 2 is not injective.
+:::
+
+:::{.rmenv title=Example}
+The function $f \colon \{1,2\} \to \{1,2,3\}$ sending 1 to 1 and 2 to 2 is injective.
+:::
+
+<details>
+<summary>
+Julia implementation
+</summary>
+```{julia}
+#| output: true
+function is_injective(f::𝔽Mor)
+  length(unique!(collect(f.dom))) ==
+    length(unique!([f(x) for x in f.dom]))
+end
+
+is_injective(𝔽Mor(
+  Vec𝔽([1,2,3]),
+  Vec𝔽([1,2]),
+  Dict(1 => 1, 2 => 2, 3 => 2)
+))
+```
+</details>
+
+:::{.rmenv title=Theorem}
+A function $f \colon A \to B$ has an inverse if and only if it is surjective and injective.
+:::
+
+:::{.proof}
+First suppose that $f$ is surjective and injective. Then for each $b \in B$, there is precisely one element $a \in A$ such that $f(a) = b$. This is because surjectivity guarantees there is at least one, and injectivity guarantees that there is no more than one. Define $g \colon B \to A$ by letting $g(b)$ be this unique $a$. Then it is clear that $g \circ f = 1_{A}$ and $f \circ g = 1_B$.
+
+Conversely, suppose that $f$ has an inverse, $g$. Then $f$ is surjective, because each $b \in B$ has an element $g(b) \in A$ such that $f(g(b)) = b$. And $f$ is injective, because if $a \neq a^\prime$, then $g(f(a)) \neq g(f(a^{\prime}))$, so it must be the case that $f(a) \neq f(a^{\prime})$.
+:::
+
+We wrap up this section with a way of telling when there exists any isomorphisms between two finite sets.
+
+:::{.rmenv title=Definition}
+The **cardinality** of a finite set is the number of unique elements listed in that finite set.
+:::
+
+:::{.rmenv title=Theorem}
+If two sets have the same cardinality, then they are isomorphic.
+:::
+
+:::{.proof}
+We prove this by induction on the cardinality of the sets.
+
+If $A$ and $B$ both have $0$ elements, then they are the same set! So the identity function is the isomorphism.
+
+Now, suppose that there exist isomorphisms between all sets of cardinality $n$, and let $A$ and $B$ be sets of cardinality $n+1$. Then we can write $A = \{a\} \cup A^\prime$ and $B = \{b\} \cup B^\prime$ for $A^\prime$ and $B^\prime$ sets of cardinality $n$. By the induction hypothesis, there exists an isomorphism $f^{\prime} \colon A^\prime \to B^\prime$. Define $f \colon A \to B$ by
+
+$$ f(x) = \begin{cases}
+  b & \text{if $x = a$}
+  f^\prime(x) & \text{if $x \in A^\prime$}
+\end{cases} $$
+
+This is surjective, because it hits $b$ by construction, and everything in $B^\prime$ by the induction hypothesis. It is injective because for $x, x^\prime \in A$, with $x \neq x^\prime$, if $x, x^\prime \in A^\prime$ then $f(x) \neq f(x^\prime)$, and if one of $x, x^\prime$ is $a$, then $f(x) \neq f(x^\prime)$ because $f(a) \notin B^\prime$.
+
+We are done.
+:::
+
+<details>
+<summary>
+Proof in Julia
+</summary>
+```{julia}
+function find_isomorphism(A::𝔽, B::𝔽)
+  # Deduplicate the finite sets, and fix an ordering
+  A_vec, B_vec = unique!.([Any[A...], Any[B...]])
+
+  @assert length(A_vec) == length(B_vec)
+  n = length(A_vec)
+
+  𝔽Mor(A, B, Dict(A_vec[i] => B_vec[i] for i in 1:n))
+end
+```
+
+```{julia}
+#| output: true
+find_isomorphism(Vec𝔽([:c, :b, :a, :b]), Int𝔽(3)).vals
+```
+</details>
+
+## Takeaways
+
+- There are two special classes of functions: injections and surjections
+- If something is an injection and a surjection, it is an isomorphism
+- You can tell which finite sets are isomorphic by looking at their cardinalities
+
+# The Pigeonhole Principle
+
+The point of this first lecture is to introduce you to finite sets and pure math, not category theory. Therefore, we end with a discussion of a theorem from combinatorics.
+
+:::{.rmenv title=Theorem}
+If $X$ and $Y$ are finite sets, and $X$ has a larger cardinality than $Y$, then for any morphism $f \colon X \to Y$, there exist distinct elements $x_1, x_2 \in X$ such that $f(x_1) = f(x_2)$. In other words, $f$ is not injective.
+:::
+
+:::{.proof}
+Suppose that no such $x_1,x_2$ existed. Then if $X = \{x_1,\ldots,x_n\}$ with $x_i \neq x_j$ for all $i,j$, we have $f(x_1),\ldots,f(x_n)$ all distinct. Therefore, there are at least $n$ distinct elements of $Y$, which contradicts the statement that $Y$ has a smaller cardinality than $X$. We are done.
+:::
+
+:::{.rmenv title=Example}
+Suppose that $x_1,\ldots,x_5$ are points on a sphere. I.e., each $x_i$ is a 3-dimensional vector with distance from the origin 1. Then there is a hemisphere that contains 4 of the points.
+:::
+
+:::{.proof}
+Pick any two points. These two points determine a great circle of the sphere. Then at least two of the other three points must fall on one of the hemispheres determined by that great circle.
+:::
+
+<details>
+<summary>
+Julia Implementation
+</summary>
+```{julia}
+function pigeonhole(f::𝔽Mor)
+  @assert length(unique!([f.dom...])) > length(unique!([f.codom...]))
+  holes = Dict(y => Any[] for y in f.codom)
+  for pigeon in f.dom
+    push!(holes[f(pigeon)], pigeon)
   end
+  for hole in holes
+    if length(hole) > 1
+      return hole
+    end
+  end
+end
 ```
+</details>
 
-:::{.rmenv title=Definition}
-Given two sets $A$ and $B$, the set $A \to B$ consists of all Julia callables $f$ such that $f(a) \in B$ for all $a \in A$.
-:::
+## Takeaways
 
- Note that even if `A` and `B` are Julia functions, there is no way to check in Julia that a given `f` is an element of $A \to B$ because this would involve iterating through possibly infinitely many elements of $A$. Again, languages where this is not the case don't have good ODE solvers.
- 
-Before we move on to categories, we briefly discuss some things that are not sets. There are some "collections of stuff" that are not sets by the definition we gave above. For instance, there is no "set of all sets", because not all sets are expressed by computable functions. Nevertheless, we will sometimes make reference to these collections that are "too large" to be called sets, and we will call them "classes". 
-
-# Categories
-
-The moment we've all be waiting for.
-
-:::{.rmenv title=Definition}
-A **small category** $C$ consists of
-
-- a set $C_0$ of **objects**
-- for every $x,y \in C_0$, a set $\mathrm{Hom}_C(x,y)$ of **morphisms** from $x$ to $y$
-- for every $x,y,z \in C_0$, a **composition function** $\circ \colon \mathrm{Hom}_C(y,z) \times \mathrm{Hom}_(x,y) \to \mathrm{Hom}(x,z)$
-- for every $x \in C_0$, an **identity morphism** $1_x \in \mathrm{Hom}_C(x,x)$
-
-such that
-
-- for all $x,y,z,w \in C_0$, $f \in \mathrm{Hom}_C(x,y)$, $g \in \mathrm{Hom}_C(y,z)$, $h \in \mathrm{Hom}_C(z,w)$,
-$$ h \circ (g \circ f) = (h \circ g) \circ f $$
-- for all $x,y \in C_0$, $f \in \mathrm{Hom}_C(x,y)$,
-$$ 1_y \circ f = f = f \circ 1_x $$
-
-These two laws are called the **associativity law** and **unitality law** respectively.
-:::
-
-:::{.rmenv title=Example}
-There is a category where the objects are finite sets and the morphisms are morphisms of finite sets, as defined in the previous lecture.
-:::
+- You can do basic combinatorics in the framework we have developed in this lecture
