@@ -341,13 +341,13 @@ We could also change codomains in the same way.
 <p>But if we take this to its logical conclusion, we find that this is true not only of <span class="math inline">\(\{1,2,3,3\}\)</span> and of <span class="math inline">\(\{3,2,1\}\)</span>, but also of <span class="math inline">\(\{1,2,3\}\)</span> and <span class="math inline">\(\{\mathbf{a},\mathbf{b},\mathbf{c}\}\)</span>!</p>
 <p>To see this, let <span class="math inline">\(B = \{1,2,3\}\)</span>, <span class="math inline">\(B^\prime = \{\mathbf{a}, \mathbf{b}, \mathbf{c}\}\)</span>, and define <span class="math inline">\(f \colon B \to B^\prime\)</span> and <span class="math inline">\(g \colon B^\prime \to B\)</span> by</p>
 <p><span class="math display">\[ f(x) = \begin{cases}
-  \mathbf{a} &amp; \text{if $x = 1$}
-  \mathbf{b} &amp; \text{if $x = 2$}
+  \mathbf{a} &amp; \text{if $x = 1$} \\
+  \mathbf{b} &amp; \text{if $x = 2$} \\
   \mathbf{c} &amp; \text{if $x = 3$}
 \end{cases} \]</span></p>
 <p><span class="math display">\[ g(y) = \begin{cases}
-  1 &amp; \text{if $y = \mathbf{a}$}
-  2 &amp; \text{if $y = \mathbf{b}$}
+  1 &amp; \text{if $y = \mathbf{a}$} \\
+  2 &amp; \text{if $y = \mathbf{b}$} \\
   3 &amp; \text{if $y = \mathbf{c}$}
 \end{cases} \]</span></p>
 <p>Then given <span class="math inline">\(h \colon B \to C\)</span>, we can produce <span class="math inline">\(h^\prime \colon B^\prime \to C\)</span> via <span class="math inline">\(h^\prime = h \circ g\)</span>, and vice versa. Moreover, when we start out with a function out of <span class="math inline">\(B\)</span>, compose it with <span class="math inline">\(g\)</span> to make a function out of <span class="math inline">\(B^\prime\)</span> and then compose it with <span class="math inline">\(f\)</span> to make a function out of <span class="math inline">\(B\)</span>, we get the same function back.</p>
