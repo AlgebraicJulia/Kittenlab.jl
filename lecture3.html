@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 3: Category Theory</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./lecture2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 3: Category Theory</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture3.html" class="sidebar-item-text sidebar-link active">Lecture 3: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sets" id="toc-sets" class="nav-link active" data-scroll-target="#sets">Sets</a></li>
+  <li><a href="#categories" id="toc-categories" class="nav-link" data-scroll-target="#categories">Categories</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 3: Category Theory</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<details>
+<summary>
+Julia from last lecture
+</summary>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> 𝔽 <span class="kw">end</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Vec𝔽 <span class="op">&lt;:</span><span class="dt"> 𝔽</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  elems<span class="op">::</span><span class="dt">Vector{Any}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> a <span class="op">∈</span> A.elems</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(A.elems)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(A.elems, k)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">length</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> <span class="fu">length</span>(A.elems)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Int𝔽 <span class="op">&lt;:</span><span class="dt"> 𝔽</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  n<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Int𝔽</span>) <span class="op">=</span> <span class="fl">1</span> <span class="op">&lt;=</span> a <span class="op">&lt;=</span> A.n</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Int𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(<span class="fl">1</span><span class="op">:</span>A.n)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Int𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(<span class="fl">1</span><span class="op">:</span>A.n, k)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> 𝔽Mor</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">𝔽</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">𝔽</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  vals<span class="op">::</span><span class="dt">Dict{Any,Any}</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>(f<span class="op">::</span><span class="dt">𝔽Mor</span>)(x) <span class="op">=</span> f.vals[x]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Int𝔽Mor</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">Int𝔽</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">Int𝔽</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  vals<span class="op">::</span><span class="dt">Vector{Int}</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>(f<span class="op">::</span><span class="dt">Int𝔽Mor</span>)(i) <span class="op">=</span> f.vals[i]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<section id="sets" class="level1">
+<h1>Sets</h1>
+<p>Today we will be moving on from finite sets to talk about sets which are possibly infinite. Infinite sets are a controversial topic; they don’t exist as tangibly as finite sets, and generally are much trickier to compute with. For a mathematician, this is not a problem; they write down formulas for infinite sets in precisely the same way they wrote down formulas for finite sets.</p>
+<p>The crucial difference between finite sets and infinite sets is that any “for all” statement on an infinite set is not checkable by listing out every element of the set and checking that a property holds of each of them. Relatedly, any “exists” statement is likewise not checkable. This seems kind of obvious, but it means that naive extensions of algorithms from the case of finite sets to the case of infinite sets often fails.</p>
+<p>Thus, on a computer infinite sets have a very different feel than finite sets.</p>
+<p>In traditional foundations, everything is built out of sets. But, as we said in the previous lecture, this is unnecessarily strict. We are instead taking Julia to be our foundation, so that we will have primitive things that are not themselves sets. This is a much saner foundation, because while it might be technically possible to build, say, a real number out of sets, nobody really wants to do that.</p>
+<div class="rmenv" title="Definition">
+<p>A <strong>set</strong> <span class="math inline">\(X\)</span> consists of a function from <code>Any</code> to <code>Bool</code>, which may or either be written in Julia or defined mathematically. If <span class="math inline">\(X(x) = \mathbf{true}\)</span>, we write <span class="math inline">\(x \in X\)</span>, and if <span class="math inline">\(X(x) = \mathbf{false}\)</span> we write <span class="math inline">\(x \notin X\)</span>.</p>
+</div>
+<p>Note that when we write down Julia definitions involving sets, we are implicitly assuming that the functions are written in Julia. However, there are some sets that we will use whose functions <em>cannot</em> be written down in Julia, so take the Julia definitions with a grain of salt. If the function defining a set can be written in Julia, we say that set is <strong>computable</strong>, and otherwise the set is <strong>uncomputable</strong>.</p>
+<p>Obviously, we can only model the computable sets in Julia, but the uncomputable sets are still useful for talking <em>about</em> Julia.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> ComputableSet <span class="kw">end</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We expect any subtype of ComputableSet to have in defined on it.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, s<span class="op">::</span><span class="dt">ComputableSet</span>) <span class="op">=</span> <span class="fu">error</span>(<span class="st">"no specific definition found"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Example">
+<p>For any finite set <span class="math inline">\(A\)</span>, let <span class="math inline">\(\chi_{A}\)</span> be defined by <span class="math inline">\(\chi_{A}(x) = \mathbf{true}\)</span> if <span class="math inline">\(x\)</span> is listed in <span class="math inline">\(A\)</span> and <span class="math inline">\(\mathbf{false}\)</span> otherwise. Then <span class="math inline">\(\chi_{A}\)</span> is a set.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>Any Julia type <code>T</code> defines a set, via the function which checks whether a Julia value has that type.</p>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> FiniteSet <span class="op">&lt;:</span><span class="dt"> ComputableSet</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  A<span class="op">::</span><span class="dt">𝔽</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, χ<span class="op">::</span><span class="dt">FiniteSet</span>) <span class="op">=</span> x <span class="op">∈</span> χ.A</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> TypeSet <span class="op">&lt;:</span><span class="dt"> ComputableSet</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  T<span class="op">::</span><span class="dt">Type</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, χ<span class="op">::</span><span class="dt">TypeSet</span>) <span class="op">=</span> x isa χ.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Definition">
+<p>Given two sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, the set <span class="math inline">\(A \to B\)</span> consists of all Julia callables <span class="math inline">\(f\)</span> such that <span class="math inline">\(f(a) \in B\)</span> for all <span class="math inline">\(a \in A\)</span>. Note that</p>
+</div>
+<p>Note that even if <code>A</code> and <code>B</code> are computable sets, there is no way to check in Julia that a given <code>f</code> is an element of <span class="math inline">\(A \to B\)</span> because this would involve iterating through possibly infinitely many elements of <span class="math inline">\(A\)</span>. Again, languages where this is not the case don’t have good ODE solvers.</p>
+<div class="rmenv" title="Definition">
+<p>Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, their <strong>intersection</strong> <span class="math inline">\(X \cap Y\)</span> is defined by</p>
+<p><span class="math display">\[ (X \cap Y)(x) = X(x) \wedge Y(x) \]</span></p>
+<p>Their <strong>union</strong> <span class="math inline">\(X \cup Y\)</span> is defined by</p>
+<p><span class="math display">\[ (X \cup Y)(x) = X(x) \vee Y(x) \]</span></p>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> IntersectionSet</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  X<span class="op">::</span><span class="dt">ComputableSet</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  Y<span class="op">::</span><span class="dt">ComputableSet</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, χ<span class="op">::</span><span class="dt">IntersectionSet</span>) <span class="op">=</span> x <span class="op">∈</span> χ.X <span class="op">&amp;&amp;</span> x <span class="op">∈</span> χ.Y</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> UnionSet</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  X<span class="op">::</span><span class="dt">ComputableSet</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  Y<span class="op">::</span><span class="dt">ComputableSet</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, χ<span class="op">::</span><span class="dt">UnionSet</span>) <span class="op">=</span> x <span class="op">∈</span> χ.X <span class="op">||</span> x <span class="op">∈</span> χ.Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Definition">
+<p>Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, their <strong>product</strong> <span class="math inline">\(X \times Y\)</span> is the set of tuples <span class="math inline">\((x,y)\)</span> where <span class="math inline">\(x \in X\)</span> and <span class="math inline">\(y \in Y\)</span>. That is, <span class="math inline">\(z \in X \times Y\)</span> if and only if <code>z isa Tuple</code>, <code>length(z) = 2</code>, <span class="math inline">\(z[1] \in X\)</span> and <span class="math inline">\(z[2] \in Y\)</span>.</p>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">product</span>(X,Y) <span class="op">=</span> z <span class="op">-&gt;</span> (z isa <span class="dt">Tuple</span>) <span class="op">&amp;&amp;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(z) <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;&amp;</span> <span class="fu">X</span>(z[<span class="fl">1</span>]) <span class="op">&amp;&amp;</span> <span class="fu">Y</span>(z[<span class="fl">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Definition">
+<p>We leave it to the reader to give a mathematical definition for <strong>sum</strong> given the following definition in Julia</p>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Left</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  val<span class="op">::</span><span class="dt">Any</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Right</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  val<span class="op">::</span><span class="dt">Any</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(X,Y) <span class="op">=</span> x <span class="op">-&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> x isa Left</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">X</span>(x.val)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elseif</span> x isa Right</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Y</span>(x.val)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cn">false</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will now move on to categories. But I would like to make one brief point first, which is that there is no set of all sets. This is because not all sets correspond to Julia values, as we consider uncomputable sets to be sets. But there is a set of all computable sets.</p>
+</section>
+<section id="categories" class="level1">
+<h1>Categories</h1>
+<p>The moment we’ve all be waiting for.</p>
+<div class="rmenv" title="Definition">
+<p>A <strong>small category</strong> <span class="math inline">\(C\)</span> consists of</p>
+<ul>
+<li>a set <span class="math inline">\(C_0\)</span> of <strong>objects</strong></li>
+<li>for every <span class="math inline">\(x,y \in C_0\)</span>, a set <span class="math inline">\(\mathrm{Hom}_C(x,y)\)</span> of <strong>morphisms</strong> from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span></li>
+<li>for every <span class="math inline">\(x,y,z \in C_0\)</span>, a <strong>composition function</strong> <span class="math inline">\(\circ \colon \mathrm{Hom}_C(y,z) \times \mathrm{Hom}_(x,y) \to \mathrm{Hom}(x,z)\)</span></li>
+<li>for every <span class="math inline">\(x \in C_0\)</span>, an <strong>identity morphism</strong> <span class="math inline">\(1_x \in \mathrm{Hom}_C(x,x)\)</span></li>
+</ul>
+<p>such that</p>
+<ul>
+<li>for all <span class="math inline">\(x,y,z,w \in C_0\)</span>, <span class="math inline">\(f \in \mathrm{Hom}_C(x,y)\)</span>, <span class="math inline">\(g \in \mathrm{Hom}_C(y,z)\)</span>, <span class="math inline">\(h \in \mathrm{Hom}_C(z,w)\)</span>, <span class="math display">\[ h \circ (g \circ f) = (h \circ g) \circ f \]</span></li>
+<li>for all <span class="math inline">\(x,y \in C_0\)</span>, <span class="math inline">\(f \in \mathrm{Hom}_C(x,y)\)</span>, <span class="math display">\[ 1_y \circ f = f = f \circ 1_x \]</span></li>
+</ul>
+<p>These two laws are called the <strong>associativity law</strong> and <strong>unitality law</strong> respectively.</p>
+</div>
+<p>(Julia to be livecoded)</p>
+<div class="rmenv" title="Example">
+<p>There is a category <span class="math inline">\(\mathsf{Fin}\)</span> where the objects are finite sets and the morphisms are morphisms of finite sets, as defined in the previous lecture.</p>
+</div>
+<p>(Julia to be livecoded)</p>
+<div class="rmenv" title="Example">
+<p>There is a category where the objects are natural numbers and a morphism from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> is a <span class="math inline">\(n \times m\)</span> matrix. Composition of a <span class="math inline">\(n \times m\)</span> matrix and an <span class="math inline">\(m \times r\)</span> matrix is done by matrix multiplication.</p>
+</div>
+<p>(Julia to be livecoded)</p>
+<div class="rmenv" title="Example">
+<p>A graph consists of a finite set of vertices, a finite set of edges, and a source and target map from vertices to edges. Given any graph, there is a “free category” on that graph, where the objects are vertices and the morphisms are <em>paths</em>.</p>
+</div>
+<p>(Julia to be livecoded)</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lecture2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 2: The Category Theory of Finite Sets</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
