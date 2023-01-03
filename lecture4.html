@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 4: Functors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./lecture3.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 4: Functors</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture3.html" class="sidebar-item-text sidebar-link">Lecture 3: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture4.html" class="sidebar-item-text sidebar-link active">Lecture 4: Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#review-in-kittenlab-syntax" id="toc-review-in-kittenlab-syntax" class="nav-link active" data-scroll-target="#review-in-kittenlab-syntax">Review in Kittenlab syntax</a></li>
+  <li><a href="#functors" id="toc-functors" class="nav-link" data-scroll-target="#functors">Functors</a></li>
+  <li><a href="#examples-of-functors" id="toc-examples-of-functors" class="nav-link" data-scroll-target="#examples-of-functors">Examples of Functors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 4: Functors</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="review-in-kittenlab-syntax" class="level2">
+<h2 class="anchored" data-anchor-id="review-in-kittenlab-syntax">Review in Kittenlab syntax</h2>
+<p>In this lecture, we are finally going to start using the Kittenlab.jl library. We weren’t using Kittenlab up until now so that I could show you a variety of design tradeoffs, and so that you were learning concepts rather than a specific instantiation of those concepts, but now it becomes worth it to start building up a coherent library instead of starting from scratch every time.</p>
+<p>We start by giving the Julia definition of category that we will be using now.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">"../src/Categories.jl"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">.Categories</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This declares an abstract type for category</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> Category{Ob, Hom} <span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>along with the following methods that should be implemented on any subtype of that abstract type.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: this is not executed; this is just to show expected type signatures</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dom</span>(c<span class="op">::</span><span class="dt">Category{Ob, Hom}</span>, f<span class="op">::</span><span class="dt">Hom</span>)<span class="op">::</span><span class="dt">Ob</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">codom</span>(c<span class="op">::</span><span class="dt">Category{Ob, Hom}</span>, f<span class="op">::</span><span class="dt">Hom</span>)<span class="op">::</span><span class="dt">Ob</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">compose</span>(c<span class="op">::</span><span class="dt">Category{Ob, Hom}</span>, f<span class="op">::</span><span class="dt">Hom</span>, g<span class="op">::</span><span class="dt">Hom</span>)<span class="op">::</span><span class="dt">Hom</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span>(c<span class="op">::</span><span class="dt">Category{Ob, Hom}</span>, x<span class="op">::</span><span class="dt">Ob</span>)<span class="op">::</span><span class="dt">Hom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In Kittenlab, we have chosen a “middle path” between having everything be fully dynamic and trying to put as much as possible into the type system. We use the Julia type system to guide our implementations, to provide documentation, and to resolve dispatch, but we do not rely on it for correctness.</p>
+<p>If <code>C</code> is a subtype of <code>Category{Ob,Hom}</code>, then we expect that the set of objects for the actual mathematical category is a subset of <code>Ob</code>.</p>
+<p>Moreover, we expect the hom-set from <code>x :: Ob</code> to <code>y :: Ob</code> to be some subset of the elements <code>f :: Hom</code> with <code>dom(f) == x</code> and <code>codom(f) == y</code>.</p>
+<p>This “middle path” is fairly convenient, because often there is a good choice of the types <code>Ob</code> and <code>Hom</code> that makes the category fairly ergonomic to use, in that most or all of the elements of <code>Ob</code> are actually objects of the category, and the same for <code>Hom</code>. Additionally, having more specific types will allow Julia to produce more efficient code.</p>
+<p>We use slightly different definitions for the category of finite sets, following these principles.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">"../src/FinSets.jl"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">.FinSets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Namely, we declare</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> FinSet <span class="op">=</span> <span class="dt">AbstractSet</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> FinFunction{S,T}</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">FinSet{S}</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">FinSet{T}</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  values<span class="op">::</span><span class="dt">AbstractDict{S,T}</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We simplified our design hierarchy in one way (removing the abstract types), and complicated it in another way (adding type parameters); this is a more pragmatic and less flexible approach.</p>
+<p>We now declare a category of finsets and finfunctions to go along with this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> FinSetC <span class="op">&lt;:</span><span class="dt"> Category{FinSet, FinFunction}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">dom</span>(<span class="op">::</span><span class="dt">FinSetC</span>, f<span class="op">::</span><span class="dt">FinFunction</span>) <span class="op">=</span> f.dom</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">codom</span>(<span class="op">::</span><span class="dt">FinSetC</span>, f<span class="op">::</span><span class="dt">FinFunction</span>) <span class="op">=</span> f.codom</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> Categories.<span class="fu">compose</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">::</span><span class="dt">FinSetC</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  f<span class="op">::</span><span class="dt">FinFunction{S,T}</span>, g<span class="op">::</span><span class="dt">FinFunction{T,R}</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>) <span class="kw">where</span> {S,T,R}</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> f.codom <span class="op">==</span> g.dom</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">FinFunction</span>(f.dom, g.codom, <span class="fu">Dict</span>(x <span class="op">=&gt;</span> <span class="fu">g</span>(<span class="fu">f</span>(x)) <span class="cf">for</span> x <span class="kw">in</span> f.dom))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> Categories.<span class="fu">id</span>(<span class="op">::</span><span class="dt">FinSetC</span>, X<span class="op">::</span><span class="dt">FinSet{S}</span>) <span class="kw">where</span> {S}</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">FinFunction</span><span class="dt">{S,S}</span>(X,X,<span class="fu">Dict</span>(x <span class="op">=&gt;</span> x <span class="cf">for</span> x <span class="kw">in</span> X))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Hopefully, at this point the new conventions that we are using should make sense, so we are going to move on to functors!</p>
+</section>
+<section id="functors" class="level2">
+<h2 class="anchored" data-anchor-id="functors">Functors</h2>
+<p>Category theory is all about studying the objects of a category by studying the morphisms between them. So consequently, the study of functors (which are the morphisms between categories) is critical to the studying of categories!</p>
+<div class="rmenv" title="Definition">
+<p>Let <span class="math inline">\(\mathsf{C}\)</span> and <span class="math inline">\(\mathsf{D}\)</span> be categories. A <strong>functor</strong> <span class="math inline">\(F\)</span> from <span class="math inline">\(\mathsf{C}\)</span> to <span class="math inline">\(\mathsf{D}\)</span>, often written <span class="math inline">\(F \colon \mathsf{C} \to \mathsf{D}\)</span>, consists of:</p>
+<ul>
+<li>A function <span class="math inline">\(F_0 \colon \mathsf{C}_0 \to \mathsf{C}_0\)</span>. If <span class="math inline">\(x \in \mathsf{C}_0\)</span>, we often write <span class="math inline">\(F_0(x)\)</span> as <span class="math inline">\(F(x)\)</span>.</li>
+<li>For every <span class="math inline">\(x,y \in \mathsf{C}_0\)</span>, a function <span class="math inline">\(F_{x,y} \colon \mathrm{Hom}_{\mathsf{C}}(x,y) \to \mathrm{Hom}_{\mathsf{C}}(F(x),F(y))\)</span>. If <span class="math inline">\(f \in \mathrm{Hom}_{\mathsf{C}}(x,y)\)</span>, we often write <span class="math inline">\(F_{x,y}(f)\)</span> as <span class="math inline">\(F(f)\)</span>.</li>
+</ul>
+<p>such that the following two laws hold:</p>
+<ul>
+<li>For all <span class="math inline">\(x \in \mathsf{C}_0\)</span>, <span class="math inline">\(1_{F(x)} = F(1_x)\)</span></li>
+<li>For all <span class="math inline">\(x,y,z \in \mathsf{C}_0\)</span>, <span class="math inline">\(f \colon x \to y\)</span>, <span class="math inline">\(g \colon y \to z\)</span>, <span class="math inline">\(F(g \circ f) = F(g) \circ F(f)\)</span>.</li>
+</ul>
+</div>
+<p>We implement this with the following Julia.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">"../src/Functors.jl"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">.Functors</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The declaration of functor is the following.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> Functor{C<span class="op">&lt;:</span><span class="dt">Category</span>, D<span class="op">&lt;:</span><span class="dt">Category</span>} <span class="kw">end</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ob_map</span>(F<span class="op">::</span><span class="dt">Functor{C,D}</span>, x<span class="op">::</span><span class="dt">ObC</span>)<span class="op">::</span><span class="dt">ObD </span><span class="kw">where</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    {ObC, ObD, C<span class="op">&lt;:</span><span class="dt">Category{ObC}</span>, D<span class="op">&lt;:</span><span class="dt">Category{ObD}</span>}</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">error</span>(<span class="st">"unimplemented"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">hom_map</span>(F<span class="op">::</span><span class="dt">Functor{C,D}</span>, f<span class="op">::</span><span class="dt">HomC</span>)<span class="op">::</span><span class="dt">HomD </span><span class="kw">where</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    {ObC, HomC, ObD, HomD, C<span class="op">&lt;:</span><span class="dt">Category{ObC, HomC}</span>, D<span class="op">&lt;:</span><span class="dt">Category{ObD, HomD}</span>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">error</span>(<span class="st">"unimplemented"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># KittenC is the category of Julia-implemented categories and functors</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> KittenC <span class="op">&lt;:</span><span class="dt"> Category{Category, Functor}</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> Categories.<span class="fu">dom</span>(<span class="op">::</span><span class="dt">KittenC</span>, F<span class="op">::</span><span class="dt">Functor{C,D}</span>)<span class="op">::</span><span class="dt">C </span><span class="kw">where</span> {C,D}</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">error</span>(<span class="st">"unimplemented"</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> Categories.<span class="fu">codom</span>(<span class="op">::</span><span class="dt">KittenC</span>, F<span class="op">::</span><span class="dt">Functor{C,D}</span>)<span class="op">::</span><span class="dt">D </span><span class="kw">where</span> {C,D}</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">error</span>(<span class="st">"unimplemented"</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There are some critical subtleties in this declaration.</p>
+<p>First of all, functor is an abstract type parameterized by the <em>types</em> of its domain and codomain categories. Crucially, it is <em>not</em> parameterized by the domain and codomain categories! In the case that these types are singletons, this is an academic distinction. But later on, we will have structs that are subtypes of <code>Category</code> that are <em>not</em> singletons, where there is dynamic data in the category, and then <code>dom</code> and <code>codom</code> will be meaningful. The reason we have the types of the categories in the abstract type for functor is that we can then extract the types of the objects and morphisms for each category.</p>
+<p>Secondly, we have declared a category <code>KittenC</code> of categories and functors. Technically speaking, this is the category of “categories and functors that are implemented in Julia”; we reserve the category <span class="math inline">\(\mathsf{Cat}\)</span> for the category of <em>all</em> (small) categories. But this category is not complete yet: we need to be able to compose functors and take identity functors!</p>
+<p>We first handle this mathematically.</p>
+<div class="rmenv" title="Construction">
+<p>Given three categories <span class="math inline">\(\mathsf{C}\)</span>, <span class="math inline">\(\mathsf{D}\)</span> and <span class="math inline">\(\mathsf{E}\)</span>, along with two functors <span class="math inline">\(F \colon \mathsf{C} \to \mathsf{D}\)</span> and <span class="math inline">\(G \colon \mathsf{D} \to \mathsf{E}\)</span>, there is a functor <span class="math inline">\(G \circ F \colon \mathsf{C} \to \mathsf{E}\)</span> defined in the following way.</p>
+<ul>
+<li>For <span class="math inline">\(x \in \mathsf{C}_0\)</span>, <span class="math inline">\((G \circ F)(x) = G(F(x))\)</span></li>
+<li>For <span class="math inline">\(x,y \in \mathsf{C}_0\)</span>, <span class="math inline">\(f \colon x \to y\)</span>, <span class="math inline">\((G \circ F)(f) = G(F(f))\)</span></li>
+</ul>
+<p>We now show that <span class="math inline">\(G \circ F\)</span> preserves composition and identities. Suppose that <span class="math inline">\(x \in \mathsf{C}_0\)</span>. Then</p>
+<p><span class="math display">\[(G \circ F)(1_x) = G(F(1_x)) = G(1_{F(x)}) = 1_{G(F(x))} = 1_{(G \circ F)(x)}\]</span></p>
+<p>Moreover, if <span class="math inline">\(x,y,z \in \mathsf{C}_0\)</span>, and <span class="math inline">\(r \colon x \to y\)</span> and <span class="math inline">\(s \colon y \to z\)</span>, then</p>
+<p><span class="math display">\[(G \circ F)(s \circ r) = G(F(s \circ r)) = G(F(s) \circ F(r)) = G(F(s)) \circ G(F(r)) = (G \circ F)(s) \circ (G \circ F)(r)\]</span></p>
+<p>We are done.</p>
+</div>
+<div class="rmenv" title="Construction">
+<p>Given any category <span class="math inline">\(\mathsf{C}\)</span>, there is a functor <span class="math inline">\(1_{\mathsf{C}} \colon \mathsf{C} \to \mathsf{C}\)</span> defined in the following way.</p>
+<ul>
+<li>For <span class="math inline">\(x \in \mathsf{C}_0\)</span>, <span class="math inline">\(1_{\mathsf{C}}(x) = x\)</span></li>
+<li>For <span class="math inline">\(x,y \in \mathsf{C}_0\)</span>, <span class="math inline">\(f \colon x \to y\)</span>, <span class="math inline">\(1_{\mathsf{C}}(f) = f\)</span></li>
+</ul>
+<p>We leave it to the reader to show that this preserves identities and compositions. This is really easy if you can just state what you have to prove, but it might be tricky to state what you have to prove! So that would be a good exercise.</p>
+</div>
+<p>In Julia, we represent this all with the following data structures.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ComposedFunctor{C<span class="op">&lt;:</span><span class="dt">Category</span>,D<span class="op">&lt;:</span><span class="dt">Category</span>,E<span class="op">&lt;:</span><span class="dt">Category</span>} <span class="op">&lt;:</span><span class="dt"> Functor{C,E}</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  F<span class="op">::</span><span class="dt">Functor{C,D}</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  G<span class="op">::</span><span class="dt">Functor{D,E}</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ob_map</span>(FG<span class="op">::</span><span class="dt">ComposedFunctor</span>, x) <span class="op">=</span> <span class="fu">ob_map</span>(FG.G, <span class="fu">ob_map</span>(FG.F, x))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hom_map</span>(FG<span class="op">::</span><span class="dt">ComposedFunctor</span>, f) <span class="op">=</span> <span class="fu">hom_map</span>(FG.G, <span class="fu">hom_map</span>(FG.F, f))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">dom</span>(c<span class="op">::</span><span class="dt">KittenC</span>, FG<span class="op">::</span><span class="dt">ComposedFunctor</span>) <span class="op">=</span> <span class="fu">dom</span>(c, FG.F)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">codom</span>(c<span class="op">::</span><span class="dt">KittenC</span>, FG<span class="op">::</span><span class="dt">ComposedFunctor</span>) <span class="op">=</span> <span class="fu">codom</span>(c, FG.G)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> Categories.<span class="fu">compose</span>(</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  c<span class="op">::</span><span class="dt">KittenC</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  F<span class="op">::</span><span class="dt">Functor{C,D}</span>, G<span class="op">::</span><span class="dt">Functor{D,E}</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>) <span class="kw">where</span> {C,D,E}</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">codom</span>(c, F) <span class="op">==</span> <span class="fu">dom</span>(c, G)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ComposedFunctor</span><span class="dt">{C,D,E}</span>(F,G)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> IdFunctor{C<span class="op">&lt;:</span><span class="dt">Category</span>}</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  c<span class="op">::</span><span class="dt">C</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ob_map</span>(I<span class="op">::</span><span class="dt">IdFunctor</span>, x) <span class="op">=</span> x</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">hom_map</span>(I<span class="op">::</span><span class="dt">IdFunctor</span>, f) <span class="op">=</span> f</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">dom</span>(<span class="op">::</span><span class="dt">KittenC</span>, F<span class="op">::</span><span class="dt">IdFunctor</span>) <span class="op">=</span> F.c</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">codom</span>(<span class="op">::</span><span class="dt">KittenC</span>, F<span class="op">::</span><span class="dt">IdFunctor</span>) <span class="op">=</span> F.c</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">id</span>(<span class="op">::</span><span class="dt">KittenC</span>, c<span class="op">::</span><span class="dt">Category</span>) <span class="op">=</span> <span class="fu">IdFunctor</span>(c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="examples-of-functors" class="level2">
+<h2 class="anchored" data-anchor-id="examples-of-functors">Examples of Functors</h2>
+<p>This is the livecoding section! We are going to implement a functor between two categories. Unfortunately, this functor won’t be terribly interesting, because we haven’t met too many categories yet! But soon we will meet more categories, and we will be able to talk about many more functors.</p>
+<p>Recall from last lecture the category of matrices, <span class="math inline">\(\mathsf{Mat}\)</span>, where the objects are natural numbers and a morphism from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> is a <span class="math inline">\(n \times m\)</span> matrix. Composition is matrix multiplication!</p>
+<p>There is a category <span class="math inline">\(\mathsf{Fin}\)</span> where the objects are natural numbers and a morphism from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> is a function from <span class="math inline">\(\{1,\ldots,n\}\)</span> to <span class="math inline">\(\{1,\ldots,m\}\)</span>.</p>
+<p>We make a functor <span class="math inline">\(F\)</span> from <span class="math inline">\(\mathsf{Fin}\)</span> to <span class="math inline">\(\mathsf{Mat}\)</span> that is the identity on objects, and sends a function <span class="math inline">\(f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}\)</span> to the <span class="math inline">\(n \times m\)</span> matrix that has a 1 at index <span class="math inline">\((i, f(i))\)</span> for each <span class="math inline">\(i \in \{1,\ldots,n\}\)</span>, and 0s elsewhere.</p>
+<p>We must show that <span class="math inline">\(F\)</span> preserves composition and identites.</p>
+<p>We start with identities. The identity function <span class="math inline">\(1_n \colon \{1,\ldots,n\} \to \{1,\ldots,n\}\)</span> turns into the matrix with a <span class="math inline">\(1\)</span> at index <span class="math inline">\((i,i)\)</span> for every <span class="math inline">\(i\)</span>, and 0 elsewhere, which is the identity matrix.</p>
+<p>Now, fix <span class="math inline">\(n,m,\ell\)</span>, let <span class="math inline">\(f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}\)</span> and <span class="math inline">\(g \colon \{1,\ldots,m\} \to \{1,\ldots,\ell\}\)</span>, and let <span class="math inline">\(A = F(f)\)</span> and <span class="math inline">\(B = F(g)\)</span>. Then fix <span class="math inline">\(i,k\)</span> and consider the expression for matrix multiplication.</p>
+<p><span class="math display">\[ (AB)_{ik} = \sum_{j=1}^{m} A_{ij} B_{jk} \]</span></p>
+<p>Note that <span class="math inline">\(A_{ij} = 1\)</span> only when <span class="math inline">\(f(i) = j\)</span>, and <span class="math inline">\(B_{jk} = 1\)</span> only when <span class="math inline">\(g(j) = k\)</span>. So the only way that both of them are non-zero for the same <span class="math inline">\(j\)</span> is when <span class="math inline">\(j = f(i)\)</span> and <span class="math inline">\(k = g(j)\)</span>, or in other words <span class="math inline">\(k = (g \circ f)(i)\)</span>. We are done.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lecture3.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 3: Category Theory</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
