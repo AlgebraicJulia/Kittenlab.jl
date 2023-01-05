@@ -1,0 +1,224 @@
+# Lecture 4: Functors {.unnumbered}
+
+## Review in Kittenlab syntax
+
+In this lecture, we are finally going to start using the Kittenlab.jl library. We weren't using Kittenlab up until now so that I could show you a variety of design tradeoffs, and so that you were learning concepts rather than a specific instantiation of those concepts, but now it becomes worth it to start building up a coherent library instead of starting from scratch every time.
+
+We start by giving the Julia definition of category that we will be using now.
+
+```{julia}
+include("../src/Categories.jl")
+using .Categories
+```
+
+This declares an abstract type for category
+
+```julia
+abstract type Category{Ob, Hom} end
+```
+
+along with the following methods that should be implemented on any subtype of that abstract type.
+
+```julia
+# Note: this is not executed; this is just to show expected type signatures
+dom(c::Category{Ob, Hom}, f::Hom)::Ob
+codom(c::Category{Ob, Hom}, f::Hom)::Ob
+compose(c::Category{Ob, Hom}, f::Hom, g::Hom)::Hom
+id(c::Category{Ob, Hom}, x::Ob)::Hom
+```
+
+In Kittenlab, we have chosen a "middle path" between having everything be fully dynamic and trying to put as much as possible into the type system. We use the Julia type system to guide our implementations, to provide documentation, and to resolve dispatch, but we do not rely on it for correctness.
+
+If `C` is a subtype of `Category{Ob,Hom}`, then we expect that the set of objects for the actual mathematical category is a subset of `Ob`.
+
+Moreover, we expect the hom-set from `x :: Ob` to `y :: Ob` to be some subset of the elements `f :: Hom` with `dom(f) == x` and `codom(f) == y`.
+
+This "middle path" is fairly convenient, because often there is a good choice of the types `Ob` and `Hom` that makes the category fairly ergonomic to use, in that most or all of the elements of `Ob` are actually objects of the category, and the same for `Hom`. Additionally, having more specific types will allow Julia to produce more efficient code.
+
+We use slightly different definitions for the category of finite sets, following these principles.
+
+
+```{julia}
+include("../src/FinSets.jl")
+using .FinSets
+```
+
+Namely, we declare
+
+```julia
+const FinSet = AbstractSet
+
+struct FinFunction{S,T}
+  dom::FinSet{S}
+  codom::FinSet{T}
+  values::AbstractDict{S,T}
+end
+```
+
+We simplified our design hierarchy in one way (removing the abstract types), and complicated it in another way (adding type parameters); this is a more pragmatic and less flexible approach.
+
+We now declare a category of finsets and finfunctions to go along with this:
+
+```julia
+struct FinSetC <: Category{FinSet, FinFunction}
+end
+
+Categories.dom(::FinSetC, f::FinFunction) = f.dom
+
+Categories.codom(::FinSetC, f::FinFunction) = f.codom
+
+function Categories.compose(
+  ::FinSetC,
+  f::FinFunction{S,T}, g::FinFunction{T,R}
+) where {S,T,R}
+  @assert f.codom == g.dom
+  FinFunction(f.dom, g.codom, Dict(x => g(f(x)) for x in f.dom))
+end
+
+function Categories.id(::FinSetC, X::FinSet{S}) where {S}
+  FinFunction{S,S}(X,X,Dict(x => x for x in X))
+end
+```
+
+Hopefully, at this point the new conventions that we are using should make sense, so we are going to move on to functors!
+
+## Functors
+
+Category theory is all about studying the objects of a category by studying the morphisms between them. So consequently, the study of functors (which are the morphisms between categories) is critical to the studying of categories!
+
+:::{.rmenv title="Definition"}
+Let $\mathsf{C}$ and $\mathsf{D}$ be categories. A **functor** $F$ from $\mathsf{C}$ to $\mathsf{D}$, often written $F \colon \mathsf{C} \to \mathsf{D}$, consists of:
+
+- A function $F_0 \colon \mathsf{C}_0 \to \mathsf{C}_0$. If $x \in \mathsf{C}_0$, we often write $F_0(x)$ as $F(x)$.
+- For every $x,y \in \mathsf{C}_0$, a function $F_{x,y} \colon \mathrm{Hom}_{\mathsf{C}}(x,y) \to \mathrm{Hom}_{\mathsf{C}}(F(x),F(y))$. If $f \in \mathrm{Hom}_{\mathsf{C}}(x,y)$, we often write $F_{x,y}(f)$ as $F(f)$.
+
+such that the following two laws hold:
+
+- For all $x \in \mathsf{C}_0$, $1_{F(x)} = F(1_x)$
+- For all $x,y,z \in \mathsf{C}_0$, $f \colon x \to y$, $g \colon y \to z$, $F(g \circ f) = F(g) \circ F(f)$.
+:::
+
+We implement this with the following Julia.
+
+```{julia}
+include("../src/Functors.jl")
+using .Functors
+```
+
+The declaration of functor is the following.
+
+```julia
+abstract type Functor{C<:Category, D<:Category} end
+
+function ob_map(F::Functor{C,D}, x::ObC)::ObD where
+    {ObC, ObD, C<:Category{ObC}, D<:Category{ObD}}
+  error("unimplemented")
+end
+
+function hom_map(F::Functor{C,D}, f::HomC)::HomD where
+    {ObC, HomC, ObD, HomD, C<:Category{ObC, HomC}, D<:Category{ObD, HomD}}
+  error("unimplemented")
+end
+ 
+# KittenC is the category of Julia-implemented categories and functors
+
+struct KittenC <: Category{Category, Functor}
+end
+
+function Categories.dom(::KittenC, F::Functor{C,D})::C where {C,D}
+  error("unimplemented")
+end
+
+function Categories.codom(::KittenC, F::Functor{C,D})::D where {C,D}
+  error("unimplemented")
+end
+```
+
+There are some critical subtleties in this declaration.
+
+First of all, functor is an abstract type parameterized by the *types* of its domain and codomain categories. Crucially, it is *not* parameterized by the domain and codomain categories! In the case that these types are singletons, this is an academic distinction. But later on, we will have structs that are subtypes of `Category` that are *not* singletons, where there is dynamic data in the category, and then `dom` and `codom` will be meaningful. The reason we have the types of the categories in the abstract type for functor is that we can then extract the types of the objects and morphisms for each category.
+
+Secondly, we have declared a category `KittenC` of categories and functors. Technically speaking, this is the category of "categories and functors that are implemented in Julia"; we reserve the category $\mathsf{Cat}$ for the category of *all* (small) categories. But this category is not complete yet: we need to be able to compose functors and take identity functors!
+
+We first handle this mathematically.
+
+:::{.rmenv title="Construction"}
+Given three categories $\mathsf{C}$, $\mathsf{D}$ and $\mathsf{E}$, along with two functors $F \colon \mathsf{C} \to \mathsf{D}$ and $G \colon \mathsf{D} \to \mathsf{E}$, there is a functor $G \circ F \colon \mathsf{C} \to \mathsf{E}$ defined in the following way.
+
+- For $x \in \mathsf{C}_0$, $(G \circ F)(x) = G(F(x))$
+- For $x,y \in \mathsf{C}_0$, $f \colon x \to y$, $(G \circ F)(f) = G(F(f))$
+
+We now show that $G \circ F$ preserves composition and identities. Suppose that $x \in \mathsf{C}_0$. Then
+
+$$(G \circ F)(1_x) = G(F(1_x)) = G(1_{F(x)}) = 1_{G(F(x))} = 1_{(G \circ F)(x)}$$
+
+Moreover, if $x,y,z \in \mathsf{C}_0$, and $r \colon x \to y$ and $s \colon y \to z$, then
+
+$$(G \circ F)(s \circ r) = G(F(s \circ r)) = G(F(s) \circ F(r)) = G(F(s)) \circ G(F(r)) = (G \circ F)(s) \circ (G \circ F)(r)$$
+
+We are done.
+:::
+
+:::{.rmenv title="Construction"}
+Given any category $\mathsf{C}$, there is a functor $1_{\mathsf{C}} \colon \mathsf{C} \to \mathsf{C}$ defined in the following way.
+
+- For $x \in \mathsf{C}_0$, $1_{\mathsf{C}}(x) = x$
+- For $x,y \in \mathsf{C}_0$, $f \colon x \to y$, $1_{\mathsf{C}}(f) = f$
+
+We leave it to the reader to show that this preserves identities and compositions. This is really easy if you can just state what you have to prove, but it might be tricky to state what you have to prove! So that would be a good exercise.
+:::
+
+In Julia, we represent this all with the following data structures.
+
+```julia
+struct ComposedFunctor{C<:Category,D<:Category,E<:Category} <: Functor{C,E}
+  F::Functor{C,D}
+  G::Functor{D,E}
+end
+
+ob_map(FG::ComposedFunctor, x) = ob_map(FG.G, ob_map(FG.F, x))
+hom_map(FG::ComposedFunctor, f) = hom_map(FG.G, hom_map(FG.F, f))
+
+Categories.dom(c::KittenC, FG::ComposedFunctor) = dom(c, FG.F)
+Categories.codom(c::KittenC, FG::ComposedFunctor) = codom(c, FG.G)
+
+function Categories.compose(
+  c::KittenC,
+  F::Functor{C,D}, G::Functor{D,E}
+) where {C,D,E}
+  @assert codom(c, F) == dom(c, G)
+  ComposedFunctor{C,D,E}(F,G)
+end
+
+struct IdFunctor{C<:Category}
+  c::C
+end
+
+ob_map(I::IdFunctor, x) = x
+hom_map(I::IdFunctor, f) = f
+
+Categories.dom(::KittenC, F::IdFunctor) = F.c
+Categories.codom(::KittenC, F::IdFunctor) = F.c
+
+Categories.id(::KittenC, c::Category) = IdFunctor(c)
+```
+
+## Examples of Functors
+
+This is the livecoding section! We are going to implement a functor between two categories. Unfortunately, this functor won't be terribly interesting, because we haven't met too many categories yet! But soon we will meet more categories, and we will be able to talk about many more functors.
+
+Recall from last lecture the category of matrices, $\mathsf{Mat}$, where the objects are natural numbers and a morphism from $n$ to $m$ is a $n \times m$ matrix. Composition is matrix multiplication!
+
+There is a category $\mathsf{Fin}$ where the objects are natural numbers and a morphism from $n$ to $m$ is a function from $\{1,\ldots,n\}$ to $\{1,\ldots,m\}$.
+
+We make a functor $F$ from $\mathsf{Fin}$ to $\mathsf{Mat}$ that is the identity on objects, and sends a function $f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}$ to the $n \times m$ matrix that has a 1 at index $(i, f(i))$ for each $i \in \{1,\ldots,n\}$, and 0s elsewhere.
+
+We must show that $F$ preserves composition and identites.
+
+We start with identities. The identity function $1_n \colon \{1,\ldots,n\} \to \{1,\ldots,n\}$ turns into the matrix with a $1$ at index $(i,i)$ for every $i$, and 0 elsewhere, which is the identity matrix.
+
+Now, fix $n,m,\ell$, let $f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}$ and $g \colon \{1,\ldots,m\} \to \{1,\ldots,\ell\}$, and let $A = F(f)$ and $B = F(g)$. Then fix $i,k$ and consider the expression for matrix multiplication.
+
+$$ (AB)_{ik} = \sum_{j=1}^{m} A_{ij} B_{jk} $$
+
+Note that $A_{ij} = 1$ only when $f(i) = j$, and $B_{jk} = 1$ only when $g(j) = k$. So the only way that both of them are non-zero for the same $j$ is when $j = f(i)$ and $k = g(j)$, or in other words $k = (g \circ f)(i)$. We are done.

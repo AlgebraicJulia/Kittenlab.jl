@@ -18,7 +18,7 @@ end
 
 # Examples:
 #
-# f = FinFunction(A,B,Dict(:x => 3, :y => 1, :z => 1))
+# f = FinFunction(A, B, Dict(:x => 3, :y => 1, :z => 1))
 
 isvalid(f::FinFunction) = dom == keys(f.values) && values(f.values) ⊆ f.codom
 

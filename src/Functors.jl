@@ -1,5 +1,5 @@
 module Functors
-export Functor, ob_map, hom_map, Cat
+export Functor, ob_map, hom_map, KittenC
 
 using ..Categories
 
@@ -25,19 +25,19 @@ end
 # compose(d, hom_map(F, f), hom_map(F, g)) == hom_map(F, compose(c, f, g))
 # id(d, ob_map(F, x)) == ob_map(F, id(c, x))
 
-# Cat
-#####
+# KittenC
+#########
 
-# Cat is the category of categories and functors
+# KittenC is the category of Julia-implemented categories and functors
 
-struct Cat <: Category{Category, Functor}
+struct KittenC <: Category{Category, Functor}
 end
 
-function Categories.dom(::Cat, F::Functor)
+function Categories.dom(::KittenC, F::Functor{C,D})::C where {C,D}
   error("unimplemented")
 end
 
-function Categories.codom(::Cat, F::Functor)
+function Categories.codom(::KittenC, F::Functor{C,D})::D where {C,D}
   error("unimplemented")
 end
 
@@ -49,10 +49,10 @@ end
 ob_map(FG::ComposedFunctor, x) = ob_map(FG.G, ob_map(FG.F, x))
 hom_map(FG::ComposedFunctor, f) = hom_map(FG.G, hom_map(FG.F, f))
 
-Categories.dom(c::Cat, FG::ComposedFunctor) = dom(c, FG.F)
-Categories.codom(c::Cat, FG::ComposedFunctor) = codom(c, FG.G)
+Categories.dom(c::KittenC, FG::ComposedFunctor) = dom(c, FG.F)
+Categories.codom(c::KittenC, FG::ComposedFunctor) = codom(c, FG.G)
 
-function Categories.compose(c::Cat, F::Functor, G::Functor)
+function Categories.compose(::KittenC, F::Functor, G::Functor)
   ComposedFunctor(F,G)
 end
 
@@ -61,11 +61,11 @@ struct IdFunctor{C<:Category}
 end
 
 ob_map(I::IdFunctor, x) = x
-hom_map(I::IdFunctor, f) = rf
+hom_map(I::IdFunctor, f) = f
 
-Categories.dom(c::Cat, F::IdFunctor) = F.c
-Categories.codom(c::Cat, F::IdFunctor) = F.c
+Categories.dom(::KittenC, F::IdFunctor) = F.c
+Categories.codom(::KittenC, F::IdFunctor) = F.c
 
-Categories.id(::Cat, c::Category) = IdFunctor(c)
+Categories.id(::KittenC, c::Category) = IdFunctor(c)
 
 end
