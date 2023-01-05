@@ -29,9 +29,9 @@ id(c::Category{Ob, Hom}, x::Ob)::Hom
 
 In Kittenlab, we have chosen a "middle path" between having everything be fully dynamic and trying to put as much as possible into the type system. We use the Julia type system to guide our implementations, to provide documentation, and to resolve dispatch, but we do not rely on it for correctness.
 
-If `C` is a subtype of `Category{Ob,Hom}`, then we expect that the set of objects for the actual mathematical category is a subset of `Ob`.
+If `C` is a subtype of `Category{Ob,Hom}`, then we expect that the set of objects for any element of `C` to be a subset of `Ob`.
 
-Moreover, we expect the hom-set from `x :: Ob` to `y :: Ob` to be some subset of the elements `f :: Hom` with `dom(f) == x` and `codom(f) == y`.
+Moreover, we expect the hom-set from `x :: Ob` to `y :: Ob` to be some subset of the elements `f :: Hom` with `dom(c, f) == x` and `codom(c, f) == y`.
 
 This "middle path" is fairly convenient, because often there is a good choice of the types `Ob` and `Hom` that makes the category fairly ergonomic to use, in that most or all of the elements of `Ob` are actually objects of the category, and the same for `Hom`. Additionally, having more specific types will allow Julia to produce more efficient code.
 
@@ -89,8 +89,8 @@ Category theory is all about studying the objects of a category by studying the 
 :::{.rmenv title="Definition"}
 Let $\mathsf{C}$ and $\mathsf{D}$ be categories. A **functor** $F$ from $\mathsf{C}$ to $\mathsf{D}$, often written $F \colon \mathsf{C} \to \mathsf{D}$, consists of:
 
-- A function $F_0 \colon \mathsf{C}_0 \to \mathsf{C}_0$. If $x \in \mathsf{C}_0$, we often write $F_0(x)$ as $F(x)$.
-- For every $x,y \in \mathsf{C}_0$, a function $F_{x,y} \colon \mathrm{Hom}_{\mathsf{C}}(x,y) \to \mathrm{Hom}_{\mathsf{C}}(F(x),F(y))$. If $f \in \mathrm{Hom}_{\mathsf{C}}(x,y)$, we often write $F_{x,y}(f)$ as $F(f)$.
+- A function $F_0 \colon \mathsf{C}_0 \to \mathsf{D}_0$. If $x \in \mathsf{C}_0$, we often write $F_0(x)$ as $F(x)$.
+- For every $x,y \in \mathsf{C}_0$, a function $F_{x,y} \colon \mathrm{Hom}_{\mathsf{C}}(x,y) \to \mathrm{Hom}_{\mathsf{D}}(F(x),F(y))$. If $f \in \mathrm{Hom}_{\mathsf{C}}(x,y)$, we often write $F_{x,y}(f)$ as $F(f)$.
 
 such that the following two laws hold:
 
