@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 5: A Variety of Categories and Functors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./lecture4.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 5: A Variety of Categories and Functors</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture3.html" class="sidebar-item-text sidebar-link">Lecture 3: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture4.html" class="sidebar-item-text sidebar-link">Lecture 4: Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture5.html" class="sidebar-item-text sidebar-link active">Lecture 5: A Variety of Categories and Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#preorders" id="toc-preorders" class="nav-link active" data-scroll-target="#preorders">Preorders</a></li>
+  <li><a href="#monoids" id="toc-monoids" class="nav-link" data-scroll-target="#monoids">Monoids</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 5: A Variety of Categories and Functors</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In this lecture, we are going to give examples of categories and functors, so that whenever you hear something to do with categories or functors in the future, you can think “Oh, how does this work for categories X,Y,Z and functors F,G,H”. It is a good idea in math to always have a collection of examples for concepts which serve as “test cases”.</p>
+<p>This lecture is going to really start picking up steam from the previous lectures. But I believe in you; you can handle it!</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">"../src/Categories.jl"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">"../src/FinSets.jl"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">.Categories</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">.FinSets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="preorders" class="level2">
+<h2 class="anchored" data-anchor-id="preorders">Preorders</h2>
+<div class="rmenv" title="Definition">
+<p>A <strong>preorder</strong> consists of</p>
+<ul>
+<li>A set <span class="math inline">\(X\)</span></li>
+<li>A function <span class="math inline">\(\leq \colon X \times X \to \{\top, \bot\}\)</span> (which is how we write true and false in math)</li>
+</ul>
+<p>such that</p>
+<ul>
+<li>For all <span class="math inline">\(x \in X\)</span>, <span class="math inline">\(x \leq x\)</span></li>
+<li>For all <span class="math inline">\(x,y,z \in X\)</span>, if <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq z\)</span>, then <span class="math inline">\(x \leq z\)</span>.</li>
+</ul>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> Preorder{T} <span class="kw">end</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># leq(p::Preorder{T}, x::T, y::T)::Bool</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Example">
+<p>Let <span class="math inline">\(A\)</span> be a finite set. A <strong>subset</strong> of <span class="math inline">\(A\)</span> is a finite set containing only elements of <span class="math inline">\(A\)</span>. Equivalently, a subset of <span class="math inline">\(A\)</span> is a function <span class="math inline">\(A \to \{\top, \bot\}\)</span>.</p>
+<p>The set of subsets of <span class="math inline">\(A\)</span> is a preorder, where <span class="math inline">\(U \leq V\)</span> if every element of <span class="math inline">\(U\)</span> is an element of <span class="math inline">\(V\)</span>.</p>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">subsetof</span>(U<span class="op">::</span><span class="dt">FinSet{T}</span>, A<span class="op">::</span><span class="dt">FinSet{T}</span>) <span class="kw">where</span> {T}</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">all</span>(x <span class="op">∈</span> A <span class="cf">for</span> x <span class="kw">in</span> U)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SubsetPreorder{T} <span class="op">&lt;:</span><span class="dt"> Preorder{FinSet{T}}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  A<span class="op">::</span><span class="dt">FinSet{T}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">leq</span>(p<span class="op">::</span><span class="dt">SubsetPreorder{T}</span>, U<span class="op">::</span><span class="dt">FinSet{T}</span>, V<span class="op">::</span><span class="dt">FinSet{T}</span>) <span class="kw">where</span> {T}</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">subsetof</span>(U,p.A)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">subsetof</span>(V,p.B)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subsetof</span>(U,V)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Example">
+<p>The real numbers, <span class="math inline">\(\mathbb{R}\)</span>, are a partially ordered set, using the standard ordering.</p>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RealPreorder <span class="op">&lt;:</span><span class="dt"> Preorder{Float64}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">leq</span>(<span class="op">::</span><span class="dt">RealPreorder</span>, x<span class="op">::</span><span class="dt">Float64</span>, y<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> x <span class="op">&lt;=</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Theorem">
+<p>Given any preorder <span class="math inline">\((X,\leq)\)</span>, there is a category with objects <span class="math inline">\(X\)</span> and</p>
+<ul>
+<li>Precisely one morphism from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> if <span class="math inline">\(x \leq y\)</span></li>
+<li>No morphisms from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> if <span class="math inline">\(x \nleq y\)</span> (if <span class="math inline">\(x\)</span> is not less than <span class="math inline">\(y\)</span>).</li>
+</ul>
+</div>
+<p>In fact, we can take this as an alternative definition of preorder: a preorder is a category where there is either one or zero morphisms between any two objects. The idea is that a morphism from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> “witnesses” the fact that <span class="math inline">\(x \leq y\)</span>.</p>
+<p>We express this with Julia.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> PreorderMorphism{T,P<span class="op">&lt;:</span><span class="dt">Preorder{T}</span>}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  p<span class="op">::</span><span class="dt">P</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">T</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">T</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">PreorderMorphism</span>(p<span class="op">::</span><span class="dt">Preorder{T}</span>, dom<span class="op">::</span><span class="dt">T</span>, codom<span class="op">::</span><span class="dt">T</span>) <span class="kw">where</span> {T}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We can only create this morphism if dom ≤ codom</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@assert</span> <span class="fu">leq</span>(p, dom, codom)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">new</span><span class="dt">{T,typeof(p)}</span>(p, dom, codom)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> PreorderAsCat{T,P<span class="op">&lt;:</span><span class="dt">Preorder{T}</span>} <span class="op">&lt;:</span><span class="dt"> Category{T,PreorderMorphism{T,P}}</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  p<span class="op">::</span><span class="dt">P</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">dom</span>(<span class="op">::</span><span class="dt">PreorderAsCat{T,P}</span>, f<span class="op">::</span><span class="dt">PreorderMorphism{T,P}</span>) <span class="kw">where</span> {T,P} <span class="op">=</span> f.dom</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">codom</span>(<span class="op">::</span><span class="dt">PreorderAsCat{T,P}</span>, f<span class="op">::</span><span class="dt">PreorderMorphism{T,P}</span>) <span class="kw">where</span> {T,P} <span class="op">=</span> f.codom</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">id</span>(c<span class="op">::</span><span class="dt">PreorderAsCat{T,P}</span>, x<span class="op">::</span><span class="dt">T</span>) <span class="kw">where</span> {T,P} <span class="op">=</span> <span class="fu">PreorderMorphism</span>(c.p, x, x)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>Categories.<span class="fu">compose</span>(</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  c<span class="op">::</span><span class="dt">PreorderAsCat{T,P}</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  f<span class="op">::</span><span class="dt">PreorderMorphism{T,P}</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  g<span class="op">::</span><span class="dt">PreorderMorphism{T,P}</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>) <span class="kw">where</span> {T,P} <span class="op">=</span> <span class="fu">PreorderMorphism</span>(c.p, f.dom, g.codom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let us now determine what a functor between two preorders would be, if we understand those preorders as categories.</p>
+<div class="rmenv" title="Proposition">
+<p>A functor between preorders <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> simply consists of a function <span class="math inline">\(F \colon X \to Y\)</span> such that if <span class="math inline">\(x \leq x'\)</span> for <span class="math inline">\(x,x' \in X\)</span>, then <span class="math inline">\(F(x) \leq F(x')\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>If there is a morphism <span class="math inline">\(f\)</span> from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span>, then there must exist a morphism <span class="math inline">\(F(f)\)</span> from <span class="math inline">\(f(x)\)</span> to <span class="math inline">\(f(y)\)</span>. Moreover, <span class="math inline">\(F\)</span> can send morphisms to only one place, so it must preserve composites and identities.</p>
+</div>
+<p>We call a functor between preorders an <strong>order-preserving map</strong>.</p>
+<div class="rmenv" title="Definition">
+<p>There is a category <span class="math inline">\(\mathsf{Preorder}\)</span> of where the objects are preorders and the morphisms are order-preserving maps.</p>
+</div>
+<p>We said that we can view preorders as categories. Let’s make this statement precise.</p>
+<div class="rmenv" title="Definition">
+<p>If <span class="math inline">\(\mathsf{C}\)</span> is a category, then a <em>subcategory</em> <span class="math inline">\(\mathsf{D}\)</span> of <span class="math inline">\(\mathsf{C}\)</span> consists of a subset <span class="math inline">\(\mathsf{D}_{0} \subset \mathsf{C}_{0}\)</span> of objects, and for each <span class="math inline">\(x,y \in \mathsf{D}_{0}\)</span>, a subset <span class="math inline">\(\mathrm{Hom}_{\mathsf{D}}(x,y) \subset \mathrm{Hom}_{\mathsf{C}}(x,y)\)</span> of morphisms, such that</p>
+<ul>
+<li>All identities are in <span class="math inline">\(\mathsf{D}\)</span></li>
+<li>The composite of morphisms in <span class="math inline">\(\mathsf{D}\)</span> is again in <span class="math inline">\(\mathsf{D}\)</span></li>
+</ul>
+<p>If <span class="math inline">\(\mathsf{D}_{0} = \mathsf{C}_{0}\)</span>, we call <span class="math inline">\(\mathsf{D}\)</span> <em>wide</em>, and if <span class="math inline">\(\mathrm{Hom}_{D}(x,y) = \mathrm{Hom}_{C}(x,y)\)</span> for all <span class="math inline">\(x,y \in \mathsf{D}_{0}\)</span>, we call <span class="math inline">\(\mathsf{D}\)</span> <em>full</em>. The only wide, full subcategory is <span class="math inline">\(\mathsf{C}\)</span> itself.</p>
+</div>
+<p>We now state the following proposition</p>
+<div class="rmenv" title="Proposition">
+<p><span class="math inline">\(\mathsf{Preorder}\)</span> is a full subcategory of <span class="math inline">\(\mathsf{Cat}\)</span>.</p>
+</div>
+<p>Now is when something very subtle comes into play. We have two different definitions of preorder, which are in some sense equivalent, but the way we have stated definitions, one of these definitions would make the previous proposition true, and another of those definitions would make the previous proposition false. Specifically, if we say that a preorder is a category with the property that each hom-set is a singleton or empty, then the set of preorders is literally a subset of the set of (small) categories. However, if we say that a preorder is a set with a function to <code>Bool</code>, then this is not true! Concretely, it is not true that <code>Preorder &lt;: Category</code>, it’s just that we can <em>construct</em> a category out of a preorder!</p>
+<p>It is for this reason in category theory that we take a slightly generalized notion of “subobject”. Instead of using subset, where the elements of set <span class="math inline">\(A\)</span> have to be contained in set <span class="math inline">\(B\)</span>, we just require there to be an <em>injection</em> from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span>! So we say that a subcategory of <span class="math inline">\(\mathsf{C}\)</span> is just another category <span class="math inline">\(\mathsf{D}\)</span> that has an injective functor into <span class="math inline">\(\mathsf{C}\)</span>.</p>
+<p>This follows from a more general principle that we should not distinguish between isomorphic objects. I.e., if we have an injective functor into <span class="math inline">\(\mathsf{C}\)</span>, then <span class="math inline">\(\mathsf{D}\)</span> is isomorphic to the image of that functor, which is a literal subset of <span class="math inline">\(\mathsf{C}\)</span>.</p>
+<p>Now that we have made this pedantic and subtle point, we will follow convention in category to ignore it, and say things like <span class="math inline">\(\mathsf{Preorder}\)</span> is a full subcategory of <span class="math inline">\(\mathsf{Cat}\)</span> without caring about the precise definition of preorder we have chosen.</p>
+<p>With this out of the way, we now talk about a menagerie of functors. In category theory, often functors are described by what they do on objects, and their action on morphisms is inferred. This makes a good exercise for the reader; see if you can tell what the action on morphisms of each of the following functors is.</p>
+<ol type="1">
+<li>There is a functor <span class="math inline">\(\mathsf{Preorder} \to \mathsf{Cat}\)</span> that simply sends a preorder to that preorder viewed as a category, as we discussed before.</li>
+<li>There is a functor <span class="math inline">\(\mathsf{Cat}\)</span> which sends a category <span class="math inline">\(\mathsf{C}\)</span> to the preorder with the objects of <span class="math inline">\(\mathsf{C}\)</span>, and <span class="math inline">\(x \leq y\)</span> if and only if <span class="math inline">\(\mathrm{Hom}_{\mathsf{C}}(x,y)\)</span> is non-empty.</li>
+<li>There is a functor <span class="math inline">\(\mathsf{Preorder} \to \mathsf{Set}\)</span> which simply sends a preorder to its underlying set.</li>
+<li>There is a functor <span class="math inline">\(\mathsf{Set} \to \mathsf{Preorder}\)</span> which sends a set <span class="math inline">\(X\)</span> to the preorder with underlying set <span class="math inline">\(X\)</span> where <span class="math inline">\(x \leq y\)</span> if and only if <span class="math inline">\(x = y\)</span>. Such a preorder is known as a <strong>discrete</strong> preorder.</li>
+<li>There is a functor <span class="math inline">\(\mathsf{Set} \to \mathsf{Preorder}\)</span> which sends a set <span class="math inline">\(X\)</span> to the preorder with underlying set <span class="math inline">\(X\)</span> where <span class="math inline">\(x \leq y\)</span> always. Such a preorder is known as a <strong>codiscrete</strong> preorder.</li>
+</ol>
+<p>To sum up, preorders are a special case of categories, where there is at most one morphism between any two objects. We now move on to another special case of categories.</p>
+</section>
+<section id="monoids" class="level2">
+<h2 class="anchored" data-anchor-id="monoids">Monoids</h2>
+<p>Preorders are an “extreme” example of categories, where there are lots of objects, but very few morphisms. The other extreme is monoids, where there is only one object, but plenty of morphisms. We start with the classical definition of morphism.</p>
+<div class="rmenv" title="Definition">
+<p>A <strong>monoid</strong> is a set <span class="math inline">\(M\)</span> along with a binary operation <span class="math inline">\(\ast \colon M \times M \to M\)</span> and an element <span class="math inline">\(e \in M\)</span> such that:</p>
+<ul>
+<li>For all <span class="math inline">\(a,b,c \in M\)</span>, <span class="math inline">\((a \ast b) \ast c = a \ast (b \ast c)\)</span></li>
+<li>For all <span class="math inline">\(a \in M\)</span>, <span class="math inline">\(a \ast e = a = e \ast a\)</span></li>
+</ul>
+<p>We call <span class="math inline">\(e\)</span> the <strong>unit</strong> or <strong>identity element</strong> of the monoid, and <span class="math inline">\(\ast\)</span> the <strong>multiplication</strong>.</p>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> Monoid{T} <span class="kw">end</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># mul(m::Monoid{T}, x::T, y::T)::T</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ident(m::Monoid{T})::T</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Example">
+<p>Let <span class="math inline">\(A\)</span> be an alphabet, and let <span class="math inline">\(A^{\ast}\)</span> be the set of strings on that alphabet. For instance, if <span class="math inline">\(A = \{a,b,c\}\)</span>, then <span class="math inline">\(A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}\)</span>. Then if we define <span class="math inline">\(\ast\)</span> to be ``concatenation’’, i.e.&nbsp;<span class="math inline">\([ab] \ast [cba] = [abcba]\)</span>, and if we define <span class="math inline">\(e = []\)</span>, <span class="math inline">\((A^{\ast},\ast,[])\)</span> is a monoid.</p>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ConcatMonoid{T} <span class="op">&lt;:</span><span class="dt"> Monoid{Vector{T}}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  alphabet<span class="op">::</span><span class="dt">Set{T}</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">mul</span>(m<span class="op">::</span><span class="dt">ConcatMonoid{T}</span>, xs<span class="op">::</span><span class="dt">Vector{T}</span>, ys<span class="op">::</span><span class="dt">Vector{T}</span>) <span class="kw">where</span> {T}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">all</span>(x <span class="op">∈</span> m.alphabet <span class="cf">for</span> x <span class="kw">in</span> xs)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">all</span>(y <span class="op">∈</span> m.alphabet <span class="cf">for</span> y <span class="kw">in</span> xs)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  [xs; ys]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ident</span>(<span class="op">::</span><span class="dt">ConcatMonoid{T}</span>) <span class="kw">where</span> {T} <span class="op">=</span> T[]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="rmenv" title="Example">
+<p>Any of <span class="math inline">\(\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R},\mathbb{C}\)</span> with <span class="math inline">\(+\)</span> or <span class="math inline">\(\cdot\)</span> is a monoid.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>The set of <span class="math inline">\(n \times n\)</span> matrices with either matrix multiplication, element-wise multiplication, or element-wise addition is a monoid.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>The set of subsets of some fixed set <span class="math inline">\(A\)</span> with either intersection or union is a monoid. The unit of intersection is <span class="math inline">\(A\)</span>, and the unit of union is <span class="math inline">\(\emptyset\)</span>.</p>
+</div>
+<div class="rmenv" title="Proposition">
+<p>A monoid is precisely the same thing as a category with only a single object.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Suppose that <span class="math inline">\(\mathsf{C}\)</span> is a category with one object <span class="math inline">\(x\)</span>. Then <span class="math inline">\(\mathsf{Hom}_{\mathsf{C}}(x,x)\)</span> is a monoid with multiplication <span class="math inline">\(\circ\)</span> and unit <span class="math inline">\(1_x\)</span>. Conversely, if <span class="math inline">\(M\)</span> is a monoid, we can construct a category with one object <span class="math inline">\(x\)</span>, and <span class="math inline">\(\mathsf{Hom}_{\mathsf{C}}(x,x) = M\)</span>, with <span class="math inline">\(\circ = \ast\)</span> and <span class="math inline">\(1_x = e\)</span>.</p>
+</div>
+<p>Moreover, a functor between two monoids viewed as categories is a simply a function <span class="math inline">\(F \colon M \to N\)</span> such that <span class="math inline">\(F(a \ast b) = F(a) \ast F(b)\)</span>, as the single object of the monoid has only one place to go!</p>
+<p>Let <span class="math inline">\(\mathsf{Mon}\)</span> be the category of monoids. Then there are a bunch of functors between <span class="math inline">\(\mathsf{Mon}\)</span> and our old familiar categories.</p>
+<ul>
+<li>There is a functor <span class="math inline">\(\mathsf{Mon} \to \mathsf{Cat}\)</span> which sends a monoid to that monoid viewed as a category.</li>
+<li>There is a functor <span class="math inline">\(\mathsf{Mon} \to \mathsf{Set}\)</span> which sends a monoid to its underlying set.</li>
+<li>There is a functor <span class="math inline">\(\mathsf{Set} \to \mathsf{Mon}\)</span> which sends a set <span class="math inline">\(A\)</span> to the monoid <span class="math inline">\(A^{\ast}\)</span> of strings on the alphabet <span class="math inline">\(A\)</span>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lecture4.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 4: Functors</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
