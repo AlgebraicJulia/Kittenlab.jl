@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 6: Path categories and functors as data structures</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./lecture5.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 6: Path categories and functors as data structures</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture3.html" class="sidebar-item-text sidebar-link">Lecture 3: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture4.html" class="sidebar-item-text sidebar-link">Lecture 4: Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture5.html" class="sidebar-item-text sidebar-link">Lecture 5: A Variety of Categories and Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture6.html" class="sidebar-item-text sidebar-link active">Lecture 6: Path categories and functors as data structures</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#graphs" id="toc-graphs" class="nav-link active" data-scroll-target="#graphs">Graphs</a></li>
+  <li><a href="#path-categories-and-functors-out-of-them" id="toc-path-categories-and-functors-out-of-them" class="nav-link" data-scroll-target="#path-categories-and-functors-out-of-them">Path categories and functors out of them</a></li>
+  <li><a href="#graphs-1" id="toc-graphs-1" class="nav-link" data-scroll-target="#graphs-1">Graphs</a></li>
+  <li><a href="#petri-nets" id="toc-petri-nets" class="nav-link" data-scroll-target="#petri-nets">Petri nets</a></li>
+  <li><a href="#wiring-diagrams" id="toc-wiring-diagrams" class="nav-link" data-scroll-target="#wiring-diagrams">Wiring diagrams</a></li>
+  <li><a href="#acsets-in-julia" id="toc-acsets-in-julia" class="nav-link" data-scroll-target="#acsets-in-julia">ACSets in Julia</a></li>
+  <li><a href="#sneak-peak-natural-transformations" id="toc-sneak-peak-natural-transformations" class="nav-link" data-scroll-target="#sneak-peak-natural-transformations">Sneak peak: natural transformations</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 6: Path categories and functors as data structures</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="graphs" class="level2">
+<h2 class="anchored" data-anchor-id="graphs">Graphs</h2>
+<div class="rmenv" title="Definition">
+<p>A <strong>graph</strong> <span class="math inline">\(G\)</span> consists of the following.</p>
+<ul>
+<li>A finite set <span class="math inline">\(G(V)\)</span> of <strong>vertices</strong></li>
+<li>A finite set <span class="math inline">\(G(E)\)</span> of <strong>edges</strong></li>
+<li>A function <span class="math inline">\(G(\mathrm{src}) \colon G(E) \to G(V)\)</span> called the <strong>source map</strong></li>
+<li>A function <span class="math inline">\(G(\mathrm{tgt}) \colon G(E) \to G(V)\)</span> called the <strong>target map</strong></li>
+</ul>
+</div>
+<p>You can think about this like a “database” with two tables, one table for edges and one table for vertices. The vertex table has only a primary key column, and the edge table has two foreign key columns in addition to a primary key column.</p>
+<div id="fig-example-graphs" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="graph_database.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">A graph as a database</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="arad_to_bucharest.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Arad to Bucharest</figcaption><p></p>
+</figure>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Two illustrations of graphs. The first is a simple graph, translated into two “database tables” on the right as well. The second is a classic graph from computer science: major towns and cities in Romania. This graph is often used for search problems; finding the shortest path from Arad to Bucharest and for some reason is one of my favorite graphs.</figcaption><p></p>
+</figure>
+</div>
+<p>Notice that we allow multiple edges between a single pair of vertices, and also edges from a vertex to itself.</p>
+<p>In Julia, we can represent this in the following way.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Graph</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  vertices<span class="op">::</span><span class="dt">FinSet{Int}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  edges<span class="op">::</span><span class="dt">FinSet{Int}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  src<span class="op">::</span><span class="dt">FinFunction{Int,Int}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  tgt<span class="op">::</span><span class="dt">FinFunction{Int,Int}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that graphs seem somewhat similar to categories; vertices are analogous to objects and edges are analogous to morphisms. The important difference is that categories have composition and identities, and graphs don’t. There is, however, a way of building a category out of a graph, and that is the subject of the next section.</p>
+</section>
+<section id="path-categories-and-functors-out-of-them" class="level2">
+<h2 class="anchored" data-anchor-id="path-categories-and-functors-out-of-them">Path categories and functors out of them</h2>
+<div class="rmenv" title="Definition">
+<p>If <span class="math inline">\(G\)</span> is a graph, then a <strong>path</strong> in <span class="math inline">\(G\)</span> is a list <span class="math inline">\(e_{1},\ldots,e_{n}\)</span> of edges, such that <span class="math inline">\(G(\mathrm{tgt})(e_{i}) = G(\mathrm{src})(e_{i+1})\)</span> for <span class="math inline">\(i=1,\ldots,n-1\)</span>. We say that the path goes from <span class="math inline">\(G(\mathrm{src})(e_{1})\)</span> to <span class="math inline">\(G(\mathrm{tgt})(e_{n})\)</span>.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>We can make a path from Arad to Bucharest by going</p>
+<p><code>Arad -&gt; Sibiu -&gt; Fagaras -&gt; Bucharest</code></p>
+</div>
+<div class="rmenv" title="Proposition">
+<p>If <span class="math inline">\(G\)</span> is a graph, then given a path <span class="math inline">\(e_{1},\ldots,e_{n}\)</span> from a vertex <span class="math inline">\(a\)</span> to a vertex <span class="math inline">\(b\)</span>, and a path <span class="math inline">\(e_{1}^{\prime},\ldots,e_{m}^{\prime}\)</span> from <span class="math inline">\(b\)</span> to another vertex <span class="math inline">\(c\)</span>, we can construct a path <span class="math inline">\(e_{1},\ldots,e_{n},e_{1}^{\prime},\ldots,e_{m}^{\prime}\)</span> from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>.</p>
+</div>
+<p>When you hear the word “compose” your eyes should light up and think “Oh, is this a category?” And in this case, it is!</p>
+<div class="rmenv" title="Proposition">
+<p>For any graph <span class="math inline">\(G\)</span>, there is a category <span class="math inline">\(\mathrm{Path}(G)\)</span>, where the objects are vertices in <span class="math inline">\(G\)</span> and a morphism from a vertex <span class="math inline">\(a\)</span> to a vertex <span class="math inline">\(b\)</span> is a path from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span> in <span class="math inline">\(G\)</span>. Composition is as it was in the proposition above, i.e.&nbsp;list concatenation, and the identity on a vertex is simply the empty list.</p>
+</div>
+<p>Whenever you see something that constructs something from another thing, you should think “is this a functor”? And it turns out that <span class="math inline">\(\mathrm{Path}\)</span> is in fact a functor from the category of graphs to the category of categories. However, in order to write this down properly, we have to define the category of graphs, and we aren’t quite ready to do that yet (we will do it by the end of this lecture, though).</p>
+<p>The category <span class="math inline">\(\mathrm{Path}(G)\)</span> has a special property. Namely, in order to define a functor <span class="math inline">\(F\)</span> from <span class="math inline">\(\mathrm{Path}(G)\)</span> to a category <span class="math inline">\(\mathsf{C}\)</span>, all you have to do is pick an object <span class="math inline">\(F(v)\)</span> <span class="math inline">\(\mathsf{C}\)</span> for every vertex <span class="math inline">\(v \in G(V)\)</span>, and then pick a morphism <span class="math inline">\(F(e) \colon F(G(\mathrm{src})(e)) \to F(G(\mathrm{tgt})(e))\)</span> for every edge <span class="math inline">\(e \in G(E)\)</span>.</p>
+<p>Then where do you send a path <span class="math inline">\(e_{1},\ldots,e_{n}\)</span>? Well, you just send it to the composite morphism <span class="math inline">\(F(e_{n}) \circ \cdots \circ F(e_{1})\)</span>! It turns out that <em>any</em> choice of the <span class="math inline">\(F(e)\)</span> works for this; you get preservation of composition “for free”!</p>
+<p>So it’s particularly easy to define a functor coming out of <span class="math inline">\(\mathrm{Path}(G)\)</span>, and it’s also particularly easy to <em>store</em> such a functor: we just store an object for every vertex of <span class="math inline">\(G\)</span> and a morphism for every edge.</p>
+<p>We call a functor from <span class="math inline">\(\mathrm{Path}(G)\)</span> to <span class="math inline">\(\mathsf{Set}\)</span> an <strong>acset</strong>, pronounced to rhyme with “hatchet”. Other terminology you might see (and the etymology for acset) is C-set or copresheaf. However, this can be confusing because sometimes the “C” in C-set refers to <span class="math inline">\(\mathrm{Path}(G)\)</span>, but sometimes we just use C-set as a word. I like to use “acset on schema C” instead of C-set, because then I can just say “acset” without having to define C first. And copresheaf is just unnecessarily fancy. We say “schema” here, because you can think of <span class="math inline">\(\mathsf{C} = \mathrm{Path}(G)\)</span> as a “database schema”; we’ll see more about this later.</p>
+<p>Strictly speaking, there’s more to an acset than what we just presented; the “a” in acset stands for “attributed”. But we will cover this later; functors from <span class="math inline">\(\mathrm{Path}(G)\)</span> to <span class="math inline">\(\mathsf{Set}\)</span> are a special case of acsets.</p>
+<p>We will now look at some examples!</p>
+</section>
+<section id="graphs-1" class="level2">
+<h2 class="anchored" data-anchor-id="graphs-1">Graphs</h2>
+<p>First of all, we can go meta and define graphs themselves this way!</p>
+<p>Consider the following graph <span class="math inline">\(G\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="graph_schema.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Graph schema</figcaption><p></p>
+</figure>
+</div>
+<p>We let <span class="math inline">\(\mathsf{Gr} = \mathrm{Path}(G)\)</span>. Then an acset on <span class="math inline">\(\mathsf{Gr}\)</span> is a <strong>graph</strong>. Using graphs to define graphs is pretty trippy, but fortunately we can “close the loop” because our original definition of graph didn’t rely on any of this notation. Notice that we have been using the notation for a functor out of <span class="math inline">\(\mathsf{Gr}\)</span> all along however!</p>
+</section>
+<section id="petri-nets" class="level2">
+<h2 class="anchored" data-anchor-id="petri-nets">Petri nets</h2>
+<p>Consider the following graph <span class="math inline">\(G\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="petri_net_schema.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Petri net schema</figcaption><p></p>
+</figure>
+</div>
+<p>We let <span class="math inline">\(\mathsf{Petri} = \mathrm{Path}(G)\)</span>. Then an acset on <span class="math inline">\(\mathsf{Petri}\)</span> is a <strong>petri net</strong>.</p>
+<p>Examples of Petri nets:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="sir.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">SIR model</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="lotka_volterra.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Lotka-Volterra model</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="wiring-diagrams" class="level2">
+<h2 class="anchored" data-anchor-id="wiring-diagrams">Wiring diagrams</h2>
+<p>Consider the following graph <span class="math inline">\(G\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="directed_port_graph_schema.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Directed port graph schema</figcaption><p></p>
+</figure>
+</div>
+<p>We let <span class="math inline">\(\mathsf{DPG} = \mathrm{Path}(G)\)</span>. Then an acset on <span class="math inline">\(\mathsf{DPG}\)</span> is a <strong>directed port graph</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="directed_port_graph.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Directed port graph</figcaption><p></p>
+</figure>
+</div>
+<p>Wiring diagrams are slightly more complicated, because they also allow incoming and outgoing wires. Wiring diagrams and directed port graphs can be used to model processes.</p>
+</section>
+<section id="acsets-in-julia" class="level2">
+<h2 class="anchored" data-anchor-id="acsets-in-julia">ACSets in Julia</h2>
+<p>(this part will be livecoded)</p>
+</section>
+<section id="sneak-peak-natural-transformations" class="level2">
+<h2 class="anchored" data-anchor-id="sneak-peak-natural-transformations">Sneak peak: natural transformations</h2>
+<p>We said before that there is a category of graphs. In this part, we will give a definition of a <em>graph homomorphism</em> that will make this precise. It turns out that this comes from a general definition of <em>natural transformation</em>, which can be defined at the level of functors and categories! However, we will only give a hint at what this is, and leave a full exploration of natural transformations to the next lecture.</p>
+<div class="rmenv" title="Definition">
+<p>A <strong>graph homomorphism</strong> <span class="math inline">\(\alpha\)</span> from a graph <span class="math inline">\(G\)</span> to a graph <span class="math inline">\(H\)</span> consists of two maps</p>
+<ul>
+<li><span class="math inline">\(\alpha_{V} \colon G(V) \to H(V)\)</span></li>
+<li><span class="math inline">\(\alpha_{E} \colon G(E) \to H(E)\)</span></li>
+</ul>
+<p>such that <span class="math inline">\(\alpha_{V} \circ G(\mathrm{src}) = H(\mathrm{src}) \circ \alpha_{E}\)</span> and <span class="math inline">\(\alpha_{V} \circ G(\mathrm{tgt}) = H(\mathrm{tgt}) \circ \alpha_{E}\)</span>.</p>
+<p>This means that the graph homomorphism has to “preserve sources and targets”. Just like a functor has to send a morphism from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> to a morphism from <span class="math inline">\(F(A)\)</span> to <span class="math inline">\(F(B)\)</span>, a graph homomorphism has to send an edge from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span> to an edge from <span class="math inline">\(\alpha_V(a)\)</span> to <span class="math inline">\(\alpha_{V}(b)\)</span>.</p>
+<p>These conditions can be expressed equivalently as <em>commutative diagrams</em>. Basically, an commutative diagram is a way of writing an equation between composites of morphisms in a category. The equation is that when you compose the morphisms along any path in the diagram, you get the same result.</p>
+<!-- https://q.uiver.app/?q=WzAsNCxbMCwwLCJHKEUpIl0sWzEsMCwiRyhWKSJdLFswLDEsIkgoRSkiXSxbMSwxLCJIKFYpIl0sWzAsMSwiRyhcXG1hdGhybXtzcmN9KSJdLFswLDIsIlxcYWxwaGFfe0V9IiwyXSxbMiwzLCJIKFxcbWF0aHJte3NyY30pIiwyXSxbMSwzLCJcXGFscGhhX1YiXV0= -->
+<iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsNCxbMCwwLCJHKEUpIl0sWzEsMCwiRyhWKSJdLFswLDEsIkgoRSkiXSxbMSwxLCJIKFYpIl0sWzAsMSwiRyhcXG1hdGhybXtzcmN9KSJdLFswLDIsIlxcYWxwaGFfe0V9IiwyXSxbMiwzLCJIKFxcbWF0aHJte3NyY30pIiwyXSxbMSwzLCJcXGFscGhhX1YiXV0=&amp;embed" width="333" height="304" style="border-radius: 8px; border: none;">
+</iframe>
+<!-- https://q.uiver.app/?q=WzAsNCxbMCwwLCJHKEUpIl0sWzEsMCwiRyhWKSJdLFswLDEsIkgoRSkiXSxbMSwxLCJIKFYpIl0sWzAsMSwiRyhcXG1hdGhybXt0Z3R9KSJdLFswLDIsIlxcYWxwaGFfe0V9IiwyXSxbMiwzLCJIKFxcbWF0aHJte3RndH0pIiwyXSxbMSwzLCJcXGFscGhhX1YiXV0= -->
+<iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsNCxbMCwwLCJHKEUpIl0sWzEsMCwiRyhWKSJdLFswLDEsIkgoRSkiXSxbMSwxLCJIKFYpIl0sWzAsMSwiRyhcXG1hdGhybXt0Z3R9KSJdLFswLDIsIlxcYWxwaGFfe0V9IiwyXSxbMiwzLCJIKFxcbWF0aHJte3RndH0pIiwyXSxbMSwzLCJcXGFscGhhX1YiXV0=&amp;embed" width="333" height="304" style="border-radius: 8px; border: none;">
+</iframe>
+<p>In a future lecture, we will see that these are specific instances of the so-called “naturality squares” for natural transformations.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="three_coloring.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Three coloring graph</figcaption><p></p>
+</figure>
+</div>
+<div class="rmenv" title="Example">
+<p>A <strong>three-coloring</strong> of a graph <span class="math inline">\(G\)</span> is a graph homomorphism from <span class="math inline">\(G\)</span> into the graph above. It assigns each vertex of the graph to a color. Notice in a three-coloring, any two vertices connected by an edge must be assigned different colors, because there are no self-edges in the above graph.</p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lecture5.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 5: A Variety of Categories and Functors</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
