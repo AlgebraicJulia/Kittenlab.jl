@@ -49,7 +49,7 @@ end
 
 function leq(p::SubsetPreorder{T}, U::FinSet{T}, V::FinSet{T}) where {T}
   @assert subsetof(U,p.A)
-  @assert subsetof(V,p.B)
+  @assert subsetof(V,p.A)
   subsetof(U,V)
 end
 ```
