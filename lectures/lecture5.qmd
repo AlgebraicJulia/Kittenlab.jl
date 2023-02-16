@@ -175,7 +175,7 @@ abstract type Monoid{T} end
 ```
 
 :::{.rmenv title="Example"}
-Let $A$ be an alphabet, and let $A^{\ast}$ be the set of strings on that alphabet. For instance, if $A = \{a,b,c\}$, then $A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}$. Then if we define $\ast$ to be ``concatenation'', i.e. $[ab] \ast [cba] = [abcba]$, and if we define $e = []$, $(A^{\ast},\ast,[])$ is a monoid.
+Let $A$ be an alphabet, and let $A^{\ast}$ be the set of strings on that alphabet. For instance, if $A = \{a,b,c\}$, then $A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}$. Then if we define $\ast$ to be "concatenation", i.e. $[ab] \ast [cba] = [abcba]$, and if we define $e = []$, $(A^{\ast},\ast,[])$ is a monoid.
 :::
 
 ```{julia}
