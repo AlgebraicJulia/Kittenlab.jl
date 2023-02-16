@@ -195,6 +195,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./lecture7.html" class="sidebar-item-text sidebar-link">Lecture 7: Natural Transformations</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -379,7 +384,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ident(m::Monoid{T})::T</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Example">
-<p>Let <span class="math inline">\(A\)</span> be an alphabet, and let <span class="math inline">\(A^{\ast}\)</span> be the set of strings on that alphabet. For instance, if <span class="math inline">\(A = \{a,b,c\}\)</span>, then <span class="math inline">\(A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}\)</span>. Then if we define <span class="math inline">\(\ast\)</span> to be ``concatenation’’, i.e.&nbsp;<span class="math inline">\([ab] \ast [cba] = [abcba]\)</span>, and if we define <span class="math inline">\(e = []\)</span>, <span class="math inline">\((A^{\ast},\ast,[])\)</span> is a monoid.</p>
+<p>Let <span class="math inline">\(A\)</span> be an alphabet, and let <span class="math inline">\(A^{\ast}\)</span> be the set of strings on that alphabet. For instance, if <span class="math inline">\(A = \{a,b,c\}\)</span>, then <span class="math inline">\(A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}\)</span>. Then if we define <span class="math inline">\(\ast\)</span> to be “concatenation”, i.e.&nbsp;<span class="math inline">\([ab] \ast [cba] = [abcba]\)</span>, and if we define <span class="math inline">\(e = []\)</span>, <span class="math inline">\((A^{\ast},\ast,[])\)</span> is a monoid.</p>
 </div>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ConcatMonoid{T} <span class="op">&lt;:</span><span class="dt"> Monoid{Vector{T}}</span></span>

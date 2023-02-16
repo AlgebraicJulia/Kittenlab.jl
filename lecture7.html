@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 7: Natural Transformations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./lecture6.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 7: Natural Transformations</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture3.html" class="sidebar-item-text sidebar-link">Lecture 3: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture4.html" class="sidebar-item-text sidebar-link">Lecture 4: Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture5.html" class="sidebar-item-text sidebar-link">Lecture 5: A Variety of Categories and Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture6.html" class="sidebar-item-text sidebar-link">Lecture 6: Path categories and functors as data structures</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture7.html" class="sidebar-item-text sidebar-link active">Lecture 7: Natural Transformations</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#recap" id="toc-recap" class="nav-link active" data-scroll-target="#recap">Recap</a></li>
+  <li><a href="#natural-transformations" id="toc-natural-transformations" class="nav-link" data-scroll-target="#natural-transformations">Natural transformations</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 7: Natural Transformations</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div id="fig-meme" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="2morphisms.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Merry and Pippin miss the higher category theory they were used to in the Shire.</figcaption><p></p>
+</figure>
+</div>
+<section id="recap" class="level2">
+<h2 class="anchored" data-anchor-id="recap">Recap</h2>
+<p>Before we plunge into natural transformations, let’s briefly review the first six lectures, because it has been a while.</p>
+<ul>
+<li>In lecture 1, we learned about what it means to do formal math, and we we did finite sets in Julia.</li>
+<li>In lecture 2, we learned about morphisms between finite sets, including composition, surjections, injections, and bijections. We then learned about the idea of cardinality; how two finite sets can be isomorphic but not equal.</li>
+<li>In lecture 3, we learned how finite sets and functions between them were a special case of a more general concept: a category. In order to do this, we had to first think about what it means to represent an infinite set in Julia, as a function from <code>Any</code> to <code>Bool</code>.</li>
+<li>In lecture 4, we learned about functors between categories. We implemented a general pattern for functors in Julia, and then implemented a specific functor from the category of finite sets to the category of matrices.</li>
+<li>In lecture 5, we learned about special cases of categories: partially ordered sets (each partially ordered set is a category, and the collection of all partially ordered sets with order-preserving maps is also a category) and monoids (each monoid is a category, and the collection of all monoids is also a category). Associated with these examples we also have a variety of functors; order-preserving maps are functors, monoid homomorphisms are functors, and we have a bunch of different functors between the categories of monoids, sets, and partial orders.</li>
+<li>Finally, in lecture 6 we learned about C-sets. We first learned about finitely-presented categories, i.e.&nbsp;categories generated by a graph. We then showed that we could think about functors out of these path graph categories as databases, and then we implemented on the fly a version of databases based on this model. We finished by talking about graph homomorphisms.</li>
+</ul>
+<p>In this lecture, we are going to pick up where we left off last time with graph homomorphisms, and talk about general natural transformations.</p>
+</section>
+<section id="natural-transformations" class="level2">
+<h2 class="anchored" data-anchor-id="natural-transformations">Natural transformations</h2>
+<p>I said before that category theory is unique among mathematics because it is its own metatheory; the collection of all categories forms a category, but the collection of all rings does not form a ring, nor does the collection of all PDEs form a PDE. However, I wasn’t quite telling the truth, because there is actually <em>more</em> structure to the collection of all categories than just a category.</p>
+<p>We can not only consider morphisms between categories (i.e.&nbsp;functors), but also morphisms between the functors themselves. We call these natural transformations. More generally, “morphisms that go between morphisms” are also called 2-morphisms, and we call ordinary morphisms 1-morphisms to contrast.</p>
+<p>The standard picture for natural transformations is</p>
+<div id="fig-nattransf" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<!-- https://q.uiver.app/?q=WzAsMixbMCwwLCJcXG1hdGhzZntDfSJdLFsyLDAsIlxcbWF0aHNme0R9Il0sWzAsMSwiRiIsMCx7ImN1cnZlIjotMn1dLFswLDEsIkciLDIseyJjdXJ2ZSI6Mn1dLFsyLDMsIlxcYWxwaGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d -->
+<iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsMixbMCwwLCJcXG1hdGhzZntDfSJdLFsyLDAsIlxcbWF0aHNme0R9Il0sWzAsMSwiRiIsMCx7ImN1cnZlIjotMn1dLFswLDEsIkciLDIseyJjdXJ2ZSI6Mn1dLFsyLDMsIlxcYWxwaGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d&amp;embed" width="432" height="176" style="border-radius: 8px; border: none;">
+</iframe>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: The natural transformation <span class="math inline">\(\alpha\)</span> is meant to look like it “goes between” <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span></figcaption><p></p>
+</figure>
+</div>
+<p>However, I’ve always thought that this obscured an essential asymmetry to natural transformations, because there is a sense where natural transformations really “live in” <span class="math inline">\(\mathsf{D}\)</span>, not in the abstract space between <span class="math inline">\(\mathsf{C}\)</span> and <span class="math inline">\(\mathsf{D}\)</span>.</p>
+<p>A more informative picture is this:</p>
+<div id="fig-nattransf-biased" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<!-- https://q.uiver.app/?q=WzAsNSxbMiwwLCJjIl0sWzEsMiwiRihjKSJdLFszLDIsIkcoYykiXSxbMCwwLCJcXG1hdGhzZntDfSJdLFswLDIsIlxcbWF0aHNme0R9Il0sWzAsMSwiRiIsMix7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMCwyLCJHIiwwLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoibWFwcyB0byJ9fX1dLFsxLDIsIlxcYWxwaGFfYyJdXQ== -->
+<iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsNSxbMiwwLCJjIl0sWzEsMiwiRihjKSJdLFszLDIsIkcoYykiXSxbMCwwLCJcXG1hdGhzZntDfSJdLFswLDIsIlxcbWF0aHNme0R9Il0sWzAsMSwiRiIsMix7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMCwyLCJHIiwwLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoibWFwcyB0byJ9fX1dLFsxLDIsIlxcYWxwaGFfYyJdXQ==&amp;embed" width="560" height="432" style="border-radius: 8px; border: none;">
+</iframe>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The natural transformation really “lives in” <span class="math inline">\(\mathsf{D}\)</span>.</figcaption><p></p>
+</figure>
+</div>
+<p>Looking at that picture already gives you half of the definition of a natural transformation, so we might as well go all the way and give the whole definition.</p>
+<div class="rmenv" title="Definition">
+<p>Let <span class="math inline">\(\mathsf{C}\)</span> and <span class="math inline">\(\mathsf{D}\)</span> be categories, and <span class="math inline">\(F,G \colon \mathsf{C} \to \mathsf{D}\)</span> be functors between them. Then a <strong>natural transformation</strong> <span class="math inline">\(\alpha \colon F \Rightarrow G\)</span> consists of a morphism <span class="math inline">\(\alpha_{c} \colon F(c) \to G(c)\)</span> for every object <span class="math inline">\(c \in \mathsf{C}\)</span>, such the following holds, which is called the naturality condition.</p>
+<p>For all <span class="math inline">\(c,c^{\prime} \in \mathsf{C}\)</span> and all <span class="math inline">\(f \colon c \to c^{\prime}\)</span>, the bottom square in <a href="#fig-naturality-condition">Figure&nbsp;<span>4</span></a> <em>commutes</em>. That is, <span class="math inline">\(G(f) \circ \alpha_{c} = \alpha_{c^{\prime}} \circ F(f)\)</span>, or in other words, you can follow any path and you get the same result.</p>
+</div>
+<div id="fig-naturality-condition" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<!-- https://q.uiver.app/?q=WzAsNixbMywxLCJjJyJdLFsxLDAsImMiXSxbMCwzLCJGKGMpIl0sWzIsMiwiRyhjKSJdLFs0LDMsIkcoYycpIl0sWzIsNCwiRihjJykiXSxbMSwwLCJmIl0sWzEsMiwiRiIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMSwzLCJHIiwxLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoibWFwcyB0byJ9fX1dLFswLDUsIkYiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtYXBzIHRvIn19fV0sWzAsNCwiRyIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMiw1LCJGKGYpIiwyXSxbMyw0LCJHKGYpIl0sWzIsMywiXFxhbHBoYV9jIl0sWzUsNCwiXFxhbHBoYV97Yyd9IiwyXV0= -->
+<iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsNixbMywxLCJjJyJdLFsxLDAsImMiXSxbMCwzLCJGKGMpIl0sWzIsMiwiRyhjKSJdLFs0LDMsIkcoYycpIl0sWzIsNCwiRihjJykiXSxbMSwwLCJmIl0sWzEsMiwiRiIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMSwzLCJHIiwxLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoibWFwcyB0byJ9fX1dLFswLDUsIkYiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtYXBzIHRvIn19fV0sWzAsNCwiRyIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMiw1LCJGKGYpIiwyXSxbMyw0LCJHKGYpIl0sWzIsMywiXFxhbHBoYV9jIl0sWzUsNCwiXFxhbHBoYV97Yyd9IiwyXV0=&amp;embed" width="700" height="688" style="border-radius: 8px; border: none;">
+</iframe>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: The naturality condition</figcaption><p></p>
+</figure>
+</div>
+<p>This may seem like a big scary diagram, but I want to convince you that this condition is in fact very… natural.</p>
+<p>Recall that a graph is a functor into <span class="math inline">\(\mathsf{Set}\)</span> from the category <span class="math inline">\(\mathsf{Gr}\)</span> which has two objects <span class="math inline">\(V\)</span> and <span class="math inline">\(E\)</span>, and two non-identity morphisms <span class="math inline">\(\mathrm{src},\mathrm{tgt} \colon E \to V\)</span>.</p>
+<p>Suppose that <span class="math inline">\(G_{1}\)</span> and <span class="math inline">\(G_{2}\)</span> are graphs, and <span class="math inline">\(\alpha\)</span> is a natural transformation between them. Then <span class="math inline">\(\alpha\)</span> consists of two maps: a mapping of edges <span class="math inline">\(\alpha_{E} \colon G_{1}(E) \to G_{2}(E)\)</span> and a mapping of vertices <span class="math inline">\(\alpha_{V} \colon G_{1}(V) \to G_{2}(V)\)</span>. The naturality condition for <span class="math inline">\(\mathrm{src}\)</span> can be written as in <a href="#fig-src-naturality">Figure&nbsp;<span>5</span></a>.</p>
+<div id="fig-src-naturality" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<!-- https://q.uiver.app/?q=WzAsNixbMywxLCJWIl0sWzEsMCwiRSJdLFswLDMsIkdfMShFKSJdLFsyLDIsIkdfMihFKSJdLFs0LDMsIkdfMihWKSJdLFsyLDQsIkdfMShWKSJdLFsxLDAsIlxcbWF0aHJte3NyY30iXSxbMSwyLCJHXzEiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtYXBzIHRvIn19fV0sWzEsMywiR18yIiwxLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoibWFwcyB0byJ9fX1dLFswLDUsIkdfMSIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMCw0LCJHXzIiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtYXBzIHRvIn19fV0sWzIsNSwiR18xKFxcbWF0aHJte3NyY30pIiwyXSxbMyw0LCJHXzIoXFxtYXRocm17c3JjfSkiXSxbMiwzLCJcXGFscGhhX0UiXSxbNSw0LCJcXGFscGhhX1YiLDJdXQ== -->
+<iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsNixbMywxLCJWIl0sWzEsMCwiRSJdLFswLDMsIkdfMShFKSJdLFsyLDIsIkdfMihFKSJdLFs0LDMsIkdfMihWKSJdLFsyLDQsIkdfMShWKSJdLFsxLDAsIlxcbWF0aHJte3NyY30iXSxbMSwyLCJHXzEiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtYXBzIHRvIn19fV0sWzEsMywiR18yIiwxLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoibWFwcyB0byJ9fX1dLFswLDUsIkdfMSIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1hcHMgdG8ifX19XSxbMCw0LCJHXzIiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtYXBzIHRvIn19fV0sWzIsNSwiR18xKFxcbWF0aHJte3NyY30pIiwyXSxbMyw0LCJHXzIoXFxtYXRocm17c3JjfSkiXSxbMiwzLCJcXGFscGhhX0UiXSxbNSw0LCJcXGFscGhhX1YiLDJdXQ==&amp;embed" width="757" height="688" style="border-radius: 8px; border: none;">
+</iframe>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: The naturality condition for <span class="math inline">\(\mathrm{src}\)</span>.</figcaption><p></p>
+</figure>
+</div>
+<p>What does this mean? Well, if we follow the arrows in one way, this says that if we start with an edge in <span class="math inline">\(G_{1}(E)\)</span>, map it over to <span class="math inline">\(G_{2}(E)\)</span> following the homomorphism, and then take its source, we get the same thing as if we started by taking its source and then mapped the source over.</p>
+<p>So the naturality condition is precisely that sources and targets of edges are preserved.</p>
+<p>If we do Petri nets next, the naturality condition just states that the sources and targets of arcs are preserved.</p>
+<p>The plan for the live section of this lecture is to implement natural transformations in Julia building off of the implementation of C-sets that we had last time. But first, let’s give some examples of natural transformations between functors that are not C-sets.</p>
+<div class="rmenv" title="Example">
+<p>Suppose that <span class="math inline">\(f, g \colon \mathbb{R} \to \mathbb{R}\)</span> are order-preserving functions, i.e.&nbsp;endofunctors on the poset <span class="math inline">\(\mathbb{R}\)</span> considered as a category. Then a natural transformation <span class="math inline">\(\alpha \colon f \to g\)</span> would be a morphism <span class="math inline">\(f(x) \to g(x)\)</span> for every <span class="math inline">\(x\)</span>. As there is at most one morphism <span class="math inline">\(f(x) \to g(x)\)</span>, and it exists only if <span class="math inline">\(f(x) \leq g(x)\)</span>, there is at most one natural transformation <span class="math inline">\(f \Rightarrow g\)</span>, and it exists only if <span class="math inline">\(f(x) \leq g(x)\)</span> for all <span class="math inline">\(x\)</span>. Thus, the collection of order-preserving maps <span class="math inline">\(\mathbb{R} \to \mathbb{R}\)</span> is itself a poset.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>Suppose that <span class="math inline">\(G\)</span> and <span class="math inline">\(H\)</span> are groups, and <span class="math inline">\(f,g\)</span> are functors from <span class="math inline">\(G\)</span> to <span class="math inline">\(H\)</span> when viewed as one-element categories. Then a natural transformation from <span class="math inline">\(f\)</span> to <span class="math inline">\(g\)</span> is a choice of <span class="math inline">\(h \in H\)</span> such that <span class="math inline">\(f(x) h = h g(x)\)</span> for all <span class="math inline">\(x \in G\)</span>. Or in other words, <span class="math inline">\(f(x) = h g(x) h^{-1}\)</span>. If <span class="math inline">\(H\)</span> is abelian (meaning that the multiplication is commutative), then this can only happen if <span class="math inline">\(f(x) = g(x)\)</span>. However, if <span class="math inline">\(H\)</span> is non-commutative, then this “conjugation” can be non-trivial.</p>
+<p>For instance, suppose that <span class="math inline">\(H\)</span> is the group of 2x2 real matrices, and <span class="math inline">\(G\)</span> is the group of real numbers. Let <span class="math inline">\(f \colon G \to H\)</span> send <span class="math inline">\(\theta \in \mathbb{R}\)</span> to a rotation by <span class="math inline">\(\theta\)</span>, and <span class="math inline">\(g \colon G \to H\)</span> send <span class="math inline">\(\theta\)</span> to a rotation by <span class="math inline">\(-\theta\)</span>. Then if <span class="math inline">\(h \in H\)</span> is the mirror flip around the <span class="math inline">\(y\)</span> axis, <span class="math inline">\(f(\theta) = h g(\theta) h^{-1}\)</span>. I encourage the interested reader to work this out by taking points on the unit circle, and rotating and flipping them in sequence.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>Recall in lecture 5 we defined several functors between <span class="math inline">\(\mathsf{Mon}\)</span> and <span class="math inline">\(\mathsf{Set}\)</span>. One of these functors, which we will now call <span class="math inline">\(F\)</span>, sent a set <span class="math inline">\(X\)</span> to the monoid <span class="math inline">\(X^{\ast}\)</span> of strings on the alphabet <span class="math inline">\(X\)</span> (which you can also think of as lists with elements taken from <span class="math inline">\(X\)</span>). Another functor, which we will now call <span class="math inline">\(U\)</span>, sent a monoid <span class="math inline">\(M\)</span> to its underlying set.</p>
+<p>We can compose these to get a functor <span class="math inline">\(UF \colon \mathsf{Set} \to \mathsf{Set}\)</span>. We then define a natural transformation <span class="math inline">\(\eta \colon 1_{\mathsf{Set}} \to UF\)</span>, where <span class="math inline">\(1_{\mathsf{Set}}\)</span> is the identity functor on <span class="math inline">\(\mathsf{Set}\)</span>. For a set <span class="math inline">\(X\)</span>, <span class="math inline">\(\eta_{X}\)</span> sends an element <span class="math inline">\(x \in X = 1_{\mathsf{Set}}(X)\)</span> to the singleton list <span class="math inline">\([x] \in X^{\ast}\)</span>.</p>
+<p>We show naturality by recalling what <span class="math inline">\(F\)</span> and <span class="math inline">\(U\)</span> do on morphisms. Essentially, <span class="math inline">\(UF\)</span> takes a morphism <span class="math inline">\(f \colon X \to Y\)</span> and “maps it” over a list <span class="math inline">\([x_{1},\ldots,x_{n}]\)</span> to produce <span class="math inline">\([f(x_{1}), \ldots, f(x_{n})]\)</span>. So naturality of <span class="math inline">\(\eta\)</span> is simply saying that taking the singleton of <span class="math inline">\(f(x)\)</span> and mapping <span class="math inline">\(f\)</span> over <span class="math inline">\([x]\)</span> give the same result.</p>
+</div>
+<p>(live section now)</p>
+<p>Remember, the jupyter notebooks for the live section can be found in the github repository for these lecture notes: <a href="https://github.com/AlgebraicJulia/Kittenlab.jl">Kittenlab.jl</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lecture6.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 6: Path categories and functors as data structures</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
