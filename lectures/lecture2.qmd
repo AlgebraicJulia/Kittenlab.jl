@@ -106,10 +106,10 @@ struct Set𝔽
   elems::Set{Any}
 end
 
-Base.:(∈)(a, A::Vec𝔽) = a ∈ A.elems
+Base.:(∈)(a, A::Set𝔽) = a ∈ A.elems
 
-Base.iterate(A::Vec𝔽) = iterate(A.elems)
-Base.iterate(A::Vec𝔽, k) = iterate(A.elems, k)
+Base.iterate(A::Set𝔽) = iterate(A.elems)
+Base.iterate(A::Set𝔽, k) = iterate(A.elems, k)
 ```
 </details>
 
@@ -330,11 +330,11 @@ find_isomorphism(Vec𝔽([:c, :b, :a, :b]), Int𝔽(3)).vals
 The point of this first lecture is to introduce you to finite sets and pure math, not category theory. Therefore, we end with a discussion of a theorem from combinatorics.
 
 :::{.rmenv title=Theorem}
-If $X$ and $Y$ are finite sets, and $X$ has a larger cardinality than $Y$, then for any morphism $f \colon X \to Y$, there exist distinct elements $x_1, x_2 \in X$ such that $f(x_1) = f(x_2)$. In other words, $f$ is not injective.
+If $X$ and $Y$ are finite sets, and $X$ has a larger cardinality than $Y$, then for any morphism $f \colon X \to Y$, there exist distinct elements $x, x' \in X$ such that $f(x) = f(x')$. In other words, $f$ is not injective.
 :::
 
 :::{.proof}
-Suppose that no such $x_1,x_2$ existed. Then if $X = \{x_1,\ldots,x_n\}$ with $x_i \neq x_j$ for all $i,j$, we have $f(x_1),\ldots,f(x_n)$ all distinct. Therefore, there are at least $n$ distinct elements of $Y$, which contradicts the statement that $Y$ has a smaller cardinality than $X$. We are done.
+Suppose that no such $x,x'$ existed. Then if $X = \{x_1,\ldots,x_n\}$ with $x_i \neq x_j$ for all $i,j$, we have $f(x_1),\ldots,f(x_n)$ all distinct. Therefore, there are at least $n$ distinct elements of $Y$, which contradicts the statement that $Y$ has a smaller cardinality than $X$. We are done.
 :::
 
 :::{.rmenv title=Example}
