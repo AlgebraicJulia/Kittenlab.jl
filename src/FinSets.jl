@@ -1,4 +1,6 @@
 module FinSets
+using StructEquality
+
 export FinSet, FinFunction, FinSetC
 
 using ..Categories
@@ -10,10 +12,10 @@ const FinSet = AbstractSet
 # A = Set([:x,:y,:z])
 # B = Set([1,3,4])
 
-struct FinFunction{S,T}
+@struct_hash_equal struct FinFunction{S,T}
   dom::FinSet{S}
   codom::FinSet{T}
-  values::AbstractDict{S,T}
+  values::Dict{S,T}
 end
 
 # Examples:

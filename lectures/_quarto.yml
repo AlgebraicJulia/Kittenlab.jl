@@ -14,6 +14,7 @@ book:
     - lecture5.qmd
     - lecture6.qmd
     - lecture7.qmd
+    - lecture8.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -26,3 +27,7 @@ format:
   html:
     theme: cosmo
     css: main.css
+    filters:
+      - tikz.lua
+
+from: markdown+tex_math_single_backslash

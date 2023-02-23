@@ -1,0 +1,175 @@
+# Lecture 8: Universal Mapping Properties {.unnumbered}
+
+{{< include _preamble.qmd >}}
+
+## Representable Functors
+
+We now have all the players in category theory: categories, functors, and natural transformations. But we need something to make them dance together; this thing is called *universal mapping properties*.
+
+Universal mapping properties are the soul of category theory. The idea is that we characterize an object in a category by looking at all the morphisms in or out of that object. There are two ways to do this: look at the morphisms in, and look at the morphisms out. We'll start with morphisms out.
+
+For any object \(x\) in a category \(\C\), there is a functor
+
+\[ \Hom_{\C}(x, -) \colon \C \to \Set \]
+
+called the **covariant representable functor** on \(x\).^[There are also contravariant representable functors, but we won't be getting to them until the next lecture.]
+
+\( \Hom_{\C}(x, -) \) sends \(y \in \C\) to the set \(\Hom_{\C}(x,y)\) of morphisms from \(x\) to \(y\), and given a morphisms \(g \colon y \to z\), the function
+
+\[ \Hom_{\C}(x,g) \colon \Hom_{\C}(x,y) \to \Hom_{\C}(x,z) \]
+
+is given by *composition*, i.e.
+
+\[ \Hom_{\C}(x,g)(f \in \Hom_{\C}(x,y)) = g \circ f \in \Hom_{\C}(x,z) \]
+
+:::{.rmenv title="Example"}
+Let \(\C = \Gr\), the schema for graphs. Then \( \Hom_{\Gr}(V,-) \) is the graph with one vertex \( \id_V \in \Hom_{\Gr}(V,V) \) and no edges:
+
+![The representable on \(V\)](representable_on_V.png)
+
+Similarly, \( \Hom_\Gr(E,-) \) is the graph with one edge \( \id_E \in \Hom_{\Gr}(E,E) \) and two vertices \( \src, \tgt \in \Hom_{\Gr}(E,V) \).
+
+![The representable on \(E\)](representable_on_E.png)
+:::
+
+:::{.rmenv title="Example"}
+\(\Hom_{\Set}(2,-)\) is the functor on \(\Set\) that sends a set \(X\) to the set
+\[\{f \colon 2 \to X\} = X^{2} \]
+Given a function \(f \colon X \to Y\), \(\Hom_{\Set}(2,f)\) is the function that sends a tuple \( (x_{1},x_{2}) \in X^2 \) to the tuple \( (f(x_{1}), f(x_{2})) \in Y^2 \).
+:::
+
+:::{.rmenv title="Example"}
+For \(n \in \N\), let \(P_n\) be the path graph of length \(n\). Then for a graph \(G\), \(\Hom_{\Set^{\Gr}}(P_{n}, G)\) is the set of length-\(n\) paths in \(G\). Thus, we can think of the representable \(\Hom_{\Set^{\Gr}}(P_{n}, -)\) as a functor which sends a graph to the set of length-\(n\) paths in that graph. Notice that as a special case if \(n = 1\), then this simply sends a graph to the set of edges in that graph. This is sneak peak at the Yoneda lemma (but we won't get there today).
+
+In catlab, we have a very powerful homomorphism search, which can actually compute the set \(Hom_{\Set^{\C}}(G,H)\) for any finite \(\C\). There are all sorts of uses for this, but one is simply finding length-\(n\) paths in a graph!
+:::
+
+## Representatives of functors
+
+Now, there is a natural question to ask: can we go the other way? I.e., given a functor \(F \colon \C \to \Set\), is there an object \( c \in \C \) such that \(F \cong \Hom_\C(c,-) \), where \(\cong\) means natural isomorphism.
+
+This is certainly not always the case, because there are graphs other than the single vertex graph and the single edge graph.
+
+But when it is the case, it turns out that this \(c\) is unique up to isomorphism! That is, if \( \Hom_\C(c, -) \cong \Hom_\C(c', -)\), then \( c \cong c' \)! We won't prove this today, but we will use it.
+
+So this gives us a very powerful tool for constructing objects in a category; we can look for representatives of functors into \(\Set\), and if they exist, they must be unique! Let's do an example.
+
+:::{.rmenv title="Example"}
+Let \(X\) and \(Y\) be sets. Then consider the functor \(F \colon \Set \to \Set\) defined by
+
+\[ F(Z) = \Hom(X,Z) \times \Hom(Y,Z) \]
+
+The disjoint union \(X+Y\) of \(X\) and \(Y\) represents this functor. That is, there is a natural isomorphism
+
+\[ \Hom(X,-) \times \Hom(Y,-) \cong \Hom(X+Y,-) \]
+
+We can implement this isomorphism in Julia.
+
+```{julia}
+# | output: true
+include("../src/Kittenlab.jl")
+using .Kittenlab.FinSets
+using .Kittenlab.Categories
+
+struct Right{T}
+  val::T
+end
+
+struct Left{T}
+  val::T
+end
+
+disjoint_union(X::FinSet{S}, Y::FinSet{T}) where {S,T} =
+  Set{Union{Left{S}, Right{T}}}([Left.(X)..., Right.(Y)...])
+
+
+disjoint_union(Set([1,2,3]), Set([1,2,3]))
+```
+
+```{julia}
+# | output: true
+# Hom(X,-) x Hom(Y,-) -> Hom(X+Y,-)
+copair(f::FinFunction{X,Z}, g::FinFunction{Y,Z}) where {X,Y,Z} =
+  FinFunction{Union{Left{X}, Right{Y}},Z}(
+    disjoint_union(dom(FinSetC(), f), dom(FinSetC(), g)),
+    codom(FinSetC(), g),
+    Dict(
+      vcat(
+        [Left(x) => f(x) for x in dom(FinSetC(), f)],
+        [Right(x) => g(x) for x in dom(FinSetC(), g)],
+      )
+    )
+  )
+
+# Hom(X+Y,-) -> Hom(X,-) x Hom(Y,-)
+unpack(xs::FinSet{X}, ys::FinSet{Y},
+       f::FinFunction{Union{Left{X}, Right{Y}}, Z}) where {X,Y,Z} =
+    (
+      FinFunction{X,Z}(
+        xs, codom(FinSetC(), f),
+        Dict(x => f(Left(x)) for x in xs)
+      ),
+      FinFunction{Y,Z}(
+        ys, codom(FinSetC(), f),
+        Dict(y => f(Right(y)) for y in ys)
+      )
+    )
+
+xs = Set([1,2,3])
+ys = Set([1,2,3])
+zs = Set([:a,:b])
+
+f = FinFunction(xs, zs, Dict([1 => :a, 2 => :b, 3 => :b]))
+g = FinFunction(ys, zs, Dict([1 => :b, 2 => :b, 3 => :a]))
+
+(f′, g′) = unpack(xs, ys, copair(f, g))
+(f == f′, g == g′)
+```
+:::
+
+However, there's no reason why we should only consider such a construction for \(\Set\).
+
+:::{.rmenv title="Definition"}
+In a general category \(\C\), a representing object of \(\Hom(x,-) \times \Hom(y,-)\) is called the **coproduct** of \(x\) and \(y\), and we write it as \(x + y\). A category is said to **have coproducts** if there exists a coproduct for every pair \(x,y \in \C\).
+:::
+
+Recall that representing objects are unique up to isomorphism, so the coproduct of two objects is unique up to isomorphism, which justifies our use of the word "the".
+
+:::{.rmenv title="Example"}
+The category of graphs has coproducts. The coproduct of two graphs \(G\) and \(H\) has
+
+\[
+\begin{align*}
+  (G + H)(V) &= G(V) + H(V) \\
+  (G + H)(E) &= G(E) + H(E) \\
+\end{align*}
+\]
+:::
+
+In fact, all categories of \(\C\)-sets have coproducts, given in a similar manner.
+
+That about wraps up the material for this lecture, but before we close, I want to present the "more traditional way" of talking about coproducts.
+
+Following the isomorphism
+
+\[ \Hom(X+Y, -) \cong \Hom(X, -) \times Hom(Y, -) \]
+
+with \(\id_{X+Y} \in \Hom(X+Y, X+Y) \), we get two maps
+
+\[ \iota_{X} \in \Hom(X, X+Y), \iota_{Y} \in Hom(Y, X+Y) \]
+
+We say that \(X+Y\) is the *universal* object with these mappings, which means that for any other
+
+```tikzcd
+X \ar["f", dr] & & Y \ar["g", dl] \\
+& Z
+```
+
+there is a unique map \(\langle f, g \rangle \colon X+Y \to Z\) such that the following commutes.
+
+```tikzcd
+X \ar["f"', dr] \ar["\iota_X", r] & X + Y \ar["\langle f{,}g \rangle", d] & Y \ar["g", dl] \ar["\iota_Y"', l] \\
+& Z
+```
+
+We leave it to the reader to show that this is an equivalent definition of coproduct!

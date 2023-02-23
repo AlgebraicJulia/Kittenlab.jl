@@ -12,9 +12,9 @@ struct Diagram{L, Ob, Hom, C<:Category{Ob, Hom}} <: Functor{FinCat{L}, C}
   hom_map::Dict{L, Hom}
 end
 
-Categories.dom(::Cat, d::Diagram) = d.diagram
+Categories.dom(::KittenC, d::Diagram) = d.diagram
 
-Categories.codom(::Cat, d::Diagram) = d.base
+Categories.codom(::KittenC, d::Diagram) = d.base
 
 Functors.ob_map(d::Diagram{L}, x::L) where {L} = d.ob_map[x]
 

@@ -38,3 +38,11 @@ div.proof:after {
 .rmenv > :last-child {
   margin-bottom: 0 !important;
 }
+
+.tikzcd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
