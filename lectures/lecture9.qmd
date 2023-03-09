@@ -1,0 +1,255 @@
+# Lecture 9: Colimits {.unnumbered}
+
+{{< include _preamble.qmd >}}
+
+## Colimits as gluing
+
+The core idea behind colimits is that we take a bunch of objects in a category, take their "disjoint union" (i.e., their $n$-ary coproduct), and then "glue" parts of those objects together.
+
+So before we get into the category theory, let's talk about exactly what that means.
+
+We want to be able to "declare by fiat" that two elements of a set are actually the same element. How can we record this declaration mathematically?
+
+We start out with a set $X$. We then make a relation on $X$, i.e. $R \subset X \times X$, where $(x,x') \in X$ if we are "declaring" that $x$ should be equal to $x'$.
+
+This relation should satisfy three properties.
+
+1. $(x,x) \in R$ for all $x$
+2. If $(x,y) \in R$, then $(y, x) \in R$
+3. If $(x,y) \in R$ and $(y,z) \in R$, then $(x,z) \in R$
+
+One way of saying this succinctly is that $(X,R)$ is a preorder where all morphisms are invertible. This is called an **equivalence relation**.
+
+We can then take the set of "connected components", which we call $X/R$. An element of $X/R$ is a subset $U$ of $X$ such that for all $x,y \in U$, $(x,y) \in R$, and if $x \in U$ and $(x,y) \in R$, then $y \in U$.
+
+There is a very efficient data structure for storing an equivalence relation on the set $\{1,\ldots,n\}$, called a *union find*.
+
+We're going to start with a more naive data structure, and then improve it to a union find.
+
+The idea is that we choose a representative for each equivalence class, and we store the mapping from number to representative in an array. Two elements are in the same equivalence class if and only if their representatives are the same.
+
+We start out with the equivalence classes $\{\{1\},\ldots,\{n\}\}$, and thus each element is assigned itself as a representative.
+
+```julia
+struct RepStore
+  representative::Vector{Int}
+  function RepStore(n::Int)
+    new(Vector{Int}(1:n))
+  end
+end
+
+equivalent(uf::RepStore, i::Int, j::Int) = uf.representative[i] == uf.representative[j]
+```
+
+We now want to be able to "declare by fiat" that two elements are equal. Naively, an algorithm for this would look something like the following.
+
+```julia
+function union!(uf::RepStore, i::Int, j::Int)
+  irep, jrep = uf.representative[i], uf.representative[j]
+  for k in 1:length(uf.representative)
+    if uf.representative[k] == jrep
+      uf.representative[k] = irep
+    end
+  end
+end
+```
+
+This sets anything that previously had the same representative as `j` to now have the same representative as `i`.
+
+But we can do better than this. Ideally, we would just write
+
+```julia
+function union!(uf::RepStore, i::Int, j::Int)
+  irep, jrep = uf.representative[i], uf.representative[j]
+  uf.representative[jrep] = irep
+end
+```
+
+This doesn't quite work. In order to make it work, we use a different strategy for storing the representatives.
+
+```julia
+struct UnionFind
+  parent::Vector{Int}
+  function UnionFind(n::Int)
+    new(Vector{Int}(1:n))
+  end
+end
+
+function find_root(uf::UnionFind, i::Int)
+  parent = uf.parent[i]
+  if parent == i
+    i
+  else
+    find_root(uf, parent)
+  end
+end
+
+function union!(uf::UnionFind, i::Int, j::Int)
+  iroot, jroot = find_root(uf, i), find_root(uf, j)
+  uf.parent[jroot] = iroot
+end
+```
+
+This implicitly stores the representative for each equivalence class via a chain of links. One way of thinking about this is that we are storing a *forest* of nodes, and we can check if two nodes are in the same tree by following the links up to the root and checking if the root is the same for each.
+
+There are then several optimizations that we can make then in order to make this run even faster, which we won't get into now, but once we have done that `find_root` and `union!` both run in essentially constant time.
+
+So this gives us a good way of "declaring by fiat" that two elements of a set are equal: we just run `merge!` on them.
+
+Let's now use this to make an implementation of the categorical operation of *pushout*.
+
+## Pushouts
+
+A *pushout* is a type of colimit, and understanding how pushouts work will generalize well to understanding of general colimits.
+
+:::{.rmenv title="Definition"}
+Suppose we have the following diagram in a category $\C$
+```tikzcd
+X && Y \\
+& Z
+\arrow["g", from=2-2, to=1-1]
+\arrow["f"', from=2-2, to=1-3]
+```
+
+Then the **pushout** of this diagram is given by another object $X +_{Z} Y \in \C$ along with maps $\iota_{X}$, $\iota_{Y}$ and $\iota_{Z}$ that make the following commute
+
+```tikzcd
+& {X +_Z Y} \\
+X && Y \\
+& Z
+\arrow["g", from=3-2, to=2-1]
+\arrow["f"', from=3-2, to=2-3]
+\arrow["{\iota_X}", from=2-1, to=1-2]
+\arrow["{\iota_Y}"', from=2-3, to=1-2]
+\arrow["{\iota_Z}", from=3-2, to=1-2]
+```
+
+such that for any $W$ with $\iota_{X}'$, $\iota_{Y}'$ $\iota_{Z}'$ similar, there exists a unique map $p_{W} \colon X +_{Z} Y \to W$ such that the following commutes.
+
+```tikzcd
+& W \\
+\\
+X & {X +_Z Y} & Y \\
+& Z
+\arrow["g", from=4-2, to=3-1]
+\arrow["f"', from=4-2, to=3-3]
+\arrow["{\iota_X}", from=3-1, to=3-2]
+\arrow["{\iota_Y}"', from=3-3, to=3-2]
+\arrow["{\iota_X'}", from=3-1, to=1-2]
+\arrow["{p_W}", from=3-2, to=1-2]
+\arrow["{\iota_Y'}"', from=3-3, to=1-2]
+```
+
+(there should also be $\iota_{Z}$ and $\iota_{Z}'$, but it's hard to fit them in that diagram).
+:::
+
+The way we think about this is that $X +_{Z} Y$ is the coproduct of $X$ and $Y$, but with the image of $Z$ in $X$ "equalized by fiat" with the image of $Z$ in $Y$.
+
+:::{.rmenv title="Example"}
+In $\Set$, the pushout of the diagram
+```tikzcd
+X && Y \\
+& Z
+\arrow["g", from=2-2, to=1-1]
+\arrow["f"', from=2-2, to=1-3]
+```
+is $X + Y/~$, where $~$ is the equivalence relation generated by $f(z) ~ g(z)$ for all $z \in Z$.
+
+We compute this with
+```julia
+function pushout(f::FinFunction, g::FinFunction)
+  @assert dom(f) == dom(g)
+  n = length(codom(f))
+  m = length(codom(g))
+  po = UnionFind(n + m)
+  for z in dom(f)
+    union!(po, f(z), n + g(z))
+  end
+  roots = unique!([find_root(res, i) for i in 1:length(po)])
+  (Set(roots),
+   Dict(i => find_root(res, f(i)) for i in 1:n),
+   Dict(i => find_root(res, g(i) + n) for i in 1:m),
+   )
+end
+```
+
+Why is this a coproduct? Well, given another set $W$ with maps in from $X$, $Y$ and $Z$ that commute, we can figure out where to send each equivalence class in $X+Y/~$, because by the commutation property, all elements of each equivalence class have to go to the same element of $W$.
+:::
+
+We can do the exact same thing for graphs. We can take two graphs, take their coproduct, and then "glue" some of their edges and vertices together, according to maps out of a third graph.
+
+Now, recall in the last lecture that we characterized coproducts as representatives of certain functors. We can do the exact same thing here, but we have to describe the functor that it's representing in a special way.
+
+Let $\D$ be the category presented by the graph
+
+```tikzcd
+\bullet && \bullet \\
+& \bullet
+\arrow[from=2-2, to=1-1]
+\arrow[from=2-2, to=1-3]
+```
+
+Then the "setup" for a pushout is a functor $F \colon \D \to \C$.
+
+:::{.rmenv title="Proposition"}
+The pushout of $F \colon \D \to \C$ is a representing object for $\Hom_{\C^{\D}}(F, \Delta(-))$, where $\Delta \colon \C \to \C^{\D}$ sends an object $X$ to the constant functor at $X$.
+:::
+
+:::{.proof}
+An element of $\Hom_{\C^{\D}}(F, \Delta(W))$ is a natural transformation $\alpha$ from $F$ to $\Delta(W)$. Remember, a natural transformation consists of a *morphism* in $\C$ for every *object* in $\D$, so in this case we have three morphisms. Then the naturality condition implies that the diagram
+
+```tikzcd
+& W \\
+{F(d_1)} && {F(d_2)} \\
+& {F(d_3)}
+\arrow[from=3-2, to=2-1]
+\arrow[from=3-2, to=2-3]
+\arrow["{\alpha_{d_1}}", from=2-1, to=1-2]
+\arrow["{\alpha_{d_3}}", from=3-2, to=1-2]
+\arrow["{\alpha_{d_2}}"', from=2-3, to=1-2]
+```
+
+commutes.
+
+A representative of $\Hom_{\C^{\D}}(F, \Delta(-))$ is an object $\varprojlim F \in \C$ such that $\Hom_{\C}(\varprojlim F, W) \cong \Hom_{\C^{\D}}(F, \Delta(W))$. We can show that such an object satisfies the earlier definition of pushout by passing in the identity on $\varprojlim F$ into the right hand side, to get a map $\Hom_{\C^{\D}}(F, \Delta(\varprojlim F))$ that gives the diagram in the definition. And then the naturality of the isomorphism gives us the factorization property. The converse can be proved similarly.
+:::
+
+This gives us a hint on how to do general colimits.
+
+:::{.rmenv title="Definition"}
+Given two categories $\D$ and $\C$, and a functor $F \colon \D \to \C$, the colimit $\varprojlim F$ is the representing object for $\Hom_{\C^{\D}}(F, \Delta(-))$ (if such an object exists).
+:::
+
+:::{.rmenv title="Example"}
+If $\D$ is the discrete category with two objects, then we just get coproducts again. More generally, we can do $n$-ary coproducts by making $\D$ the discrete category with $n$ objects.
+:::
+
+:::{.rmenv title="Example"}
+If $\D$ is the *empty* category, what do we get? Well $\Hom_{\C^{\D}}(F, \Delta(-))$ is always a singleton, if $F$ is the unique functor from $\D$ to $\C$. So we are looking for an object $X \in C$ such that $\Hom(X,Y)$ is a singleton for all $Y$.
+
+In $\Set$, this is the empty set. More generally, this is called an **initial object**.
+:::
+
+:::{.rmenv title="Example"}
+If $\D$ is a category that looks like this:
+
+```tikzcd
+{d_1} & {d_2}
+\arrow[shift right=1, from=1-1, to=1-2]
+\arrow[shift left=1, from=1-1, to=1-2]
+```
+
+then the colimit of a functor $F \colon \D \to \C$ is called a *coequalizer*.
+
+Category theory is the subject where the examples have examples: let's give an example of a coequalizer. Suppose that $\C$ is the category of abelian groups, and we have the diagram
+
+```tikzcd
+H & G
+\arrow["0"', shift right=1, from=1-1, to=1-2]
+\arrow["f", shift left=1, from=1-1, to=1-2]
+```
+
+where $H$ is a subgroup of $G$, $f$ is the inclusion, and $0$ is the constant map at the identity. Then the coequalizer of that diagram is $G/H$, the quotient group. This is the group that results from "declaring by fiat" every element of $H$ to be $0$.
+:::
+
+Colimits are a rich subject which we will no doubt return to over and over again, but that will be it for today!
