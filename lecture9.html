@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./lecture10.html" rel="next">
 <link href="./lecture8.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -206,6 +206,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lecture9.html" class="sidebar-item-text sidebar-link active">Lecture 9: Colimits</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -360,43 +365,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>   <span class="fu">Dict</span>(i <span class="op">=&gt;</span> <span class="fu">find_root</span>(res, <span class="fu">g</span>(i) <span class="op">+</span> n) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>m),</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>   )</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Why is this a coproduct? Well, given another set <span class="math inline">\(W\)</span> with maps in from <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span> that commute, we can figure out where to send each equivalence class in <span class="math inline">\(X+Y/~\)</span>, because by the commutation property, all elements of each equivalence class have to go to the same element of <span class="math inline">\(W\)</span>.</p>
+<p>Why is this a pushout? Well, given another set <span class="math inline">\(W\)</span> with maps in from <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span> that commute, we can figure out where to send each equivalence class in <span class="math inline">\(X+Y/~\)</span>, because by the commutation property, all elements of each equivalence class have to go to the same element of <span class="math inline">\(W\)</span>.</p>
 </div>
 <p>We can do the exact same thing for graphs. We can take two graphs, take their coproduct, and then “glue” some of their edges and vertices together, according to maps out of a third graph.</p>
 <p>Now, recall in the last lecture that we characterized coproducts as representatives of certain functors. We can do the exact same thing here, but we have to describe the functor that it’s representing in a special way.</p>
-<p>Let <span class="math inline">\(\mathbb{D}\)</span> be the category presented by the graph</p>
+<p>Let <span class="math inline">\(\mathsf{D}\)</span> be the category presented by the graph</p>
 <div class="tikzcd">
 <img src="bc7dc8055741041b159e288d51caa10635c03c38.svg" class="img-fluid">
 </div>
-<p>Then the “setup” for a pushout is a functor <span class="math inline">\(F \colon \mathbb{D}\to \mathsf{C}\)</span>.</p>
+<p>Then the “setup” for a pushout is a functor <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span>.</p>
 <div class="rmenv" title="Proposition">
-<p>The pushout of <span class="math inline">\(F \colon \mathbb{D}\to \mathsf{C}\)</span> is a representing object for <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(-))\)</span>, where <span class="math inline">\(\Delta \colon \mathsf{C}\to \mathsf{C}^{\mathbb{D}}\)</span> sends an object <span class="math inline">\(X\)</span> to the constant functor at <span class="math inline">\(X\)</span>.</p>
+<p>The pushout of <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span> is a representing object for <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span>, where <span class="math inline">\(\Delta \colon \mathsf{C}\to \mathsf{C}^{\mathsf{D}}\)</span> sends an object <span class="math inline">\(X\)</span> to the constant functor at <span class="math inline">\(X\)</span>.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>An element of <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(W))\)</span> is a natural transformation <span class="math inline">\(\alpha\)</span> from <span class="math inline">\(F\)</span> to <span class="math inline">\(\Delta(W)\)</span>. Remember, a natural transformation consists of a <em>morphism</em> in <span class="math inline">\(\mathsf{C}\)</span> for every <em>object</em> in <span class="math inline">\(\mathbb{D}\)</span>, so in this case we have three morphisms. Then the naturality condition implies that the diagram</p>
+<p><span class="proof-title"><em>Proof</em>. </span>An element of <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(W))\)</span> is a natural transformation <span class="math inline">\(\alpha\)</span> from <span class="math inline">\(F\)</span> to <span class="math inline">\(\Delta(W)\)</span>. Remember, a natural transformation consists of a <em>morphism</em> in <span class="math inline">\(\mathsf{C}\)</span> for every <em>object</em> in <span class="math inline">\(\mathsf{D}\)</span>, so in this case we have three morphisms. Then the naturality condition implies that the diagram</p>
 <div class="tikzcd">
 <img src="48c89f3df797cbdb6fdc7a02664fb8e32d87f7f8.svg" class="img-fluid">
 </div>
 <p>commutes.</p>
-<p>A representative of <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(-))\)</span> is an object <span class="math inline">\(\varprojlim F \in \mathsf{C}\)</span> such that <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}}(\varprojlim F, W) \cong \operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(W))\)</span>. We can show that such an object satisfies the earlier definition of pushout by passing in the identity on <span class="math inline">\(\varprojlim F\)</span> into the right hand side, to get a map <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(\varprojlim F))\)</span> that gives the diagram in the definition. And then the naturality of the isomorphism gives us the factorization property. The converse can be proved similarly.</p>
+<p>A representative of <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span> is an object <span class="math inline">\(\varprojlim F \in \mathsf{C}\)</span> such that <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}}(\varprojlim F, W) \cong \operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(W))\)</span>. We can show that such an object satisfies the earlier definition of pushout by passing in the identity on <span class="math inline">\(\varprojlim F\)</span> into the right hand side, to get a map <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(\varprojlim F))\)</span> that gives the diagram in the definition. And then the naturality of the isomorphism gives us the factorization property. The converse can be proved similarly.</p>
 </div>
 <p>This gives us a hint on how to do general colimits.</p>
 <div class="rmenv" title="Definition">
-<p>Given two categories <span class="math inline">\(\mathbb{D}\)</span> and <span class="math inline">\(\mathsf{C}\)</span>, and a functor <span class="math inline">\(F \colon \mathbb{D}\to \mathsf{C}\)</span>, the colimit <span class="math inline">\(\varprojlim F\)</span> is the representing object for <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(-))\)</span> (if such an object exists).</p>
+<p>Given two categories <span class="math inline">\(\mathsf{D}\)</span> and <span class="math inline">\(\mathsf{C}\)</span>, and a functor <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span>, the colimit <span class="math inline">\(\varprojlim F\)</span> is the representing object for <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span> (if such an object exists).</p>
 </div>
 <div class="rmenv" title="Example">
-<p>If <span class="math inline">\(\mathbb{D}\)</span> is the discrete category with two objects, then we just get coproducts again. More generally, we can do <span class="math inline">\(n\)</span>-ary coproducts by making <span class="math inline">\(\mathbb{D}\)</span> the discrete category with <span class="math inline">\(n\)</span> objects.</p>
+<p>If <span class="math inline">\(\mathsf{D}\)</span> is the discrete category with two objects, then we just get coproducts again. More generally, we can do <span class="math inline">\(n\)</span>-ary coproducts by making <span class="math inline">\(\mathsf{D}\)</span> the discrete category with <span class="math inline">\(n\)</span> objects.</p>
 </div>
 <div class="rmenv" title="Example">
-<p>If <span class="math inline">\(\mathbb{D}\)</span> is the <em>empty</em> category, what do we get? Well <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathbb{D}}}(F, \Delta(-))\)</span> is always a singleton, if <span class="math inline">\(F\)</span> is the unique functor from <span class="math inline">\(\mathbb{D}\)</span> to <span class="math inline">\(\mathsf{C}\)</span>. So we are looking for an object <span class="math inline">\(X \in C\)</span> such that <span class="math inline">\(\operatorname{Hom}(X,Y)\)</span> is a singleton for all <span class="math inline">\(Y\)</span>.</p>
+<p>If <span class="math inline">\(\mathsf{D}\)</span> is the <em>empty</em> category, what do we get? Well <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span> is always a singleton, if <span class="math inline">\(F\)</span> is the unique functor from <span class="math inline">\(\mathsf{D}\)</span> to <span class="math inline">\(\mathsf{C}\)</span>. So we are looking for an object <span class="math inline">\(X \in C\)</span> such that <span class="math inline">\(\operatorname{Hom}(X,Y)\)</span> is a singleton for all <span class="math inline">\(Y\)</span>.</p>
 <p>In <span class="math inline">\(\mathsf{Set}\)</span>, this is the empty set. More generally, this is called an <strong>initial object</strong>.</p>
 </div>
 <div class="rmenv" title="Example">
-<p>If <span class="math inline">\(\mathbb{D}\)</span> is a category that looks like this:</p>
+<p>If <span class="math inline">\(\mathsf{D}\)</span> is a category that looks like this:</p>
 <div class="tikzcd">
 <img src="63bd5bf3fae0371c03c473328cb1559c8cc7debc.svg" class="img-fluid">
 </div>
-<p>then the colimit of a functor <span class="math inline">\(F \colon \mathbb{D}\to \mathsf{C}\)</span> is called a <em>coequalizer</em>.</p>
+<p>then the colimit of a functor <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span> is called a <em>coequalizer</em>.</p>
 <p>Category theory is the subject where the examples have examples: let’s give an example of a coequalizer. Suppose that <span class="math inline">\(\mathsf{C}\)</span> is the category of abelian groups, and we have the diagram</p>
 <div class="tikzcd">
 <img src="a0b9bce74650ddae6c8dfa6a5f13d3e089047109.svg" class="img-fluid">
@@ -549,8 +554,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./lecture10.html" class="pagination-link">
+        <span class="nav-page-text">Lecture 10: Applied Colimits</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

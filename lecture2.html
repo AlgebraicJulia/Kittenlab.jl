@@ -210,6 +210,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -354,10 +359,10 @@ Possible fix in Julia
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  elems<span class="op">::</span><span class="dt">Set{Any}</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> a <span class="op">∈</span> A.elems</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span>(<span class="op">∈</span>)(a, A<span class="op">::</span><span class="dt">Set𝔽</span>) <span class="op">=</span> a <span class="op">∈</span> A.elems</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(A.elems)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Vec𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(A.elems, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Set𝔽</span>) <span class="op">=</span> <span class="fu">iterate</span>(A.elems)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">iterate</span>(A<span class="op">::</span><span class="dt">Set𝔽</span>, k) <span class="op">=</span> <span class="fu">iterate</span>(A.elems, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
 <p>But let’s think about why we typically choose to make <span class="math inline">\(\{1,2,3,3\}\)</span> and <span class="math inline">\(\{3,2,1\}\)</span> “the same” set. One good reason is that any morphism out of <span class="math inline">\(\{1,2,3,3\}\)</span> can be seen as a morphism out of <span class="math inline">\(\{3,2,1\}\)</span>, and the same goes for incoming morphisms.</p>
@@ -550,10 +555,10 @@ Proof in Julia
 <h1>The Pigeonhole Principle</h1>
 <p>The point of this first lecture is to introduce you to finite sets and pure math, not category theory. Therefore, we end with a discussion of a theorem from combinatorics.</p>
 <div class="rmenv" title="Theorem">
-<p>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are finite sets, and <span class="math inline">\(X\)</span> has a larger cardinality than <span class="math inline">\(Y\)</span>, then for any morphism <span class="math inline">\(f \colon X \to Y\)</span>, there exist distinct elements <span class="math inline">\(x_1, x_2 \in X\)</span> such that <span class="math inline">\(f(x_1) = f(x_2)\)</span>. In other words, <span class="math inline">\(f\)</span> is not injective.</p>
+<p>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are finite sets, and <span class="math inline">\(X\)</span> has a larger cardinality than <span class="math inline">\(Y\)</span>, then for any morphism <span class="math inline">\(f \colon X \to Y\)</span>, there exist distinct elements <span class="math inline">\(x, x' \in X\)</span> such that <span class="math inline">\(f(x) = f(x')\)</span>. In other words, <span class="math inline">\(f\)</span> is not injective.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>Suppose that no such <span class="math inline">\(x_1,x_2\)</span> existed. Then if <span class="math inline">\(X = \{x_1,\ldots,x_n\}\)</span> with <span class="math inline">\(x_i \neq x_j\)</span> for all <span class="math inline">\(i,j\)</span>, we have <span class="math inline">\(f(x_1),\ldots,f(x_n)\)</span> all distinct. Therefore, there are at least <span class="math inline">\(n\)</span> distinct elements of <span class="math inline">\(Y\)</span>, which contradicts the statement that <span class="math inline">\(Y\)</span> has a smaller cardinality than <span class="math inline">\(X\)</span>. We are done.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>Suppose that no such <span class="math inline">\(x,x'\)</span> existed. Then if <span class="math inline">\(X = \{x_1,\ldots,x_n\}\)</span> with <span class="math inline">\(x_i \neq x_j\)</span> for all <span class="math inline">\(i,j\)</span>, we have <span class="math inline">\(f(x_1),\ldots,f(x_n)\)</span> all distinct. Therefore, there are at least <span class="math inline">\(n\)</span> distinct elements of <span class="math inline">\(Y\)</span>, which contradicts the statement that <span class="math inline">\(Y\)</span> has a smaller cardinality than <span class="math inline">\(X\)</span>. We are done.</p>
 </div>
 <div class="rmenv" title="Example">
 <p>Suppose that <span class="math inline">\(x_1,\ldots,x_5\)</span> are points on a sphere. I.e., each <span class="math inline">\(x_i\)</span> is a 3-dimensional vector with distance from the origin 1. Then there is a hemisphere that contains 4 of the points.</p>
