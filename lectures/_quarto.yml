@@ -16,6 +16,7 @@ book:
     - lecture7.qmd
     - lecture8.qmd
     - lecture9.qmd
+    - lecture10.qmd
     - references.qmd
 
 bibliography: references.bib

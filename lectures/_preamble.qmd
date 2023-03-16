@@ -19,6 +19,7 @@ $$
 \newcommand{\dom}{\operatorname{dom}}
 \newcommand{\codom}{\operatorname{codom}}
 \newcommand{\id}{\operatorname{id}}
+\newcommand{\Csp}{\operatorname{Csp}}
 
 <!-- Math: graphs -->
 \newcommand{\src}{\operatorname{src}}

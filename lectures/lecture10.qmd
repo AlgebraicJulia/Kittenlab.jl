@@ -1,1 +1,202 @@
-# Lecture 10: The Yoneda Lemma
+# Lecture 10: Applied Colimits {.unnumbered}
+
+{{< include _preamble.qmd >}}
+
+Our goal for the next couple lectures is to learn how to compose *open graphs*.
+
+:::{.rmenv title="Definition"}
+An **open graph** is a graph $G$ along with an input set $I$ and an output set $O$ and maps $i \colon I \to G(V)$, $o \colon O \to G(V)$.
+:::
+
+![An Open Graph](open_graph.png)
+
+We want to make a category where the objects are finite sets and the morphisms are open graphs between the finite sets.
+
+We are going to build up the technology for this category in parts. The first step is defining what a *cospan category* is. The second step is going to generalize this.
+
+:::{.rmenv title="Definition"}
+A **cospan** in a category $\C$ from an object $X \in \C$ to an object $Y \in \C$ is a diagram of the form
+```tikzcd
+& A \\
+X \ar[ur, "f"] && Y \ar[ul, "g"']
+```
+:::
+
+:::{.rmenv title="Definition"}
+Let $\C$ be a category that has pushouts. Then define the category $\Csp(\C)$ in the following way. The objects of $\Csp(\C)$ are the objects of $\C$, and a morphism from $X$ to $Y$ is a cospan from $X$ to $Y$. Composition of two cospans
+
+```tikzcd
+& A && B \\
+X \ar[ur, "f"] && Y \ar[ul, "g"'] \ar[ur, "h"] && Z \ar[ul, "k"']
+```
+
+is given by the pushout
+
+```tikzcd
+&& {A +_{Y} B} \ar[dd, "\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none] \\
+& A \ar[ur] && B \ar[ul] \\
+X \ar[ur, "f"] && Y \ar[ul, "g"'] \ar[ur, "h"]  && Z \ar[ul, "k"']
+```
+:::
+
+What is the identity in this category? I claim that the identity on $X$ is
+
+```tikzcd
+& X \\
+X \ar[ur, "1_X"] && X \ar[ul, "1_X"']
+```
+
+Let's prove that this is the case. Suppose that we have another cospan
+```tikzcd
+& A \\
+X \ar[ur, "f"] && Y \ar[ul, "g"']
+```
+
+Then their composition is
+```tikzcd
+&& {X +_{X} A} \ar[dd, "\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none] \\
+& X \ar[ur] && A \ar[ul] \\
+X \ar[ur, "1_X"] && X \ar[ul, "1_X"'] \ar[ur, "f"]  && Z \ar[ul, "g"']
+```
+
+I want to show that $A = X +_{X} A$, and that the two upper morphisms are $f$ and $1_A$ respectively.
+
+Immediately here, alarm bells should be going off in your head. Showing that two objects in a category are equal is almost always the wrong thing to do! Instead, one should show that two objects are *isomorphic*. But in this case, these "objects" are serving the purpose of morphisms, and morphisms need to be equal "on the nose"! So what do we do?
+
+We have to redefine $\Csp(\C)$. There are two ways of doing this. One is that we can consider a notion of morphism between morphism, which gets us into bicategories. But we choose to not walk that route today.
+
+The second way is to make a morphism from $X$ to $Y$ be an *equivalence class* of cospans.
+
+:::{.rmenv title="Definition"}
+The two cospans
+
+```tikzcd
+& A \\
+X \ar[ur, "f"] && Y \ar[ul, "g"']
+```
+
+and
+
+```tikzcd
+& A' \\
+X \ar[ur, "f'"] && Y \ar[ul, "g'"']
+```
+
+are **equivalent** when there exists an isomorphism $\phi \colon A \to A'$ such that
+
+```tikzcd
+& A \ar[dd, "\phi"] \\
+X \ar[ur, "f"] \ar[dr, "f'"'] && Y \ar[ul, "g"'] \ar[dl, "g'"] \\
+& A'
+```
+
+commutes.
+:::
+
+We then redefine $\Csp(\C)$.
+
+:::{.rmenv title="Definition"}
+The category $\Csp(\C)$ has as objects, objects of $\C$, and as morphisms *equivalence classes* of cospans.
+
+Given two morphisms $E_{1} \colon X \to Y$ and $E_{2} \colon Y \to Z$, we compose them by picking a cospan from $E_{1}$, a cospan from $E_{2}$, taking their pushout, and then taking the equivalence class of all morphisms equivalent to that pushout.
+:::
+
+There's something very important that we have to check for this to work: we have to check that composing equivalent cospans give equivalent results! Proving this will enable us to flex some of our theoretical muscles for pushouts.
+
+:::{.rmenv title="Proposition"}
+Suppose that we have the following commuting diagram:
+
+```tikzcd
+& A \ar[dd, "\phi"] && B \ar[dd, "\psi"] \\
+X \ar[ur, "f"] \ar[dr, "f'"'] && Y \ar[ul, "g"'] \ar[ur, "h"] \ar[dl, "g'"] \ar[dr, "h'"'] && Z \ar[ul, "k"'] \ar[dl, "k'"] \\
+& A' && B'
+```
+
+where $\phi$ and $\psi$ are isomorphisms. Then there is an isomorphism $\phi +_Y \psi \colon A +_Y B \to A' +_Y B'$ such that the diagram
+
+```tikzcd
+&& {A +_{Y} B} \ar[dd, "\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none] \ar[dddd, "\phi +_Y \psi", bend left]\\
+& A \ar[ur] \ar[dd, "\phi"] && B \ar[dd, "\psi"] \ar[ul] \\
+X \ar[ur, "f"] \ar[dr, "f'"'] && Y \ar[ul, "g"'] \ar[ur, "h"] \ar[dl, "g'"] \ar[dr, "h'"'] && Z \ar[ul, "k"'] \ar[dl, "k'"] \\
+& A' \ar[dr] && B' \ar[dl] \\
+&& {A' +_{Y} B'} \ar[uu, "\lrcorner"{anchor=center, pos=0.125, rotate=135}, draw=none]
+```
+
+commutes.
+:::
+
+:::{.proof}
+This is our first big serious proof in category theory, so before we get started, let's just make sure we understand where we are and where we're going.
+
+The diagrams above look big and scary, but when we chunk them, they aren't so bad. We have two pairs of equivalent cospans: two equivalent cospans between $X$ and $Y$, and two equivalent cospans between $Y$ and $Z$. Then we've composed each one, to get the top and bottom of the diagram, and finally the curved arrow is an isomorphism between the composed cospans.
+
+Often in proofs like this, it is hard to know where to start. One good thing to do is to go back to definitions.
+
+Let $\mathsf{D}$ be the category that looks like this
+
+```tikzcd
+\bullet_1 && \bullet_2 \\
+& \bullet \ar[ur] \ar[ul]
+```
+
+Let $F, F'$ be functors from $\mathsf{D}$ into $\mathsf{C}$ that send
+
+```tikzcd
+\bullet && \bullet \\
+& \bullet \ar[ur] \ar[ul]
+```
+
+to
+
+```tikzcd
+A && B \\
+& Y \ar[ur, "g"'] \ar[ul, "h"]
+```
+
+and
+
+```tikzcd
+A' && B' \\
+& Y \ar[ur, "g'"'] \ar[ul, "h'"]
+```
+
+respectively.
+
+Then recall that the *pushout* of the diagram $F$ is a representing object for the functor
+
+$X \mapsto \Hom_{\C^{\mathsf{D}}}(F, \Delta X)$
+
+which sends an object $X$ to the set of natural transformations from $F$ to the constant functor at $X$, i.e. commuting diagrams
+
+```tikzcd
+X && X \\
+& X \ar[ur, "1_X"] \ar[ul, "1_X"'] \\
+F(\bullet_1) \ar[uu, "\alpha_{\bullet_1}"] && F(\bullet_2) \ar[uu, "\alpha_{\bullet_2}"'] \\
+& F(\bullet) \ar[ur] \ar[ul] \ar[uu, "\alpha_{\bullet}"]
+```
+
+which are the same as commuting squares
+
+```tikzcd
+& X \\
+F(\bullet_1) \ar[ur, "\alpha_{\bullet_1}"] && F(\bullet_2) \ar[ul, "\alpha_{\bullet_2}"'] \\
+& F(\bullet) \ar[ur] \ar[ul] \ar[uu, "\alpha_{\bullet}"]
+```
+
+Now, I claim that if we can show that $F$ and $F'$ are naturally isomorphic functors, then the pushout of $F$ and the pushout of $F'$ will be isomorphic as well.
+
+This is because if $F \cong F'$, then $\Hom_{C^{\mathsf{D}}}(F, \Delta-) \cong \Hom_{C^{\mathsf{D}}}(F', \Delta-)$, and representing objects of isomorphic functors are isomorphic. I'm not sure if we've proved that explicitly by now; it's a consequence of the Yoneda lemma, but it should be intuitive!
+
+To show that $F$ and $F'$ are naturally isomorphic, we must construct a natural isomorphism. This consists of an isomorphism $F(x) \cong F'(x)$ for each $x \in \mathsf{D}$, chosen to satisfy the naturality condition. But we are given exactly what we need by our assumption! Namely, we make the following natural isomorphism:
+
+```tikzcd
+A \ar[dd, "\phi"'] && B \ar[dd, "\psi"] \\
+& Y \ar[dd, "1_Y"'] \ar[ul, "g"'] \ar[ur, "h"] \\
+A' && B \\
+& Y \ar[ul, "g'"] \ar[ur, "h'"']
+```
+
+Now, through what some might call "abstract nonsense", we have summoned an isomorphism from $A +_{Y} B$ to $A' +_{Y} B'$: we will call this isomorphism $\phi +_{Y} \psi$.
+
+This is not enough though: we still have to show that the whole diagram commutes! Unfortunately, I can't think of a slick way to do this quickly, so instead I will summarize the strategy. Basically, you have to trace through the proof that isomorphic functors give isomorphic representing objects, and you will see that the construction of the isomorphism shows that this should commute.
+:::
