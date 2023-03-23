@@ -1,202 +1,218 @@
-# Lecture 10: Applied Colimits {.unnumbered}
+# Lecture 10: Representables revisited {.unnumbered}
 
 {{< include _preamble.qmd >}}
 
-Our goal for the next couple lectures is to learn how to compose *open graphs*.
+## Representable functors
 
-:::{.rmenv title="Definition"}
-An **open graph** is a graph $G$ along with an input set $I$ and an output set $O$ and maps $i \colon I \to G(V)$, $o \colon O \to G(V)$.
+The core of category theory is the idea that "everything you know" about an object is encapsulated by looking at the morphisms out of (or into) that object.
+
+This intuition is captured in the formalism of representable functors, which we have talked about before but hasn't seemed to "take".
+
+Before we (re)define representable functors, we're going to talk a little bit about the "type" of a representable functor.
+
+We want to look at the morphisms out of an object. How can we express that information? One way would be to just have a set. But that doesn't tell us very much; that doesn't give us "handles" that we can use to process the information.
+
+We can organize a little bit by splitting that set by *codomain*. Namely, for each object $Y \in \C$, we have a set of morphisms with codomain $Y$. So this looks like a function $F \colon \C \to \Set$. But when we have a morphism from $Y$ to $Z$, and a morphism into $Y$, then we can make a morphism into $Z$. Thus, for every $f \colon Y \to Z$, there is a function $F(f) \colon F(Y) \to F(Z)$. In other words, $F$ is a *functor* from $\C \to \Set$, or a $\C$-set, if you will.
+
+So the "shape" of the information about all of the morphisms out of an object in $\C$ is a $\C$-set.
+
+:::{.rmenv title="Example"}
+Take the category $\Petri$ presented by the following diagram
+
+```tikzcd
+& S \\
+I \ar[ur, "\mathrm{is}"] \ar[dr, swap, "\mathrm{it}"] & & O \ar[dl, "\mathrm{ot}"] \ar[ul, swap, "\mathrm{os}"] \\
+& T
+```
+
+Then let $F$ be the $\Petri$-set of morphisms out of $S$. $F(S) = \{ \id_{S} \}$, and $F(x) = \emptyset$ for $x \in \{S,I,O\}$. Interpreted as a Petri net, $F$ is the single-species Petri net.
+
+Now let $F$ be the $\Petri$-set of morphisms out of $I$. Then $F(S) = \{ \mathrm{is} \}$, $F(T) = \{\mathrm{it}\}$, $F(I) = \{ \id_{I} \}$. Interpreted as a Petri net, $F$ has a single species, a single transition, and one arc going from the species to the transition.
 :::
 
-![An Open Graph](open_graph.png)
-
-We want to make a category where the objects are finite sets and the morphisms are open graphs between the finite sets.
-
-We are going to build up the technology for this category in parts. The first step is defining what a *cospan category* is. The second step is going to generalize this.
-
-:::{.rmenv title="Definition"}
-A **cospan** in a category $\C$ from an object $X \in \C$ to an object $Y \in \C$ is a diagram of the form
-```tikzcd
-& A \\
-X \ar[ur, "f"] && Y \ar[ul, "g"']
-```
-:::
-
-:::{.rmenv title="Definition"}
-Let $\C$ be a category that has pushouts. Then define the category $\Csp(\C)$ in the following way. The objects of $\Csp(\C)$ are the objects of $\C$, and a morphism from $X$ to $Y$ is a cospan from $X$ to $Y$. Composition of two cospans
-
-```tikzcd
-& A && B \\
-X \ar[ur, "f"] && Y \ar[ul, "g"'] \ar[ur, "h"] && Z \ar[ul, "k"']
-```
-
-is given by the pushout
-
-```tikzcd
-&& {A +_{Y} B} \ar[dd, "\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none] \\
-& A \ar[ur] && B \ar[ul] \\
-X \ar[ur, "f"] && Y \ar[ul, "g"'] \ar[ur, "h"]  && Z \ar[ul, "k"']
-```
-:::
-
-What is the identity in this category? I claim that the identity on $X$ is
-
-```tikzcd
-& X \\
-X \ar[ur, "1_X"] && X \ar[ul, "1_X"']
-```
-
-Let's prove that this is the case. Suppose that we have another cospan
-```tikzcd
-& A \\
-X \ar[ur, "f"] && Y \ar[ul, "g"']
-```
-
-Then their composition is
-```tikzcd
-&& {X +_{X} A} \ar[dd, "\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none] \\
-& X \ar[ur] && A \ar[ul] \\
-X \ar[ur, "1_X"] && X \ar[ul, "1_X"'] \ar[ur, "f"]  && Z \ar[ul, "g"']
-```
-
-I want to show that $A = X +_{X} A$, and that the two upper morphisms are $f$ and $1_A$ respectively.
-
-Immediately here, alarm bells should be going off in your head. Showing that two objects in a category are equal is almost always the wrong thing to do! Instead, one should show that two objects are *isomorphic*. But in this case, these "objects" are serving the purpose of morphisms, and morphisms need to be equal "on the nose"! So what do we do?
-
-We have to redefine $\Csp(\C)$. There are two ways of doing this. One is that we can consider a notion of morphism between morphism, which gets us into bicategories. But we choose to not walk that route today.
-
-The second way is to make a morphism from $X$ to $Y$ be an *equivalence class* of cospans.
-
-:::{.rmenv title="Definition"}
-The two cospans
-
-```tikzcd
-& A \\
-X \ar[ur, "f"] && Y \ar[ul, "g"']
-```
-
-and
-
-```tikzcd
-& A' \\
-X \ar[ur, "f'"] && Y \ar[ul, "g'"']
-```
-
-are **equivalent** when there exists an isomorphism $\phi \colon A \to A'$ such that
-
-```tikzcd
-& A \ar[dd, "\phi"] \\
-X \ar[ur, "f"] \ar[dr, "f'"'] && Y \ar[ul, "g"'] \ar[dl, "g'"] \\
-& A'
-```
-
-commutes.
-:::
-
-We then redefine $\Csp(\C)$.
-
-:::{.rmenv title="Definition"}
-The category $\Csp(\C)$ has as objects, objects of $\C$, and as morphisms *equivalence classes* of cospans.
-
-Given two morphisms $E_{1} \colon X \to Y$ and $E_{2} \colon Y \to Z$, we compose them by picking a cospan from $E_{1}$, a cospan from $E_{2}$, taking their pushout, and then taking the equivalence class of all morphisms equivalent to that pushout.
-:::
-
-There's something very important that we have to check for this to work: we have to check that composing equivalent cospans give equivalent results! Proving this will enable us to flex some of our theoretical muscles for pushouts.
+We summarize what we've talked about so far in the following proposition.
 
 :::{.rmenv title="Proposition"}
-Suppose that we have the following commuting diagram:
-
-```tikzcd
-& A \ar[dd, "\phi"] && B \ar[dd, "\psi"] \\
-X \ar[ur, "f"] \ar[dr, "f'"'] && Y \ar[ul, "g"'] \ar[ur, "h"] \ar[dl, "g'"] \ar[dr, "h'"'] && Z \ar[ul, "k"'] \ar[dl, "k'"] \\
-& A' && B'
-```
-
-where $\phi$ and $\psi$ are isomorphisms. Then there is an isomorphism $\phi +_Y \psi \colon A +_Y B \to A' +_Y B'$ such that the diagram
-
-```tikzcd
-&& {A +_{Y} B} \ar[dd, "\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none] \ar[dddd, "\phi +_Y \psi", bend left]\\
-& A \ar[ur] \ar[dd, "\phi"] && B \ar[dd, "\psi"] \ar[ul] \\
-X \ar[ur, "f"] \ar[dr, "f'"'] && Y \ar[ul, "g"'] \ar[ur, "h"] \ar[dl, "g'"] \ar[dr, "h'"'] && Z \ar[ul, "k"'] \ar[dl, "k'"] \\
-& A' \ar[dr] && B' \ar[dl] \\
-&& {A' +_{Y} B'} \ar[uu, "\lrcorner"{anchor=center, pos=0.125, rotate=135}, draw=none]
-```
-
-commutes.
+Given a category $\C$ and an object $X \in \C$, there is a $\C$-set $y_{\C}(X) \colon \C \to \Set$, such that $y_{\C}(X)(Y) = \Hom_{\C}(X,Y)$.
 :::
 
-:::{.proof}
-This is our first big serious proof in category theory, so before we get started, let's just make sure we understand where we are and where we're going.
+We call $y_{\C}(X)$ the "representable functor at $X$". We're now going to talk about how to compute these representable functors in a special case.
 
-The diagrams above look big and scary, but when we chunk them, they aren't so bad. We have two pairs of equivalent cospans: two equivalent cospans between $X$ and $Y$, and two equivalent cospans between $Y$ and $Z$. Then we've composed each one, to get the top and bottom of the diagram, and finally the curved arrow is an isomorphism between the composed cospans.
+## Computing representables with dynamic programming
 
-Often in proofs like this, it is hard to know where to start. One good thing to do is to go back to definitions.
+Suppose that $\C$ is the path graph category for a graph $G$, so that an object of $\C$ is a vertex of $G$, and a morphism of $\C$ is a path in $G$.
 
-Let $\mathsf{D}$ be the category that looks like this
+Our goal is to be able to fix $a \in \C$, and then compute $\Hom_{\C}(a,b)$ for every $b$. Of course, if there are loops in $G$, then $\Hom_{\C}(a,b)$ could be infinite, so we're going to assume that $G$ is a directed acyclic graph.
 
-```tikzcd
-\bullet_1 && \bullet_2 \\
-& \bullet \ar[ur] \ar[ul]
+This is going to be kind of like Dijkstra's algorithm, which computes the shortest path between different vertices, except instead of computing the shortest path, we're going to compute the set of *all* paths. But we're going to use a similar trick of expanding the problem to be computing all the paths between *all* pairs of vertices.
+
+For this problem, we're going to use Catlab, because Catlab has some nice features for printing out graphs that I don't want to recreate.
+
+```{julia}
+# | output: true
+using Pkg; Pkg.activate(".")
+using Catlab
+using Catlab.Graphs
+
+g = path_graph(Graph, 10)  
 ```
 
-Let $F, F'$ be functors from $\mathsf{D}$ into $\mathsf{C}$ that send
+```{julia}
+# | output: true
+using Catlab.Graphics
 
-```tikzcd
-\bullet && \bullet \\
-& \bullet \ar[ur] \ar[ul]
+to_graphviz(g)
 ```
 
-to
+We will represent a path in a graph as a vector of edge ids.
 
-```tikzcd
-A && B \\
-& Y \ar[ur, "g"'] \ar[ul, "h"]
+```{julia}
+const Path = Vector{Int}
 ```
 
-and
+Then we will write a function
 
-```tikzcd
-A' && B' \\
-& Y \ar[ur, "g'"'] \ar[ul, "h'"]
+```julia
+function compute_paths(g::Graph)::Matrix{Set{Path}}
+  ...
+end
 ```
 
-respectively.
+which returns an $n \times n$ matrix $P$, where $n$ is the number of vertices in the graph, $P_{v,w}$ is the set of paths from $v$ to $w$.
 
-Then recall that the *pushout* of the diagram $F$ is a representing object for the functor
+```{julia}
+# | output: true
+function compute_paths(g::Graph)
+  n = nv(g) # the number of vertices in g
+  P = [Set{Path}() for _ in 1:n, _ in 1:n]
+  
+  # add all of the identity paths
+  for v in vertices(g)
+    push!(P[v,v], Int[])
+  end
+  # at each iteration, we find the paths of length k
+  # the longest paths are length n
+  for k in 1:n
+    for e in edges(g)
+      s,t = src(g,e), tgt(g,e)
+      for v in vertices(g)
+        for p in P[v,s]
+          if length(p) == k - 1
+            push!(P[v,t], [p; e])
+          end
+        end
+      end
+    end
+  end
 
-$X \mapsto \Hom_{\C^{\mathsf{D}}}(F, \Delta X)$
+  P
+end
 
-which sends an object $X$ to the set of natural transformations from $F$ to the constant functor at $X$, i.e. commuting diagrams
-
-```tikzcd
-X && X \\
-& X \ar[ur, "1_X"] \ar[ul, "1_X"'] \\
-F(\bullet_1) \ar[uu, "\alpha_{\bullet_1}"] && F(\bullet_2) \ar[uu, "\alpha_{\bullet_2}"'] \\
-& F(\bullet) \ar[ur] \ar[ul] \ar[uu, "\alpha_{\bullet}"]
+compute_paths(g)
 ```
 
-which are the same as commuting squares
+Now, let's think about what this is saying mathematically. Let $G$ be the path graph with 10 vertices, and let $\C$ be the path category on $G$. $\C$ has objects $1,\ldots,10$, one morphism from $i$ to $j$ if $i \leq j$, and zero morphisms if $i > j$. Thus the representable $y_{\C}(i)$ is given by
 
-```tikzcd
-& X \\
-F(\bullet_1) \ar[ur, "\alpha_{\bullet_1}"] && F(\bullet_2) \ar[ul, "\alpha_{\bullet_2}"'] \\
-& F(\bullet) \ar[ur] \ar[ul] \ar[uu, "\alpha_{\bullet}"]
-```
+\[ y_{\C}(i)(j) = \begin{cases}
+                  1 & \text{if $i \leq j$} \\
+                  \emptyset & \text{otherwise}
+                \end{cases}
+\]
 
-Now, I claim that if we can show that $F$ and $F'$ are naturally isomorphic functors, then the pushout of $F$ and the pushout of $F'$ will be isomorphic as well.
+Note that it's possible to have a function from $\emptyset$ to $1$, but not the other way around. So if there's a morphism from $x$ to $y$, and $F(x)$ is non-empty, then $F(y)$ has to also be non-empty.
 
-This is because if $F \cong F'$, then $\Hom_{C^{\mathsf{D}}}(F, \Delta-) \cong \Hom_{C^{\mathsf{D}}}(F', \Delta-)$, and representing objects of isomorphic functors are isomorphic. I'm not sure if we've proved that explicitly by now; it's a consequence of the Yoneda lemma, but it should be intuitive!
+This also implies that there can't be an isomorphism between $y_{\C}(i)$ and $y_{\C}(j)$ for $i \neq j$, because if $i < j$ then $y_{\C}(i)(i)$ is non-empty but $y_{\C}(j)(i)$ is empty.
 
-To show that $F$ and $F'$ are naturally isomorphic, we must construct a natural isomorphism. This consists of an isomorphism $F(x) \cong F'(x)$ for each $x \in \mathsf{D}$, chosen to satisfy the naturality condition. But we are given exactly what we need by our assumption! Namely, we make the following natural isomorphism:
+This is a specific instance of the general phenomenon that looking at all of the morphisms out of an object characterizes that object.
 
-```tikzcd
-A \ar[dd, "\phi"'] && B \ar[dd, "\psi"] \\
-& Y \ar[dd, "1_Y"'] \ar[ul, "g"'] \ar[ur, "h"] \\
-A' && B \\
-& Y \ar[ul, "g'"] \ar[ur, "h'"']
-```
+## Characterizing objects using C-sets
 
-Now, through what some might call "abstract nonsense", we have summoned an isomorphism from $A +_{Y} B$ to $A' +_{Y} B'$: we will call this isomorphism $\phi +_{Y} \psi$.
+Previously, we have gone from objects of $\C$ to $\C$-sets, taking $x \in \C$ to $y_\C(x)$. But we can also ask the question, given an arbitrary $F \colon \C \to \Set$, is there an $x \in \C$ such that $y_\C(x) \cong F$? We ask this question by saying "does $F$ have a representative?"
 
-This is not enough though: we still have to show that the whole diagram commutes! Unfortunately, I can't think of a slick way to do this quickly, so instead I will summarize the strategy. Basically, you have to trace through the proof that isomorphic functors give isomorphic representing objects, and you will see that the construction of the isomorphism shows that this should commute.
+:::{.rmenv title="Example (non-mathematical)"}
+Suppose you come back from a party, and you had a really good time talking to someone but you can't remember their name. But you do remember the conversations that the person had with the other people at the party. So you call up a friend, and you ask "who was that person who was had 3 conversations with Alice, 2 conversations with Bob, and didn't talk to Eve at all?" Your friend might say "oh, that was Roberta", or might say "you must have been drunk; nobody had that sequence of conversations."
+
+Of course, there might be several people of that description, and no two people are really "isomorphic", but the basic idea is still there. You can generally identify someone by how they relate to other people. Finding a representing object for a $\C$-set is conceptually the same process; the $\C$-set is the description of how the object relates to other objects.
 :::
+
+:::{.rmenv title="Example"}
+Consider the functor $U$ from $\Vect$ to $\Set$ which sends a vector space $V$ to its underlying set, and a linear map $f \colon V \to W$ to its underlying function. Think for a second, is there a representing object for this functor?
+
+Yes: one representing object for this functor is the vector space $\R$. What does this mean precisely? This means that there is an natural isomorphism between the functors $y_{\Vect}(\R)$ and $U$. That is, for every vector space $V$, there is an isomorphism between the set $y_{\Vect}(\R)(V) = \Hom_{\Vect}(\R,V)$ and the set $V$.
+
+We construct this isomorphism in the following way. Given a linear map $f \colon \R \to V$, there is a corresponding element $f(1) \in V$, and given an element $v \in V$, there is a unique linear map $f \colon \R \to V$ such that $f(1) = v$. Let $\alpha_{V} \colon y_{\Vect}(\R)(V) \to U(V)$ and $\alpha_{V}^{-1} \colon U(V) \to y_{\Vect}(\R)(V)$ be these maps.
+
+We then need to also check the naturality toblerone for $\alpha$. We won't do this every time, but it's good practice.
+
+Let $V$ and $W$ be vector spaces, and let $g \colon U \to V$ be a map between them. Then the bottom of the naturality toblerone for $g$ is
+
+```tikzcd
+y_{\mathsf{Vect}}(\mathbb{R})(V) \ar[r, "\alpha_V"] \ar [d, swap, "y_{\mathsf{Vect}}(\mathbb{R})(g)"] & U(V) \ar[d, "U(g)"]\\
+y_{\mathsf{Vect}}(\mathbb{R})(W) \ar[r, "\alpha_W"] & U(W)
+```
+
+Remember that the action of $y_{\Vect}(\R)$ on morphisms is composition. So if we start out with $f \colon \R \to V$, and take the left-bottom route, we first get $g \circ f \in y_{\Vect}(\R)(W)$, and then get $(g \circ f)(1) \in U(W)$. If we take the top-right route, we first get $f(1) \in U(V)$, and then get $g(f(1)) \in U(W))$. As $(g \circ f)(1) = g(f(1))$, the square commutes! So $\alpha$ is a natural transformation. We can similarly prove that $\alpha^{-1}$ is a natural transformation, and it is clear that $\alpha$ and $\alpha^{-1}$ are inverses, so $U$ and $y_{\Vect}(\mathbb{R})$ are naturally isomorphic, as required.
+:::
+
+:::{.rmenv title="Example"}
+Consider the functor $F$ from $\Vect$ to $\Set$ which sends every vector space to the singleton set $1$. Is there a representing object for this functor?
+
+Yes, the representing object for this functor is the vector space $\R^{0}$, because there is precisely one linear map $\R^{0} \to V$ for any vector space $V$.
+:::
+
+:::{.rmenv title="Example"}
+Consider the poset $(\Q_{\geq 0}, \leq)$ as a category. Then define $F \colon \Q_{\geq 0} \to \Set$ by
+
+\[
+F(x) = \begin{cases}
+         1 & \text{if $2 \leq x^{2}$} \\
+         \emptyset & \text{otherwise}
+       \end{cases}
+\]
+
+You can check that if $x \leq x'$, then $F(x') = \emptyset$ if and only if $F(x) = \emptyset$, so we can make $F$ into a functor by supplying the unique functions $\emptyset \to 1$ and $1 \to 1$ for $F(x) \to F(x')$; we never have to make a function $1 \to \emptyset$, which would be impossible.
+
+A representative for $F$ would be a rational number $q \geq 0$ such that $2 \leq x^{2}$ if and only if $q \leq x$. One canditate for this would be $\sqrt{2}$, but $\sqrt{2}$ isn't rational! It turns out that no such $q$ exists, so there is no representative for $F$!
+
+However, if we consider a similar situation with the poset $(\R_{\geq 0}, \leq)$ instead, then $F$ would be representable!
+
+So we see that representability has many surprising and non-trivial applications.
+:::
+
+## A new perspective on coproducts in Julia
+
+We can do the coproduct of two types in Julia like the following
+
+```{julia}
+struct Left{T}
+  val::T
+end
+
+struct Right{T}
+  val::T
+end
+
+const Coproduct{S,T} = Union{Left{S}, Right{T}}
+```
+
+Now, suppose we want to write a function `foo` out of `Coproduct{Int,String}` into `Int` that takes `Left(x)` to `x^2` `Right(x)` to `length(x)`. We can use Julia's dispatch system to help us here:
+
+```{julia}
+# | output: true
+ 
+foo(l::Left{Int}) = l.val^2
+foo(r::Right{String}) = length(r.val)
+
+(foo(Left(4)), foo(Right("hello")))
+```
+
+How did we write this function? Well, we wrote *two* functions, one out of `Int` and one out of `String`.
+
+In general, a function from `Coproduct{S,T}` to `A` is given by a function from `S` to `A` and a function from `T` to `A`.
+
+The description of coproducts as the representatives of a certain $\C$-set expresses this property exactly.
+
+Namely, if we work in $\Jul$, the category of Julia types and functions between them, then the functor $F \colon \Jul \to \Set$ which sends `A` to the set of pairs of functions `S -> A` and `T -> A` is *represented* by the type `Coproduct{S,T}`.
+
+We're not going to go over pushouts again in this lecture; we'll do that next lecture. But now we know how we are going to characterize the pushout of a diagram in a category $\C$: we are going to describe what the maps out of the pushout object look like by writing down a certain $\C$-set, and then we are going to find a representative of that $\C$-set!
+

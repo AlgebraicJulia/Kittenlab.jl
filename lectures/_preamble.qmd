@@ -3,6 +3,7 @@ $$
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
 
 <!-- Math: categories -->
 \newcommand{\then}{\operatorname{⨟}}
@@ -48,12 +49,15 @@ $$
 \newcommand{\PortGraph}{\cat{PortGraph}}
 \newcommand{\CPG}{\cat{CPG}}
 \newcommand{\Gr}{\cat{Gr}}
+\newcommand{\Petri}{\cat{Petri}}
 \newcommand{\SIPortGraph}{\cat{SIPortGraph}}
 \newcommand{\OpenCPG}{\cat{OpenCPG}}
 \newcommand{\DWD}{\cat{DWD}}
 \newcommand{\UWD}{\cat{UWD}}
 \newcommand{\WD}{\cat{WD}}
 \newcommand{\UPortGraph}{\cat{UPortGraph}}
+\newcommand{\Vect}{\cat{Vect}}
+\newcommand{\Jul}{\cat{Jul}}
 \newcommand{\Pin}{P_{\textrm{in}}}
 \newcommand{\Pout}{P_{\textrm{out}}}
 \newcommand{\Box}{\textrm{Box}}

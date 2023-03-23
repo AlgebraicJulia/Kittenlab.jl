@@ -29,6 +29,7 @@ format:
   html:
     theme: cosmo
     css: main.css
+    html-math-method: katex
     filters:
       - tikz.lua
 

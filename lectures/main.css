@@ -46,3 +46,30 @@ div.proof:after {
   margin-bottom: 1em;
   margin-top: 1em;
 }
+
+.upside-down {
+  transform: scaleY(-1);
+}
+
+div.c-set table {
+  line-height: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+div.c-set thead tr:first-of-type > th {
+  text-align: center;
+  background: #eae9f4;
+}
+div.c-set tr,
+div.c-set th,
+div.c-set td {
+  padding: 10px;
+  border: 1px solid lightgray;
+}
+
+div.c-set .fndef tr:first-of-type {
+  background: #f8f8f8;
+}

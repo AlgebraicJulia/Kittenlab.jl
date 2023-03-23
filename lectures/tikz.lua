@@ -144,7 +144,7 @@ end
 
 function CodeBlock(el)
   if tikz_doc_templates[el.classes[1]] ~= nil  then
-    local fbasename = pandoc.sha1(el.text) .. '.svg'
+    local fbasename = 'tikz/' .. pandoc.sha1(el.text) .. '.svg'
     local fname = system.get_working_directory() .. '/' .. fbasename
     if not file_exists(fname) then
       tikz2image(el.text, tikz_doc_templates[el.classes[1]], fname)
