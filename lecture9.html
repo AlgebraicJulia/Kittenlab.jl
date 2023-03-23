@@ -124,12 +124,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="main.css">
 </head>
 
 <body class="nav-sidebar floating">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -210,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Representables revisited</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -260,22 +276,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="colimits-as-gluing" class="level2">
 <h2 class="anchored" data-anchor-id="colimits-as-gluing">Colimits as gluing</h2>
-<p>The core idea behind colimits is that we take a bunch of objects in a category, take their “disjoint union” (i.e., their <span class="math inline">\(n\)</span>-ary coproduct), and then “glue” parts of those objects together.</p>
+<p>The core idea behind colimits is that we take a bunch of objects in a category, take their “disjoint union” (i.e., their <span class="math inline">n</span>-ary coproduct), and then “glue” parts of those objects together.</p>
 <p>So before we get into the category theory, let’s talk about exactly what that means.</p>
 <p>We want to be able to “declare by fiat” that two elements of a set are actually the same element. How can we record this declaration mathematically?</p>
-<p>We start out with a set <span class="math inline">\(X\)</span>. We then make a relation on <span class="math inline">\(X\)</span>, i.e.&nbsp;<span class="math inline">\(R \subset X \times X\)</span>, where <span class="math inline">\((x,x') \in X\)</span> if we are “declaring” that <span class="math inline">\(x\)</span> should be equal to <span class="math inline">\(x'\)</span>.</p>
+<p>We start out with a set <span class="math inline">X</span>. We then make a relation on <span class="math inline">X</span>, i.e.&nbsp;<span class="math inline">R \subset X \times X</span>, where <span class="math inline">(x,x') \in X</span> if we are “declaring” that <span class="math inline">x</span> should be equal to <span class="math inline">x'</span>.</p>
 <p>This relation should satisfy three properties.</p>
 <ol type="1">
-<li><span class="math inline">\((x,x) \in R\)</span> for all <span class="math inline">\(x\)</span></li>
-<li>If <span class="math inline">\((x,y) \in R\)</span>, then <span class="math inline">\((y, x) \in R\)</span></li>
-<li>If <span class="math inline">\((x,y) \in R\)</span> and <span class="math inline">\((y,z) \in R\)</span>, then <span class="math inline">\((x,z) \in R\)</span></li>
+<li><span class="math inline">(x,x) \in R</span> for all <span class="math inline">x</span></li>
+<li>If <span class="math inline">(x,y) \in R</span>, then <span class="math inline">(y, x) \in R</span></li>
+<li>If <span class="math inline">(x,y) \in R</span> and <span class="math inline">(y,z) \in R</span>, then <span class="math inline">(x,z) \in R</span></li>
 </ol>
-<p>One way of saying this succinctly is that <span class="math inline">\((X,R)\)</span> is a preorder where all morphisms are invertible. This is called an <strong>equivalence relation</strong>.</p>
-<p>We can then take the set of “connected components”, which we call <span class="math inline">\(X/R\)</span>. An element of <span class="math inline">\(X/R\)</span> is a subset <span class="math inline">\(U\)</span> of <span class="math inline">\(X\)</span> such that for all <span class="math inline">\(x,y \in U\)</span>, <span class="math inline">\((x,y) \in R\)</span>, and if <span class="math inline">\(x \in U\)</span> and <span class="math inline">\((x,y) \in R\)</span>, then <span class="math inline">\(y \in U\)</span>.</p>
-<p>There is a very efficient data structure for storing an equivalence relation on the set <span class="math inline">\(\{1,\ldots,n\}\)</span>, called a <em>union find</em>.</p>
+<p>One way of saying this succinctly is that <span class="math inline">(X,R)</span> is a preorder where all morphisms are invertible. This is called an <strong>equivalence relation</strong>.</p>
+<p>We can then take the set of “connected components”, which we call <span class="math inline">X/R</span>. An element of <span class="math inline">X/R</span> is a subset <span class="math inline">U</span> of <span class="math inline">X</span> such that for all <span class="math inline">x,y \in U</span>, <span class="math inline">(x,y) \in R</span>, and if <span class="math inline">x \in U</span> and <span class="math inline">(x,y) \in R</span>, then <span class="math inline">y \in U</span>.</p>
+<p>There is a very efficient data structure for storing an equivalence relation on the set <span class="math inline">\{1,\ldots,n\}</span>, called a <em>union find</em>.</p>
 <p>We’re going to start with a more naive data structure, and then improve it to a union find.</p>
 <p>The idea is that we choose a representative for each equivalence class, and we store the mapping from number to representative in an array. Two elements are in the same equivalence class if and only if their representatives are the same.</p>
-<p>We start out with the equivalence classes <span class="math inline">\(\{\{1\},\ldots,\{n\}\}\)</span>, and thus each element is assigned itself as a representative.</p>
+<p>We start out with the equivalence classes <span class="math inline">\{\{1\},\ldots,\{n\}\}</span>, and thus each element is assigned itself as a representative.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RepStore</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  representative<span class="op">::</span><span class="dt">Vector{Int}</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">RepStore</span>(n<span class="op">::</span><span class="dt">Int</span>)</span>
@@ -329,27 +345,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="pushouts">Pushouts</h2>
 <p>A <em>pushout</em> is a type of colimit, and understanding how pushouts work will generalize well to understanding of general colimits.</p>
 <div class="rmenv" title="Definition">
-<p>Suppose we have the following diagram in a category <span class="math inline">\(\mathsf{C}\)</span></p>
+<p>Suppose we have the following diagram in a category <span class="math inline">\mathsf{C}</span></p>
 <div class="tikzcd">
-<img src="8b50c5d7e06b858bd742256352810ed9d87202b0.svg" class="img-fluid">
+<img src="tikz/8b50c5d7e06b858bd742256352810ed9d87202b0.svg" class="img-fluid">
 </div>
-<p>Then the <strong>pushout</strong> of this diagram is given by another object <span class="math inline">\(X +_{Z} Y \in \mathsf{C}\)</span> along with maps <span class="math inline">\(\iota_{X}\)</span>, <span class="math inline">\(\iota_{Y}\)</span> and <span class="math inline">\(\iota_{Z}\)</span> that make the following commute</p>
+<p>Then the <strong>pushout</strong> of this diagram is given by another object <span class="math inline">X +_{Z} Y \in \mathsf{C}</span> along with maps <span class="math inline">\iota_{X}</span>, <span class="math inline">\iota_{Y}</span> and <span class="math inline">\iota_{Z}</span> that make the following commute</p>
 <div class="tikzcd">
-<img src="59ab570a5743d4cc726153fa49339c9fc642b6a9.svg" class="img-fluid">
+<img src="tikz/59ab570a5743d4cc726153fa49339c9fc642b6a9.svg" class="img-fluid">
 </div>
-<p>such that for any <span class="math inline">\(W\)</span> with <span class="math inline">\(\iota_{X}'\)</span>, <span class="math inline">\(\iota_{Y}'\)</span> <span class="math inline">\(\iota_{Z}'\)</span> similar, there exists a unique map <span class="math inline">\(p_{W} \colon X +_{Z} Y \to W\)</span> such that the following commutes.</p>
+<p>such that for any <span class="math inline">W</span> with <span class="math inline">\iota_{X}'</span>, <span class="math inline">\iota_{Y}'</span> <span class="math inline">\iota_{Z}'</span> similar, there exists a unique map <span class="math inline">p_{W} \colon X +_{Z} Y \to W</span> such that the following commutes.</p>
 <div class="tikzcd">
-<img src="cf064fcc56f36ef878d613ca4a91d6f0923edf0b.svg" class="img-fluid">
+<img src="tikz/cf064fcc56f36ef878d613ca4a91d6f0923edf0b.svg" class="img-fluid">
 </div>
-<p>(there should also be <span class="math inline">\(\iota_{Z}\)</span> and <span class="math inline">\(\iota_{Z}'\)</span>, but it’s hard to fit them in that diagram).</p>
+<p>(there should also be <span class="math inline">\iota_{Z}</span> and <span class="math inline">\iota_{Z}'</span>, but it’s hard to fit them in that diagram).</p>
 </div>
-<p>The way we think about this is that <span class="math inline">\(X +_{Z} Y\)</span> is the coproduct of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, but with the image of <span class="math inline">\(Z\)</span> in <span class="math inline">\(X\)</span> “equalized by fiat” with the image of <span class="math inline">\(Z\)</span> in <span class="math inline">\(Y\)</span>.</p>
+<p>The way we think about this is that <span class="math inline">X +_{Z} Y</span> is the coproduct of <span class="math inline">X</span> and <span class="math inline">Y</span>, but with the image of <span class="math inline">Z</span> in <span class="math inline">X</span> “equalized by fiat” with the image of <span class="math inline">Z</span> in <span class="math inline">Y</span>.</p>
 <div class="rmenv" title="Example">
-<p>In <span class="math inline">\(\mathsf{Set}\)</span>, the pushout of the diagram</p>
+<p>In <span class="math inline">\mathsf{Set}</span>, the pushout of the diagram</p>
 <div class="tikzcd">
-<img src="8b50c5d7e06b858bd742256352810ed9d87202b0.svg" class="img-fluid">
+<img src="tikz/8b50c5d7e06b858bd742256352810ed9d87202b0.svg" class="img-fluid">
 </div>
-<p>is <span class="math inline">\(X + Y/\sim\)</span>, where <span class="math inline">\(\sim\)</span> is the equivalence relation generated by <span class="math inline">\(f(z) \sim g(z)\)</span> for all <span class="math inline">\(z \in Z\)</span>.</p>
+<p>is <span class="math inline">X + Y/\sim</span>, where <span class="math inline">\sim</span> is the equivalence relation generated by <span class="math inline">f(z) \sim g(z)</span> for all <span class="math inline">z \in Z</span>.</p>
 <p>We compute this with</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pushout</span>(f<span class="op">::</span><span class="dt">FinFunction</span>, g<span class="op">::</span><span class="dt">FinFunction</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@assert</span> <span class="fu">dom</span>(f) <span class="op">==</span> <span class="fu">dom</span>(g)</span>
@@ -365,48 +381,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>   <span class="fu">Dict</span>(i <span class="op">=&gt;</span> <span class="fu">find_root</span>(res, <span class="fu">g</span>(i) <span class="op">+</span> n) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>m),</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>   )</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Why is this a pushout? Well, given another set <span class="math inline">\(W\)</span> with maps in from <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span> that commute, we can figure out where to send each equivalence class in <span class="math inline">\(X+Y/\sim\)</span>, because by the commutation property, all elements of each equivalence class have to go to the same element of <span class="math inline">\(W\)</span>.</p>
+<p>Why is this a pushout? Well, given another set <span class="math inline">W</span> with maps in from <span class="math inline">X</span>, <span class="math inline">Y</span> and <span class="math inline">Z</span> that commute, we can figure out where to send each equivalence class in <span class="math inline">X+Y/\sim</span>, because by the commutation property, all elements of each equivalence class have to go to the same element of <span class="math inline">W</span>.</p>
 </div>
 <p>We can do the exact same thing for graphs. We can take two graphs, take their coproduct, and then “glue” some of their edges and vertices together, according to maps out of a third graph.</p>
 <p>Now, recall in the last lecture that we characterized coproducts as representatives of certain functors. We can do the exact same thing here, but we have to describe the functor that it’s representing in a special way.</p>
-<p>Let <span class="math inline">\(\mathsf{D}\)</span> be the category presented by the graph</p>
+<p>Let <span class="math inline">\mathsf{D}</span> be the category presented by the graph</p>
 <div class="tikzcd">
-<img src="bc7dc8055741041b159e288d51caa10635c03c38.svg" class="img-fluid">
+<img src="tikz/bc7dc8055741041b159e288d51caa10635c03c38.svg" class="img-fluid">
 </div>
-<p>Then the “setup” for a pushout is a functor <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span>.</p>
+<p>Then the “setup” for a pushout is a functor <span class="math inline">F \colon \mathsf{D} \to \mathsf{C}</span>.</p>
 <div class="rmenv" title="Proposition">
-<p>The pushout of <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span> is a representing object for <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span>, where <span class="math inline">\(\Delta \colon \mathsf{C}\to \mathsf{C}^{\mathsf{D}}\)</span> sends an object <span class="math inline">\(X\)</span> to the constant functor at <span class="math inline">\(X\)</span>.</p>
+<p>The pushout of <span class="math inline">F \colon \mathsf{D} \to \mathsf{C}</span> is a representing object for <span class="math inline">\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))</span>, where <span class="math inline">\Delta \colon \mathsf{C}\to \mathsf{C}^{\mathsf{D}}</span> sends an object <span class="math inline">X</span> to the constant functor at <span class="math inline">X</span>.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>An element of <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(W))\)</span> is a natural transformation <span class="math inline">\(\alpha\)</span> from <span class="math inline">\(F\)</span> to <span class="math inline">\(\Delta(W)\)</span>. Remember, a natural transformation consists of a <em>morphism</em> in <span class="math inline">\(\mathsf{C}\)</span> for every <em>object</em> in <span class="math inline">\(\mathsf{D}\)</span>, so in this case we have three morphisms. Then the naturality condition implies that the diagram</p>
+<p><span class="proof-title"><em>Proof</em>. </span>An element of <span class="math inline">\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(W))</span> is a natural transformation <span class="math inline">\alpha</span> from <span class="math inline">F</span> to <span class="math inline">\Delta(W)</span>. Remember, a natural transformation consists of a <em>morphism</em> in <span class="math inline">\mathsf{C}</span> for every <em>object</em> in <span class="math inline">\mathsf{D}</span>, so in this case we have three morphisms. Then the naturality condition implies that the diagram</p>
 <div class="tikzcd">
-<img src="48c89f3df797cbdb6fdc7a02664fb8e32d87f7f8.svg" class="img-fluid">
+<img src="tikz/48c89f3df797cbdb6fdc7a02664fb8e32d87f7f8.svg" class="img-fluid">
 </div>
 <p>commutes.</p>
-<p>A representative of <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span> is an object <span class="math inline">\(\varprojlim F \in \mathsf{C}\)</span> such that <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}}(\varprojlim F, W) \cong \operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(W))\)</span>. We can show that such an object satisfies the earlier definition of pushout by passing in the identity on <span class="math inline">\(\varprojlim F\)</span> into the right hand side, to get a map <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(\varprojlim F))\)</span> that gives the diagram in the definition. And then the naturality of the isomorphism gives us the factorization property. The converse can be proved similarly.</p>
+<p>A representative of <span class="math inline">\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))</span> is an object <span class="math inline">\varprojlim F \in \mathsf{C}</span> such that <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(\varprojlim F, W) \cong \operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(W))</span>. We can show that such an object satisfies the earlier definition of pushout by passing in the identity on <span class="math inline">\varprojlim F</span> into the right hand side, to get a map <span class="math inline">\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(\varprojlim F))</span> that gives the diagram in the definition. And then the naturality of the isomorphism gives us the factorization property. The converse can be proved similarly.</p>
 </div>
 <p>This gives us a hint on how to do general colimits.</p>
 <div class="rmenv" title="Definition">
-<p>Given two categories <span class="math inline">\(\mathsf{D}\)</span> and <span class="math inline">\(\mathsf{C}\)</span>, and a functor <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span>, the colimit <span class="math inline">\(\varprojlim F\)</span> is the representing object for <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span> (if such an object exists).</p>
+<p>Given two categories <span class="math inline">\mathsf{D}</span> and <span class="math inline">\mathsf{C}</span>, and a functor <span class="math inline">F \colon \mathsf{D} \to \mathsf{C}</span>, the colimit <span class="math inline">\varprojlim F</span> is the representing object for <span class="math inline">\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))</span> (if such an object exists).</p>
 </div>
 <div class="rmenv" title="Example">
-<p>If <span class="math inline">\(\mathsf{D}\)</span> is the discrete category with two objects, then we just get coproducts again. More generally, we can do <span class="math inline">\(n\)</span>-ary coproducts by making <span class="math inline">\(\mathsf{D}\)</span> the discrete category with <span class="math inline">\(n\)</span> objects.</p>
+<p>If <span class="math inline">\mathsf{D}</span> is the discrete category with two objects, then we just get coproducts again. More generally, we can do <span class="math inline">n</span>-ary coproducts by making <span class="math inline">\mathsf{D}</span> the discrete category with <span class="math inline">n</span> objects.</p>
 </div>
 <div class="rmenv" title="Example">
-<p>If <span class="math inline">\(\mathsf{D}\)</span> is the <em>empty</em> category, what do we get? Well <span class="math inline">\(\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))\)</span> is always a singleton, if <span class="math inline">\(F\)</span> is the unique functor from <span class="math inline">\(\mathsf{D}\)</span> to <span class="math inline">\(\mathsf{C}\)</span>. So we are looking for an object <span class="math inline">\(X \in C\)</span> such that <span class="math inline">\(\operatorname{Hom}(X,Y)\)</span> is a singleton for all <span class="math inline">\(Y\)</span>.</p>
-<p>In <span class="math inline">\(\mathsf{Set}\)</span>, this is the empty set. More generally, this is called an <strong>initial object</strong>.</p>
+<p>If <span class="math inline">\mathsf{D}</span> is the <em>empty</em> category, what do we get? Well <span class="math inline">\operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta(-))</span> is always a singleton, if <span class="math inline">F</span> is the unique functor from <span class="math inline">\mathsf{D}</span> to <span class="math inline">\mathsf{C}</span>. So we are looking for an object <span class="math inline">X \in C</span> such that <span class="math inline">\operatorname{Hom}(X,Y)</span> is a singleton for all <span class="math inline">Y</span>.</p>
+<p>In <span class="math inline">\mathsf{Set}</span>, this is the empty set. More generally, this is called an <strong>initial object</strong>.</p>
 </div>
 <div class="rmenv" title="Example">
-<p>If <span class="math inline">\(\mathsf{D}\)</span> is a category that looks like this:</p>
+<p>If <span class="math inline">\mathsf{D}</span> is a category that looks like this:</p>
 <div class="tikzcd">
-<img src="63bd5bf3fae0371c03c473328cb1559c8cc7debc.svg" class="img-fluid">
+<img src="tikz/63bd5bf3fae0371c03c473328cb1559c8cc7debc.svg" class="img-fluid">
 </div>
-<p>then the colimit of a functor <span class="math inline">\(F \colon \mathsf{D} \to \mathsf{C}\)</span> is called a <em>coequalizer</em>.</p>
-<p>Category theory is the subject where the examples have examples: let’s give an example of a coequalizer. Suppose that <span class="math inline">\(\mathsf{C}\)</span> is the category of abelian groups, and we have the diagram</p>
+<p>then the colimit of a functor <span class="math inline">F \colon \mathsf{D} \to \mathsf{C}</span> is called a <em>coequalizer</em>.</p>
+<p>Category theory is the subject where the examples have examples: let’s give an example of a coequalizer. Suppose that <span class="math inline">\mathsf{C}</span> is the category of abelian groups, and we have the diagram</p>
 <div class="tikzcd">
-<img src="a0b9bce74650ddae6c8dfa6a5f13d3e089047109.svg" class="img-fluid">
+<img src="tikz/a0b9bce74650ddae6c8dfa6a5f13d3e089047109.svg" class="img-fluid">
 </div>
-<p>where <span class="math inline">\(H\)</span> is a subgroup of <span class="math inline">\(G\)</span>, <span class="math inline">\(f\)</span> is the inclusion, and <span class="math inline">\(0\)</span> is the constant map at the identity. Then the coequalizer of that diagram is <span class="math inline">\(G/H\)</span>, the quotient group. This is the group that results from “declaring by fiat” every element of <span class="math inline">\(H\)</span> to be <span class="math inline">\(0\)</span>.</p>
+<p>where <span class="math inline">H</span> is a subgroup of <span class="math inline">G</span>, <span class="math inline">f</span> is the inclusion, and <span class="math inline">0</span> is the constant map at the identity. Then the coequalizer of that diagram is <span class="math inline">G/H</span>, the quotient group. This is the group that results from “declaring by fiat” every element of <span class="math inline">H</span> to be <span class="math inline">0</span>.</p>
 </div>
 <p>Colimits are a rich subject which we will no doubt return to over and over again, but that will be it for today!</p>
 
@@ -547,6 +563,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./lecture8.html" class="pagination-link">
@@ -555,7 +572,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./lecture10.html" class="pagination-link">
-        <span class="nav-page-text">Lecture 10: Applied Colimits</span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Lecture 10: Representables revisited</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

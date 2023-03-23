@@ -124,12 +124,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="main.css">
 </head>
 
 <body class="nav-sidebar floating">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -210,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Representables revisited</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -312,15 +328,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="functors">Functors</h2>
 <p>Category theory is all about studying the objects of a category by studying the morphisms between them. So consequently, the study of functors (which are the morphisms between categories) is critical to the studying of categories!</p>
 <div class="rmenv" title="Definition">
-<p>Let <span class="math inline">\(\mathsf{C}\)</span> and <span class="math inline">\(\mathsf{D}\)</span> be categories. A <strong>functor</strong> <span class="math inline">\(F\)</span> from <span class="math inline">\(\mathsf{C}\)</span> to <span class="math inline">\(\mathsf{D}\)</span>, often written <span class="math inline">\(F \colon \mathsf{C} \to \mathsf{D}\)</span>, consists of:</p>
+<p>Let <span class="math inline">\mathsf{C}</span> and <span class="math inline">\mathsf{D}</span> be categories. A <strong>functor</strong> <span class="math inline">F</span> from <span class="math inline">\mathsf{C}</span> to <span class="math inline">\mathsf{D}</span>, often written <span class="math inline">F \colon \mathsf{C} \to \mathsf{D}</span>, consists of:</p>
 <ul>
-<li>A function <span class="math inline">\(F_0 \colon \mathsf{C}_0 \to \mathsf{D}_0\)</span>. If <span class="math inline">\(x \in \mathsf{C}_0\)</span>, we often write <span class="math inline">\(F_0(x)\)</span> as <span class="math inline">\(F(x)\)</span>.</li>
-<li>For every <span class="math inline">\(x,y \in \mathsf{C}_0\)</span>, a function <span class="math inline">\(F_{x,y} \colon \mathrm{Hom}_{\mathsf{C}}(x,y) \to \mathrm{Hom}_{\mathsf{D}}(F(x),F(y))\)</span>. If <span class="math inline">\(f \in \mathrm{Hom}_{\mathsf{C}}(x,y)\)</span>, we often write <span class="math inline">\(F_{x,y}(f)\)</span> as <span class="math inline">\(F(f)\)</span>.</li>
+<li>A function <span class="math inline">F_0 \colon \mathsf{C}_0 \to \mathsf{D}_0</span>. If <span class="math inline">x \in \mathsf{C}_0</span>, we often write <span class="math inline">F_0(x)</span> as <span class="math inline">F(x)</span>.</li>
+<li>For every <span class="math inline">x,y \in \mathsf{C}_0</span>, a function <span class="math inline">F_{x,y} \colon \mathrm{Hom}_{\mathsf{C}}(x,y) \to \mathrm{Hom}_{\mathsf{D}}(F(x),F(y))</span>. If <span class="math inline">f \in \mathrm{Hom}_{\mathsf{C}}(x,y)</span>, we often write <span class="math inline">F_{x,y}(f)</span> as <span class="math inline">F(f)</span>.</li>
 </ul>
 <p>such that the following two laws hold:</p>
 <ul>
-<li>For all <span class="math inline">\(x \in \mathsf{C}_0\)</span>, <span class="math inline">\(1_{F(x)} = F(1_x)\)</span></li>
-<li>For all <span class="math inline">\(x,y,z \in \mathsf{C}_0\)</span>, <span class="math inline">\(f \colon x \to y\)</span>, <span class="math inline">\(g \colon y \to z\)</span>, <span class="math inline">\(F(g \circ f) = F(g) \circ F(f)\)</span>.</li>
+<li>For all <span class="math inline">x \in \mathsf{C}_0</span>, <span class="math inline">1_{F(x)} = F(1_x)</span></li>
+<li>For all <span class="math inline">x,y,z \in \mathsf{C}_0</span>, <span class="math inline">f \colon x \to y</span>, <span class="math inline">g \colon y \to z</span>, <span class="math inline">F(g \circ f) = F(g) \circ F(f)</span>.</li>
 </ul>
 </div>
 <p>We implement this with the following Julia.</p>
@@ -355,25 +371,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>There are some critical subtleties in this declaration.</p>
 <p>First of all, functor is an abstract type parameterized by the <em>types</em> of its domain and codomain categories. Crucially, it is <em>not</em> parameterized by the domain and codomain categories! In the case that these types are singletons, this is an academic distinction. But later on, we will have structs that are subtypes of <code>Category</code> that are <em>not</em> singletons, where there is dynamic data in the category, and then <code>dom</code> and <code>codom</code> will be meaningful. The reason we have the types of the categories in the abstract type for functor is that we can then extract the types of the objects and morphisms for each category.</p>
-<p>Secondly, we have declared a category <code>KittenC</code> of categories and functors. Technically speaking, this is the category of “categories and functors that are implemented in Julia”; we reserve the category <span class="math inline">\(\mathsf{Cat}\)</span> for the category of <em>all</em> (small) categories. But this category is not complete yet: we need to be able to compose functors and take identity functors!</p>
+<p>Secondly, we have declared a category <code>KittenC</code> of categories and functors. Technically speaking, this is the category of “categories and functors that are implemented in Julia”; we reserve the category <span class="math inline">\mathsf{Cat}</span> for the category of <em>all</em> (small) categories. But this category is not complete yet: we need to be able to compose functors and take identity functors!</p>
 <p>We first handle this mathematically.</p>
 <div class="rmenv" title="Construction">
-<p>Given three categories <span class="math inline">\(\mathsf{C}\)</span>, <span class="math inline">\(\mathsf{D}\)</span> and <span class="math inline">\(\mathsf{E}\)</span>, along with two functors <span class="math inline">\(F \colon \mathsf{C} \to \mathsf{D}\)</span> and <span class="math inline">\(G \colon \mathsf{D} \to \mathsf{E}\)</span>, there is a functor <span class="math inline">\(G \circ F \colon \mathsf{C} \to \mathsf{E}\)</span> defined in the following way.</p>
+<p>Given three categories <span class="math inline">\mathsf{C}</span>, <span class="math inline">\mathsf{D}</span> and <span class="math inline">\mathsf{E}</span>, along with two functors <span class="math inline">F \colon \mathsf{C} \to \mathsf{D}</span> and <span class="math inline">G \colon \mathsf{D} \to \mathsf{E}</span>, there is a functor <span class="math inline">G \circ F \colon \mathsf{C} \to \mathsf{E}</span> defined in the following way.</p>
 <ul>
-<li>For <span class="math inline">\(x \in \mathsf{C}_0\)</span>, <span class="math inline">\((G \circ F)(x) = G(F(x))\)</span></li>
-<li>For <span class="math inline">\(x,y \in \mathsf{C}_0\)</span>, <span class="math inline">\(f \colon x \to y\)</span>, <span class="math inline">\((G \circ F)(f) = G(F(f))\)</span></li>
+<li>For <span class="math inline">x \in \mathsf{C}_0</span>, <span class="math inline">(G \circ F)(x) = G(F(x))</span></li>
+<li>For <span class="math inline">x,y \in \mathsf{C}_0</span>, <span class="math inline">f \colon x \to y</span>, <span class="math inline">(G \circ F)(f) = G(F(f))</span></li>
 </ul>
-<p>We now show that <span class="math inline">\(G \circ F\)</span> preserves composition and identities. Suppose that <span class="math inline">\(x \in \mathsf{C}_0\)</span>. Then</p>
-<p><span class="math display">\[(G \circ F)(1_x) = G(F(1_x)) = G(1_{F(x)}) = 1_{G(F(x))} = 1_{(G \circ F)(x)}\]</span></p>
-<p>Moreover, if <span class="math inline">\(x,y,z \in \mathsf{C}_0\)</span>, and <span class="math inline">\(r \colon x \to y\)</span> and <span class="math inline">\(s \colon y \to z\)</span>, then</p>
-<p><span class="math display">\[(G \circ F)(s \circ r) = G(F(s \circ r)) = G(F(s) \circ F(r)) = G(F(s)) \circ G(F(r)) = (G \circ F)(s) \circ (G \circ F)(r)\]</span></p>
+<p>We now show that <span class="math inline">G \circ F</span> preserves composition and identities. Suppose that <span class="math inline">x \in \mathsf{C}_0</span>. Then</p>
+<p><span class="math display">(G \circ F)(1_x) = G(F(1_x)) = G(1_{F(x)}) = 1_{G(F(x))} = 1_{(G \circ F)(x)}</span></p>
+<p>Moreover, if <span class="math inline">x,y,z \in \mathsf{C}_0</span>, and <span class="math inline">r \colon x \to y</span> and <span class="math inline">s \colon y \to z</span>, then</p>
+<p><span class="math display">(G \circ F)(s \circ r) = G(F(s \circ r)) = G(F(s) \circ F(r)) = G(F(s)) \circ G(F(r)) = (G \circ F)(s) \circ (G \circ F)(r)</span></p>
 <p>We are done.</p>
 </div>
 <div class="rmenv" title="Construction">
-<p>Given any category <span class="math inline">\(\mathsf{C}\)</span>, there is a functor <span class="math inline">\(1_{\mathsf{C}} \colon \mathsf{C} \to \mathsf{C}\)</span> defined in the following way.</p>
+<p>Given any category <span class="math inline">\mathsf{C}</span>, there is a functor <span class="math inline">1_{\mathsf{C}} \colon \mathsf{C} \to \mathsf{C}</span> defined in the following way.</p>
 <ul>
-<li>For <span class="math inline">\(x \in \mathsf{C}_0\)</span>, <span class="math inline">\(1_{\mathsf{C}}(x) = x\)</span></li>
-<li>For <span class="math inline">\(x,y \in \mathsf{C}_0\)</span>, <span class="math inline">\(f \colon x \to y\)</span>, <span class="math inline">\(1_{\mathsf{C}}(f) = f\)</span></li>
+<li>For <span class="math inline">x \in \mathsf{C}_0</span>, <span class="math inline">1_{\mathsf{C}}(x) = x</span></li>
+<li>For <span class="math inline">x,y \in \mathsf{C}_0</span>, <span class="math inline">f \colon x \to y</span>, <span class="math inline">1_{\mathsf{C}}(f) = f</span></li>
 </ul>
 <p>We leave it to the reader to show that this preserves identities and compositions. This is really easy if you can just state what you have to prove, but it might be tricky to state what you have to prove! So that would be a good exercise.</p>
 </div>
@@ -412,14 +428,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="examples-of-functors" class="level2">
 <h2 class="anchored" data-anchor-id="examples-of-functors">Examples of Functors</h2>
 <p>This is the livecoding section! We are going to implement a functor between two categories. Unfortunately, this functor won’t be terribly interesting, because we haven’t met too many categories yet! But soon we will meet more categories, and we will be able to talk about many more functors.</p>
-<p>Recall from last lecture the category of matrices, <span class="math inline">\(\mathsf{Mat}\)</span>, where the objects are natural numbers and a morphism from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> is a <span class="math inline">\(n \times m\)</span> matrix. Composition is matrix multiplication!</p>
-<p>There is a category <span class="math inline">\(\mathsf{Fin}\)</span> where the objects are natural numbers and a morphism from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> is a function from <span class="math inline">\(\{1,\ldots,n\}\)</span> to <span class="math inline">\(\{1,\ldots,m\}\)</span>.</p>
-<p>We make a functor <span class="math inline">\(F\)</span> from <span class="math inline">\(\mathsf{Fin}\)</span> to <span class="math inline">\(\mathsf{Mat}\)</span> that is the identity on objects, and sends a function <span class="math inline">\(f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}\)</span> to the <span class="math inline">\(n \times m\)</span> matrix that has a 1 at index <span class="math inline">\((i, f(i))\)</span> for each <span class="math inline">\(i \in \{1,\ldots,n\}\)</span>, and 0s elsewhere.</p>
-<p>We must show that <span class="math inline">\(F\)</span> preserves composition and identites.</p>
-<p>We start with identities. The identity function <span class="math inline">\(1_n \colon \{1,\ldots,n\} \to \{1,\ldots,n\}\)</span> turns into the matrix with a <span class="math inline">\(1\)</span> at index <span class="math inline">\((i,i)\)</span> for every <span class="math inline">\(i\)</span>, and 0 elsewhere, which is the identity matrix.</p>
-<p>Now, fix <span class="math inline">\(n,m,\ell\)</span>, let <span class="math inline">\(f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}\)</span> and <span class="math inline">\(g \colon \{1,\ldots,m\} \to \{1,\ldots,\ell\}\)</span>, and let <span class="math inline">\(A = F(f)\)</span> and <span class="math inline">\(B = F(g)\)</span>. Then fix <span class="math inline">\(i,k\)</span> and consider the expression for matrix multiplication.</p>
-<p><span class="math display">\[ (AB)_{ik} = \sum_{j=1}^{m} A_{ij} B_{jk} \]</span></p>
-<p>Note that <span class="math inline">\(A_{ij} = 1\)</span> only when <span class="math inline">\(f(i) = j\)</span>, and <span class="math inline">\(B_{jk} = 1\)</span> only when <span class="math inline">\(g(j) = k\)</span>. So the only way that both of them are non-zero for the same <span class="math inline">\(j\)</span> is when <span class="math inline">\(j = f(i)\)</span> and <span class="math inline">\(k = g(j)\)</span>, or in other words <span class="math inline">\(k = (g \circ f)(i)\)</span>. We are done.</p>
+<p>Recall from last lecture the category of matrices, <span class="math inline">\mathsf{Mat}</span>, where the objects are natural numbers and a morphism from <span class="math inline">n</span> to <span class="math inline">m</span> is a <span class="math inline">n \times m</span> matrix. Composition is matrix multiplication!</p>
+<p>There is a category <span class="math inline">\mathsf{Fin}</span> where the objects are natural numbers and a morphism from <span class="math inline">n</span> to <span class="math inline">m</span> is a function from <span class="math inline">\{1,\ldots,n\}</span> to <span class="math inline">\{1,\ldots,m\}</span>.</p>
+<p>We make a functor <span class="math inline">F</span> from <span class="math inline">\mathsf{Fin}</span> to <span class="math inline">\mathsf{Mat}</span> that is the identity on objects, and sends a function <span class="math inline">f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}</span> to the <span class="math inline">n \times m</span> matrix that has a 1 at index <span class="math inline">(i, f(i))</span> for each <span class="math inline">i \in \{1,\ldots,n\}</span>, and 0s elsewhere.</p>
+<p>We must show that <span class="math inline">F</span> preserves composition and identites.</p>
+<p>We start with identities. The identity function <span class="math inline">1_n \colon \{1,\ldots,n\} \to \{1,\ldots,n\}</span> turns into the matrix with a <span class="math inline">1</span> at index <span class="math inline">(i,i)</span> for every <span class="math inline">i</span>, and 0 elsewhere, which is the identity matrix.</p>
+<p>Now, fix <span class="math inline">n,m,\ell</span>, let <span class="math inline">f \colon \{1,\ldots,n\} \to \{1,\ldots,m\}</span> and <span class="math inline">g \colon \{1,\ldots,m\} \to \{1,\ldots,\ell\}</span>, and let <span class="math inline">A = F(f)</span> and <span class="math inline">B = F(g)</span>. Then fix <span class="math inline">i,k</span> and consider the expression for matrix multiplication.</p>
+<p><span class="math display"> (AB)_{ik} = \sum_{j=1}^{m} A_{ij} B_{jk} </span></p>
+<p>Note that <span class="math inline">A_{ij} = 1</span> only when <span class="math inline">f(i) = j</span>, and <span class="math inline">B_{jk} = 1</span> only when <span class="math inline">g(j) = k</span>. So the only way that both of them are non-zero for the same <span class="math inline">j</span> is when <span class="math inline">j = f(i)</span> and <span class="math inline">k = g(j)</span>, or in other words <span class="math inline">k = (g \circ f)(i)</span>. We are done.</p>
 
 
 </section>

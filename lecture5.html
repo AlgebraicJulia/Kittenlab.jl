@@ -124,12 +124,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="main.css">
 </head>
 
 <body class="nav-sidebar floating">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -210,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Representables revisited</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -266,13 +282,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="rmenv" title="Definition">
 <p>A <strong>preorder</strong> consists of</p>
 <ul>
-<li>A set <span class="math inline">\(X\)</span></li>
-<li>A function <span class="math inline">\(\leq \colon X \times X \to \{\top, \bot\}\)</span> (which is how we write true and false in math)</li>
+<li>A set <span class="math inline">X</span></li>
+<li>A function <span class="math inline">\leq \colon X \times X \to \{\top, \bot\}</span> (which is how we write true and false in math)</li>
 </ul>
 <p>such that</p>
 <ul>
-<li>For all <span class="math inline">\(x \in X\)</span>, <span class="math inline">\(x \leq x\)</span></li>
-<li>For all <span class="math inline">\(x,y,z \in X\)</span>, if <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq z\)</span>, then <span class="math inline">\(x \leq z\)</span>.</li>
+<li>For all <span class="math inline">x \in X</span>, <span class="math inline">x \leq x</span></li>
+<li>For all <span class="math inline">x,y,z \in X</span>, if <span class="math inline">x \leq y</span> and <span class="math inline">y \leq z</span>, then <span class="math inline">x \leq z</span>.</li>
 </ul>
 </div>
 <div class="cell" data-execution_count="2">
@@ -281,8 +297,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># leq(p::Preorder{T}, x::T, y::T)::Bool</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Example">
-<p>Let <span class="math inline">\(A\)</span> be a finite set. A <strong>subset</strong> of <span class="math inline">\(A\)</span> is a finite set containing only elements of <span class="math inline">\(A\)</span>. Equivalently, a subset of <span class="math inline">\(A\)</span> is a function <span class="math inline">\(A \to \{\top, \bot\}\)</span>.</p>
-<p>The set of subsets of <span class="math inline">\(A\)</span> is a preorder, where <span class="math inline">\(U \leq V\)</span> if every element of <span class="math inline">\(U\)</span> is an element of <span class="math inline">\(V\)</span>.</p>
+<p>Let <span class="math inline">A</span> be a finite set. A <strong>subset</strong> of <span class="math inline">A</span> is a finite set containing only elements of <span class="math inline">A</span>. Equivalently, a subset of <span class="math inline">A</span> is a function <span class="math inline">A \to \{\top, \bot\}</span>.</p>
+<p>The set of subsets of <span class="math inline">A</span> is a preorder, where <span class="math inline">U \leq V</span> if every element of <span class="math inline">U</span> is an element of <span class="math inline">V</span>.</p>
 </div>
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">subsetof</span>(U<span class="op">::</span><span class="dt">FinSet{T}</span>, A<span class="op">::</span><span class="dt">FinSet{T}</span>) <span class="kw">where</span> {T}</span>
@@ -300,7 +316,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Example">
-<p>The real numbers, <span class="math inline">\(\mathbb{R}\)</span>, are a partially ordered set, using the standard ordering.</p>
+<p>The real numbers, <span class="math inline">\mathbb{R}</span>, are a partially ordered set, using the standard ordering.</p>
 </div>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RealPreorder <span class="op">&lt;:</span><span class="dt"> Preorder{Float64}</span></span>
@@ -309,13 +325,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">leq</span>(<span class="op">::</span><span class="dt">RealPreorder</span>, x<span class="op">::</span><span class="dt">Float64</span>, y<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> x <span class="op">&lt;=</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Theorem">
-<p>Given any preorder <span class="math inline">\((X,\leq)\)</span>, there is a category with objects <span class="math inline">\(X\)</span> and</p>
+<p>Given any preorder <span class="math inline">(X,\leq)</span>, there is a category with objects <span class="math inline">X</span> and</p>
 <ul>
-<li>Precisely one morphism from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> if <span class="math inline">\(x \leq y\)</span></li>
-<li>No morphisms from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> if <span class="math inline">\(x \nleq y\)</span> (if <span class="math inline">\(x\)</span> is not less than <span class="math inline">\(y\)</span>).</li>
+<li>Precisely one morphism from <span class="math inline">x</span> to <span class="math inline">y</span> if <span class="math inline">x \leq y</span></li>
+<li>No morphisms from <span class="math inline">x</span> to <span class="math inline">y</span> if <span class="math inline">x \nleq y</span> (if <span class="math inline">x</span> is not less than <span class="math inline">y</span>).</li>
 </ul>
 </div>
-<p>In fact, we can take this as an alternative definition of preorder: a preorder is a category where there is either one or zero morphisms between any two objects. The idea is that a morphism from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> “witnesses” the fact that <span class="math inline">\(x \leq y\)</span>.</p>
+<p>In fact, we can take this as an alternative definition of preorder: a preorder is a category where there is either one or zero morphisms between any two objects. The idea is that a morphism from <span class="math inline">x</span> to <span class="math inline">y</span> “witnesses” the fact that <span class="math inline">x \leq y</span>.</p>
 <p>We express this with Julia.</p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> PreorderMorphism{T,P<span class="op">&lt;:</span><span class="dt">Preorder{T}</span>}</span>
@@ -345,39 +361,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Let us now determine what a functor between two preorders would be, if we understand those preorders as categories.</p>
 <div class="rmenv" title="Proposition">
-<p>A functor between preorders <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> simply consists of a function <span class="math inline">\(F \colon X \to Y\)</span> such that if <span class="math inline">\(x \leq x'\)</span> for <span class="math inline">\(x,x' \in X\)</span>, then <span class="math inline">\(F(x) \leq F(x')\)</span>.</p>
+<p>A functor between preorders <span class="math inline">X</span> and <span class="math inline">Y</span> simply consists of a function <span class="math inline">F \colon X \to Y</span> such that if <span class="math inline">x \leq x'</span> for <span class="math inline">x,x' \in X</span>, then <span class="math inline">F(x) \leq F(x')</span>.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>If there is a morphism <span class="math inline">\(f\)</span> from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span>, then there must exist a morphism <span class="math inline">\(F(f)\)</span> from <span class="math inline">\(f(x)\)</span> to <span class="math inline">\(f(y)\)</span>. Moreover, <span class="math inline">\(F\)</span> can send morphisms to only one place, so it must preserve composites and identities.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>If there is a morphism <span class="math inline">f</span> from <span class="math inline">x</span> to <span class="math inline">y</span>, then there must exist a morphism <span class="math inline">F(f)</span> from <span class="math inline">f(x)</span> to <span class="math inline">f(y)</span>. Moreover, <span class="math inline">F</span> can send morphisms to only one place, so it must preserve composites and identities.</p>
 </div>
 <p>We call a functor between preorders an <strong>order-preserving map</strong>.</p>
 <div class="rmenv" title="Definition">
-<p>There is a category <span class="math inline">\(\mathsf{Preorder}\)</span> of where the objects are preorders and the morphisms are order-preserving maps.</p>
+<p>There is a category <span class="math inline">\mathsf{Preorder}</span> of where the objects are preorders and the morphisms are order-preserving maps.</p>
 </div>
 <p>We said that we can view preorders as categories. Let’s make this statement precise.</p>
 <div class="rmenv" title="Definition">
-<p>If <span class="math inline">\(\mathsf{C}\)</span> is a category, then a <em>subcategory</em> <span class="math inline">\(\mathsf{D}\)</span> of <span class="math inline">\(\mathsf{C}\)</span> consists of a subset <span class="math inline">\(\mathsf{D}_{0} \subset \mathsf{C}_{0}\)</span> of objects, and for each <span class="math inline">\(x,y \in \mathsf{D}_{0}\)</span>, a subset <span class="math inline">\(\mathrm{Hom}_{\mathsf{D}}(x,y) \subset \mathrm{Hom}_{\mathsf{C}}(x,y)\)</span> of morphisms, such that</p>
+<p>If <span class="math inline">\mathsf{C}</span> is a category, then a <em>subcategory</em> <span class="math inline">\mathsf{D}</span> of <span class="math inline">\mathsf{C}</span> consists of a subset <span class="math inline">\mathsf{D}_{0} \subset \mathsf{C}_{0}</span> of objects, and for each <span class="math inline">x,y \in \mathsf{D}_{0}</span>, a subset <span class="math inline">\mathrm{Hom}_{\mathsf{D}}(x,y) \subset \mathrm{Hom}_{\mathsf{C}}(x,y)</span> of morphisms, such that</p>
 <ul>
-<li>All identities are in <span class="math inline">\(\mathsf{D}\)</span></li>
-<li>The composite of morphisms in <span class="math inline">\(\mathsf{D}\)</span> is again in <span class="math inline">\(\mathsf{D}\)</span></li>
+<li>All identities are in <span class="math inline">\mathsf{D}</span></li>
+<li>The composite of morphisms in <span class="math inline">\mathsf{D}</span> is again in <span class="math inline">\mathsf{D}</span></li>
 </ul>
-<p>If <span class="math inline">\(\mathsf{D}_{0} = \mathsf{C}_{0}\)</span>, we call <span class="math inline">\(\mathsf{D}\)</span> <em>wide</em>, and if <span class="math inline">\(\mathrm{Hom}_{D}(x,y) = \mathrm{Hom}_{C}(x,y)\)</span> for all <span class="math inline">\(x,y \in \mathsf{D}_{0}\)</span>, we call <span class="math inline">\(\mathsf{D}\)</span> <em>full</em>. The only wide, full subcategory is <span class="math inline">\(\mathsf{C}\)</span> itself.</p>
+<p>If <span class="math inline">\mathsf{D}_{0} = \mathsf{C}_{0}</span>, we call <span class="math inline">\mathsf{D}</span> <em>wide</em>, and if <span class="math inline">\mathrm{Hom}_{D}(x,y) = \mathrm{Hom}_{C}(x,y)</span> for all <span class="math inline">x,y \in \mathsf{D}_{0}</span>, we call <span class="math inline">\mathsf{D}</span> <em>full</em>. The only wide, full subcategory is <span class="math inline">\mathsf{C}</span> itself.</p>
 </div>
 <p>We now state the following proposition</p>
 <div class="rmenv" title="Proposition">
-<p><span class="math inline">\(\mathsf{Preorder}\)</span> is a full subcategory of <span class="math inline">\(\mathsf{Cat}\)</span>.</p>
+<p><span class="math inline">\mathsf{Preorder}</span> is a full subcategory of <span class="math inline">\mathsf{Cat}</span>.</p>
 </div>
 <p>Now is when something very subtle comes into play. We have two different definitions of preorder, which are in some sense equivalent, but the way we have stated definitions, one of these definitions would make the previous proposition true, and another of those definitions would make the previous proposition false. Specifically, if we say that a preorder is a category with the property that each hom-set is a singleton or empty, then the set of preorders is literally a subset of the set of (small) categories. However, if we say that a preorder is a set with a function to <code>Bool</code>, then this is not true! Concretely, it is not true that <code>Preorder &lt;: Category</code>, it’s just that we can <em>construct</em> a category out of a preorder!</p>
-<p>It is for this reason in category theory that we take a slightly generalized notion of “subobject”. Instead of using subset, where the elements of set <span class="math inline">\(A\)</span> have to be contained in set <span class="math inline">\(B\)</span>, we just require there to be an <em>injection</em> from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span>! So we say that a subcategory of <span class="math inline">\(\mathsf{C}\)</span> is just another category <span class="math inline">\(\mathsf{D}\)</span> that has an injective functor into <span class="math inline">\(\mathsf{C}\)</span>.</p>
-<p>This follows from a more general principle that we should not distinguish between isomorphic objects. I.e., if we have an injective functor into <span class="math inline">\(\mathsf{C}\)</span>, then <span class="math inline">\(\mathsf{D}\)</span> is isomorphic to the image of that functor, which is a literal subset of <span class="math inline">\(\mathsf{C}\)</span>.</p>
-<p>Now that we have made this pedantic and subtle point, we will follow convention in category to ignore it, and say things like <span class="math inline">\(\mathsf{Preorder}\)</span> is a full subcategory of <span class="math inline">\(\mathsf{Cat}\)</span> without caring about the precise definition of preorder we have chosen.</p>
+<p>It is for this reason in category theory that we take a slightly generalized notion of “subobject”. Instead of using subset, where the elements of set <span class="math inline">A</span> have to be contained in set <span class="math inline">B</span>, we just require there to be an <em>injection</em> from <span class="math inline">A</span> to <span class="math inline">B</span>! So we say that a subcategory of <span class="math inline">\mathsf{C}</span> is just another category <span class="math inline">\mathsf{D}</span> that has an injective functor into <span class="math inline">\mathsf{C}</span>.</p>
+<p>This follows from a more general principle that we should not distinguish between isomorphic objects. I.e., if we have an injective functor into <span class="math inline">\mathsf{C}</span>, then <span class="math inline">\mathsf{D}</span> is isomorphic to the image of that functor, which is a literal subset of <span class="math inline">\mathsf{C}</span>.</p>
+<p>Now that we have made this pedantic and subtle point, we will follow convention in category to ignore it, and say things like <span class="math inline">\mathsf{Preorder}</span> is a full subcategory of <span class="math inline">\mathsf{Cat}</span> without caring about the precise definition of preorder we have chosen.</p>
 <p>With this out of the way, we now talk about a menagerie of functors. In category theory, often functors are described by what they do on objects, and their action on morphisms is inferred. This makes a good exercise for the reader; see if you can tell what the action on morphisms of each of the following functors is.</p>
 <ol type="1">
-<li>There is a functor <span class="math inline">\(\mathsf{Preorder} \to \mathsf{Cat}\)</span> that simply sends a preorder to that preorder viewed as a category, as we discussed before.</li>
-<li>There is a functor <span class="math inline">\(\mathsf{Cat}\)</span> which sends a category <span class="math inline">\(\mathsf{C}\)</span> to the preorder with the objects of <span class="math inline">\(\mathsf{C}\)</span>, and <span class="math inline">\(x \leq y\)</span> if and only if <span class="math inline">\(\mathrm{Hom}_{\mathsf{C}}(x,y)\)</span> is non-empty.</li>
-<li>There is a functor <span class="math inline">\(\mathsf{Preorder} \to \mathsf{Set}\)</span> which simply sends a preorder to its underlying set.</li>
-<li>There is a functor <span class="math inline">\(\mathsf{Set} \to \mathsf{Preorder}\)</span> which sends a set <span class="math inline">\(X\)</span> to the preorder with underlying set <span class="math inline">\(X\)</span> where <span class="math inline">\(x \leq y\)</span> if and only if <span class="math inline">\(x = y\)</span>. Such a preorder is known as a <strong>discrete</strong> preorder.</li>
-<li>There is a functor <span class="math inline">\(\mathsf{Set} \to \mathsf{Preorder}\)</span> which sends a set <span class="math inline">\(X\)</span> to the preorder with underlying set <span class="math inline">\(X\)</span> where <span class="math inline">\(x \leq y\)</span> always. Such a preorder is known as a <strong>codiscrete</strong> preorder.</li>
+<li>There is a functor <span class="math inline">\mathsf{Preorder} \to \mathsf{Cat}</span> that simply sends a preorder to that preorder viewed as a category, as we discussed before.</li>
+<li>There is a functor <span class="math inline">\mathsf{Cat}</span> which sends a category <span class="math inline">\mathsf{C}</span> to the preorder with the objects of <span class="math inline">\mathsf{C}</span>, and <span class="math inline">x \leq y</span> if and only if <span class="math inline">\mathrm{Hom}_{\mathsf{C}}(x,y)</span> is non-empty.</li>
+<li>There is a functor <span class="math inline">\mathsf{Preorder} \to \mathsf{Set}</span> which simply sends a preorder to its underlying set.</li>
+<li>There is a functor <span class="math inline">\mathsf{Set} \to \mathsf{Preorder}</span> which sends a set <span class="math inline">X</span> to the preorder with underlying set <span class="math inline">X</span> where <span class="math inline">x \leq y</span> if and only if <span class="math inline">x = y</span>. Such a preorder is known as a <strong>discrete</strong> preorder.</li>
+<li>There is a functor <span class="math inline">\mathsf{Set} \to \mathsf{Preorder}</span> which sends a set <span class="math inline">X</span> to the preorder with underlying set <span class="math inline">X</span> where <span class="math inline">x \leq y</span> always. Such a preorder is known as a <strong>codiscrete</strong> preorder.</li>
 </ol>
 <p>To sum up, preorders are a special case of categories, where there is at most one morphism between any two objects. We now move on to another special case of categories.</p>
 </section>
@@ -385,12 +401,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="monoids">Monoids</h2>
 <p>Preorders are an “extreme” example of categories, where there are lots of objects, but very few morphisms. The other extreme is monoids, where there is only one object, but plenty of morphisms. We start with the classical definition of morphism.</p>
 <div class="rmenv" title="Definition">
-<p>A <strong>monoid</strong> is a set <span class="math inline">\(M\)</span> along with a binary operation <span class="math inline">\(\ast \colon M \times M \to M\)</span> and an element <span class="math inline">\(e \in M\)</span> such that:</p>
+<p>A <strong>monoid</strong> is a set <span class="math inline">M</span> along with a binary operation <span class="math inline">\ast \colon M \times M \to M</span> and an element <span class="math inline">e \in M</span> such that:</p>
 <ul>
-<li>For all <span class="math inline">\(a,b,c \in M\)</span>, <span class="math inline">\((a \ast b) \ast c = a \ast (b \ast c)\)</span></li>
-<li>For all <span class="math inline">\(a \in M\)</span>, <span class="math inline">\(a \ast e = a = e \ast a\)</span></li>
+<li>For all <span class="math inline">a,b,c \in M</span>, <span class="math inline">(a \ast b) \ast c = a \ast (b \ast c)</span></li>
+<li>For all <span class="math inline">a \in M</span>, <span class="math inline">a \ast e = a = e \ast a</span></li>
 </ul>
-<p>We call <span class="math inline">\(e\)</span> the <strong>unit</strong> or <strong>identity element</strong> of the monoid, and <span class="math inline">\(\ast\)</span> the <strong>multiplication</strong>.</p>
+<p>We call <span class="math inline">e</span> the <strong>unit</strong> or <strong>identity element</strong> of the monoid, and <span class="math inline">\ast</span> the <strong>multiplication</strong>.</p>
 </div>
 <div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract type</span> Monoid{T} <span class="kw">end</span></span>
@@ -399,7 +415,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ident(m::Monoid{T})::T</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Example">
-<p>Let <span class="math inline">\(A\)</span> be an alphabet, and let <span class="math inline">\(A^{\ast}\)</span> be the set of strings on that alphabet. For instance, if <span class="math inline">\(A = \{a,b,c\}\)</span>, then <span class="math inline">\(A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}\)</span>. Then if we define <span class="math inline">\(\ast\)</span> to be “concatenation”, i.e.&nbsp;<span class="math inline">\([ab] \ast [cba] = [abcba]\)</span>, and if we define <span class="math inline">\(e = []\)</span>, <span class="math inline">\((A^{\ast},\ast,[])\)</span> is a monoid.</p>
+<p>Let <span class="math inline">A</span> be an alphabet, and let <span class="math inline">A^{\ast}</span> be the set of strings on that alphabet. For instance, if <span class="math inline">A = \{a,b,c\}</span>, then <span class="math inline">A^{\ast} = \{[],[a],[b],[c],[aa],[ab],[ac],[ba],\ldots\}</span>. Then if we define <span class="math inline">\ast</span> to be “concatenation”, i.e.&nbsp;<span class="math inline">[ab] \ast [cba] = [abcba]</span>, and if we define <span class="math inline">e = []</span>, <span class="math inline">(A^{\ast},\ast,[])</span> is a monoid.</p>
 </div>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ConcatMonoid{T} <span class="op">&lt;:</span><span class="dt"> Monoid{Vector{T}}</span></span>
@@ -414,26 +430,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ident</span>(<span class="op">::</span><span class="dt">ConcatMonoid{T}</span>) <span class="kw">where</span> {T} <span class="op">=</span> T[]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Example">
-<p>Any of <span class="math inline">\(\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R},\mathbb{C}\)</span> with <span class="math inline">\(+\)</span> or <span class="math inline">\(\cdot\)</span> is a monoid.</p>
+<p>Any of <span class="math inline">\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R},\mathbb{C}</span> with <span class="math inline">+</span> or <span class="math inline">\cdot</span> is a monoid.</p>
 </div>
 <div class="rmenv" title="Example">
-<p>The set of <span class="math inline">\(n \times n\)</span> matrices with either matrix multiplication, element-wise multiplication, or element-wise addition is a monoid.</p>
+<p>The set of <span class="math inline">n \times n</span> matrices with either matrix multiplication, element-wise multiplication, or element-wise addition is a monoid.</p>
 </div>
 <div class="rmenv" title="Example">
-<p>The set of subsets of some fixed set <span class="math inline">\(A\)</span> with either intersection or union is a monoid. The unit of intersection is <span class="math inline">\(A\)</span>, and the unit of union is <span class="math inline">\(\emptyset\)</span>.</p>
+<p>The set of subsets of some fixed set <span class="math inline">A</span> with either intersection or union is a monoid. The unit of intersection is <span class="math inline">A</span>, and the unit of union is <span class="math inline">\emptyset</span>.</p>
 </div>
 <div class="rmenv" title="Proposition">
 <p>A monoid is precisely the same thing as a category with only a single object.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>Suppose that <span class="math inline">\(\mathsf{C}\)</span> is a category with one object <span class="math inline">\(x\)</span>. Then <span class="math inline">\(\mathsf{Hom}_{\mathsf{C}}(x,x)\)</span> is a monoid with multiplication <span class="math inline">\(\circ\)</span> and unit <span class="math inline">\(1_x\)</span>. Conversely, if <span class="math inline">\(M\)</span> is a monoid, we can construct a category with one object <span class="math inline">\(x\)</span>, and <span class="math inline">\(\mathsf{Hom}_{\mathsf{C}}(x,x) = M\)</span>, with <span class="math inline">\(\circ = \ast\)</span> and <span class="math inline">\(1_x = e\)</span>.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>Suppose that <span class="math inline">\mathsf{C}</span> is a category with one object <span class="math inline">x</span>. Then <span class="math inline">\mathsf{Hom}_{\mathsf{C}}(x,x)</span> is a monoid with multiplication <span class="math inline">\circ</span> and unit <span class="math inline">1_x</span>. Conversely, if <span class="math inline">M</span> is a monoid, we can construct a category with one object <span class="math inline">x</span>, and <span class="math inline">\mathsf{Hom}_{\mathsf{C}}(x,x) = M</span>, with <span class="math inline">\circ = \ast</span> and <span class="math inline">1_x = e</span>.</p>
 </div>
-<p>Moreover, a functor between two monoids viewed as categories is a simply a function <span class="math inline">\(F \colon M \to N\)</span> such that <span class="math inline">\(F(a \ast b) = F(a) \ast F(b)\)</span>, as the single object of the monoid has only one place to go!</p>
-<p>Let <span class="math inline">\(\mathsf{Mon}\)</span> be the category of monoids. Then there are a bunch of functors between <span class="math inline">\(\mathsf{Mon}\)</span> and our old familiar categories.</p>
+<p>Moreover, a functor between two monoids viewed as categories is a simply a function <span class="math inline">F \colon M \to N</span> such that <span class="math inline">F(a \ast b) = F(a) \ast F(b)</span>, as the single object of the monoid has only one place to go!</p>
+<p>Let <span class="math inline">\mathsf{Mon}</span> be the category of monoids. Then there are a bunch of functors between <span class="math inline">\mathsf{Mon}</span> and our old familiar categories.</p>
 <ul>
-<li>There is a functor <span class="math inline">\(\mathsf{Mon} \to \mathsf{Cat}\)</span> which sends a monoid to that monoid viewed as a category.</li>
-<li>There is a functor <span class="math inline">\(\mathsf{Mon} \to \mathsf{Set}\)</span> which sends a monoid to its underlying set.</li>
-<li>There is a functor <span class="math inline">\(\mathsf{Set} \to \mathsf{Mon}\)</span> which sends a set <span class="math inline">\(A\)</span> to the monoid <span class="math inline">\(A^{\ast}\)</span> of strings on the alphabet <span class="math inline">\(A\)</span>.</li>
+<li>There is a functor <span class="math inline">\mathsf{Mon} \to \mathsf{Cat}</span> which sends a monoid to that monoid viewed as a category.</li>
+<li>There is a functor <span class="math inline">\mathsf{Mon} \to \mathsf{Set}</span> which sends a monoid to its underlying set.</li>
+<li>There is a functor <span class="math inline">\mathsf{Set} \to \mathsf{Mon}</span> which sends a set <span class="math inline">A</span> to the monoid <span class="math inline">A^{\ast}</span> of strings on the alphabet <span class="math inline">A</span>.</li>
 </ul>
 
 

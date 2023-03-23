@@ -124,12 +124,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="main.css">
 </head>
 
 <body class="nav-sidebar floating">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -210,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Representables revisited</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -302,7 +318,7 @@ Julia from last lecture
 <p>Thus, on a computer infinite sets have a very different feel than finite sets.</p>
 <p>In traditional foundations, everything is built out of sets. But, as we said in the previous lecture, this is unnecessarily strict. We are instead taking Julia to be our foundation, so that we will have primitive things that are not themselves sets. This is a much saner foundation, because while it might be technically possible to build, say, a real number out of sets, nobody really wants to do that.</p>
 <div class="rmenv" title="Definition">
-<p>A <strong>set</strong> <span class="math inline">\(X\)</span> consists of a function from <code>Any</code> to <code>Bool</code>, which may or either be written in Julia or defined mathematically. If <span class="math inline">\(X(x) = \mathbf{true}\)</span>, we write <span class="math inline">\(x \in X\)</span>, and if <span class="math inline">\(X(x) = \mathbf{false}\)</span> we write <span class="math inline">\(x \notin X\)</span>.</p>
+<p>A <strong>set</strong> <span class="math inline">X</span> consists of a function from <code>Any</code> to <code>Bool</code>, which may or either be written in Julia or defined mathematically. If <span class="math inline">X(x) = \mathbf{true}</span>, we write <span class="math inline">x \in X</span>, and if <span class="math inline">X(x) = \mathbf{false}</span> we write <span class="math inline">x \notin X</span>.</p>
 </div>
 <p>Note that when we write down Julia definitions involving sets, we are implicitly assuming that the functions are written in Julia. However, there are some sets that we will use whose functions <em>cannot</em> be written down in Julia, so take the Julia definitions with a grain of salt. If the function defining a set can be written in Julia, we say that set is <strong>computable</strong>, and otherwise the set is <strong>uncomputable</strong>.</p>
 <p>Obviously, we can only model the computable sets in Julia, but the uncomputable sets are still useful for talking <em>about</em> Julia.</p>
@@ -313,7 +329,7 @@ Julia from last lecture
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, s<span class="op">::</span><span class="dt">ComputableSet</span>) <span class="op">=</span> <span class="fu">error</span>(<span class="st">"no specific definition found"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Example">
-<p>For any finite set <span class="math inline">\(A\)</span>, let <span class="math inline">\(\chi_{A}\)</span> be defined by <span class="math inline">\(\chi_{A}(x) = \mathbf{true}\)</span> if <span class="math inline">\(x\)</span> is listed in <span class="math inline">\(A\)</span> and <span class="math inline">\(\mathbf{false}\)</span> otherwise. Then <span class="math inline">\(\chi_{A}\)</span> is a set.</p>
+<p>For any finite set <span class="math inline">A</span>, let <span class="math inline">\chi_{A}</span> be defined by <span class="math inline">\chi_{A}(x) = \mathbf{true}</span> if <span class="math inline">x</span> is listed in <span class="math inline">A</span> and <span class="math inline">\mathbf{false}</span> otherwise. Then <span class="math inline">\chi_{A}</span> is a set.</p>
 </div>
 <div class="rmenv" title="Example">
 <p>Any Julia type <code>T</code> defines a set, via the function which checks whether a Julia value has that type.</p>
@@ -332,14 +348,14 @@ Julia from last lecture
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, χ<span class="op">::</span><span class="dt">TypeSet</span>) <span class="op">=</span> x isa χ.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Definition">
-<p>Given two sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, the set <span class="math inline">\(A \to B\)</span> consists of all Julia callables <span class="math inline">\(f\)</span> such that <span class="math inline">\(f(a) \in B\)</span> for all <span class="math inline">\(a \in A\)</span>. Note that</p>
+<p>Given two sets <span class="math inline">A</span> and <span class="math inline">B</span>, the set <span class="math inline">A \to B</span> consists of all Julia callables <span class="math inline">f</span> such that <span class="math inline">f(a) \in B</span> for all <span class="math inline">a \in A</span>. Note that</p>
 </div>
-<p>Note that even if <code>A</code> and <code>B</code> are computable sets, there is no way to check in Julia that a given <code>f</code> is an element of <span class="math inline">\(A \to B\)</span> because this would involve iterating through possibly infinitely many elements of <span class="math inline">\(A\)</span>. Again, languages where this is not the case don’t have good ODE solvers.</p>
+<p>Note that even if <code>A</code> and <code>B</code> are computable sets, there is no way to check in Julia that a given <code>f</code> is an element of <span class="math inline">A \to B</span> because this would involve iterating through possibly infinitely many elements of <span class="math inline">A</span>. Again, languages where this is not the case don’t have good ODE solvers.</p>
 <div class="rmenv" title="Definition">
-<p>Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, their <strong>intersection</strong> <span class="math inline">\(X \cap Y\)</span> is defined by</p>
-<p><span class="math display">\[ (X \cap Y)(x) = X(x) \wedge Y(x) \]</span></p>
-<p>Their <strong>union</strong> <span class="math inline">\(X \cup Y\)</span> is defined by</p>
-<p><span class="math display">\[ (X \cup Y)(x) = X(x) \vee Y(x) \]</span></p>
+<p>Given two sets <span class="math inline">X</span> and <span class="math inline">Y</span>, their <strong>intersection</strong> <span class="math inline">X \cap Y</span> is defined by</p>
+<p><span class="math display"> (X \cap Y)(x) = X(x) \wedge Y(x) </span></p>
+<p>Their <strong>union</strong> <span class="math inline">X \cup Y</span> is defined by</p>
+<p><span class="math display"> (X \cup Y)(x) = X(x) \vee Y(x) </span></p>
 </div>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> IntersectionSet</span>
@@ -357,7 +373,7 @@ Julia from last lecture
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">in</span>(x, χ<span class="op">::</span><span class="dt">UnionSet</span>) <span class="op">=</span> x <span class="op">∈</span> χ.X <span class="op">||</span> x <span class="op">∈</span> χ.Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="rmenv" title="Definition">
-<p>Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, their <strong>product</strong> <span class="math inline">\(X \times Y\)</span> is the set of tuples <span class="math inline">\((x,y)\)</span> where <span class="math inline">\(x \in X\)</span> and <span class="math inline">\(y \in Y\)</span>. That is, <span class="math inline">\(z \in X \times Y\)</span> if and only if <code>z isa Tuple</code>, <code>length(z) = 2</code>, <span class="math inline">\(z[1] \in X\)</span> and <span class="math inline">\(z[2] \in Y\)</span>.</p>
+<p>Given two sets <span class="math inline">X</span> and <span class="math inline">Y</span>, their <strong>product</strong> <span class="math inline">X \times Y</span> is the set of tuples <span class="math inline">(x,y)</span> where <span class="math inline">x \in X</span> and <span class="math inline">y \in Y</span>. That is, <span class="math inline">z \in X \times Y</span> if and only if <code>z isa Tuple</code>, <code>length(z) = 2</code>, <span class="math inline">z[1] \in X</span> and <span class="math inline">z[2] \in Y</span>.</p>
 </div>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">product</span>(X,Y) <span class="op">=</span> z <span class="op">-&gt;</span> (z isa <span class="dt">Tuple</span>) <span class="op">&amp;&amp;</span></span>
@@ -390,27 +406,27 @@ Julia from last lecture
 <h1>Categories</h1>
 <p>The moment we’ve all be waiting for.</p>
 <div class="rmenv" title="Definition">
-<p>A <strong>small category</strong> <span class="math inline">\(C\)</span> consists of</p>
+<p>A <strong>small category</strong> <span class="math inline">C</span> consists of</p>
 <ul>
-<li>a set <span class="math inline">\(C_0\)</span> of <strong>objects</strong></li>
-<li>for every <span class="math inline">\(x,y \in C_0\)</span>, a set <span class="math inline">\(\mathrm{Hom}_C(x,y)\)</span> of <strong>morphisms</strong> from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span></li>
-<li>for every <span class="math inline">\(x,y,z \in C_0\)</span>, a <strong>composition function</strong> <span class="math inline">\(\circ \colon \mathrm{Hom}_C(y,z) \times \mathrm{Hom}_(x,y) \to \mathrm{Hom}(x,z)\)</span></li>
-<li>for every <span class="math inline">\(x \in C_0\)</span>, an <strong>identity morphism</strong> <span class="math inline">\(1_x \in \mathrm{Hom}_C(x,x)\)</span></li>
+<li>a set <span class="math inline">C_0</span> of <strong>objects</strong></li>
+<li>for every <span class="math inline">x,y \in C_0</span>, a set <span class="math inline">\mathrm{Hom}_C(x,y)</span> of <strong>morphisms</strong> from <span class="math inline">x</span> to <span class="math inline">y</span></li>
+<li>for every <span class="math inline">x,y,z \in C_0</span>, a <strong>composition function</strong> <span class="math inline">\circ \colon \mathrm{Hom}_C(y,z) \times \mathrm{Hom}_(x,y) \to \mathrm{Hom}(x,z)</span></li>
+<li>for every <span class="math inline">x \in C_0</span>, an <strong>identity morphism</strong> <span class="math inline">1_x \in \mathrm{Hom}_C(x,x)</span></li>
 </ul>
 <p>such that</p>
 <ul>
-<li>for all <span class="math inline">\(x,y,z,w \in C_0\)</span>, <span class="math inline">\(f \in \mathrm{Hom}_C(x,y)\)</span>, <span class="math inline">\(g \in \mathrm{Hom}_C(y,z)\)</span>, <span class="math inline">\(h \in \mathrm{Hom}_C(z,w)\)</span>, <span class="math display">\[ h \circ (g \circ f) = (h \circ g) \circ f \]</span></li>
-<li>for all <span class="math inline">\(x,y \in C_0\)</span>, <span class="math inline">\(f \in \mathrm{Hom}_C(x,y)\)</span>, <span class="math display">\[ 1_y \circ f = f = f \circ 1_x \]</span></li>
+<li>for all <span class="math inline">x,y,z,w \in C_0</span>, <span class="math inline">f \in \mathrm{Hom}_C(x,y)</span>, <span class="math inline">g \in \mathrm{Hom}_C(y,z)</span>, <span class="math inline">h \in \mathrm{Hom}_C(z,w)</span>, <span class="math display"> h \circ (g \circ f) = (h \circ g) \circ f </span></li>
+<li>for all <span class="math inline">x,y \in C_0</span>, <span class="math inline">f \in \mathrm{Hom}_C(x,y)</span>, <span class="math display"> 1_y \circ f = f = f \circ 1_x </span></li>
 </ul>
 <p>These two laws are called the <strong>associativity law</strong> and <strong>unitality law</strong> respectively.</p>
 </div>
 <p>(Julia to be livecoded)</p>
 <div class="rmenv" title="Example">
-<p>There is a category <span class="math inline">\(\mathsf{Fin}\)</span> where the objects are finite sets and the morphisms are morphisms of finite sets, as defined in the previous lecture.</p>
+<p>There is a category <span class="math inline">\mathsf{Fin}</span> where the objects are finite sets and the morphisms are morphisms of finite sets, as defined in the previous lecture.</p>
 </div>
 <p>(Julia to be livecoded)</p>
 <div class="rmenv" title="Example">
-<p>There is a category where the objects are natural numbers and a morphism from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> is a <span class="math inline">\(n \times m\)</span> matrix. Composition of a <span class="math inline">\(n \times m\)</span> matrix and an <span class="math inline">\(m \times r\)</span> matrix is done by matrix multiplication.</p>
+<p>There is a category where the objects are natural numbers and a morphism from <span class="math inline">n</span> to <span class="math inline">m</span> is a <span class="math inline">n \times m</span> matrix. Composition of a <span class="math inline">n \times m</span> matrix and an <span class="math inline">m \times r</span> matrix is done by matrix multiplication.</p>
 </div>
 <p>(Julia to be livecoded)</p>
 <div class="rmenv" title="Example">

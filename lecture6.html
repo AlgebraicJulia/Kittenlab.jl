@@ -124,12 +124,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="main.css">
 </head>
 
 <body class="nav-sidebar floating">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -210,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Applied Colimits</a>
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Representables revisited</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -260,12 +276,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="graphs" class="level2">
 <h2 class="anchored" data-anchor-id="graphs">Graphs</h2>
 <div class="rmenv" title="Definition">
-<p>A <strong>graph</strong> <span class="math inline">\(G\)</span> consists of the following.</p>
+<p>A <strong>graph</strong> <span class="math inline">G</span> consists of the following.</p>
 <ul>
-<li>A finite set <span class="math inline">\(G(V)\)</span> of <strong>vertices</strong></li>
-<li>A finite set <span class="math inline">\(G(E)\)</span> of <strong>edges</strong></li>
-<li>A function <span class="math inline">\(G(\mathrm{src}) \colon G(E) \to G(V)\)</span> called the <strong>source map</strong></li>
-<li>A function <span class="math inline">\(G(\mathrm{tgt}) \colon G(E) \to G(V)\)</span> called the <strong>target map</strong></li>
+<li>A finite set <span class="math inline">G(V)</span> of <strong>vertices</strong></li>
+<li>A finite set <span class="math inline">G(E)</span> of <strong>edges</strong></li>
+<li>A function <span class="math inline">G(\mathrm{src}) \colon G(E) \to G(V)</span> called the <strong>source map</strong></li>
+<li>A function <span class="math inline">G(\mathrm{tgt}) \colon G(E) \to G(V)</span> called the <strong>target map</strong></li>
 </ul>
 </div>
 <p>You can think about this like a “database” with two tables, one table for edges and one table for vertices. The vertex table has only a primary key column, and the edge table has two foreign key columns in addition to a primary key column.</p>
@@ -299,49 +315,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="path-categories-and-functors-out-of-them" class="level2">
 <h2 class="anchored" data-anchor-id="path-categories-and-functors-out-of-them">Path categories and functors out of them</h2>
 <div class="rmenv" title="Definition">
-<p>If <span class="math inline">\(G\)</span> is a graph, then a <strong>path</strong> in <span class="math inline">\(G\)</span> is a list <span class="math inline">\(e_{1},\ldots,e_{n}\)</span> of edges, such that <span class="math inline">\(G(\mathrm{tgt})(e_{i}) = G(\mathrm{src})(e_{i+1})\)</span> for <span class="math inline">\(i=1,\ldots,n-1\)</span>. We say that the path goes from <span class="math inline">\(G(\mathrm{src})(e_{1})\)</span> to <span class="math inline">\(G(\mathrm{tgt})(e_{n})\)</span>.</p>
+<p>If <span class="math inline">G</span> is a graph, then a <strong>path</strong> in <span class="math inline">G</span> is a list <span class="math inline">e_{1},\ldots,e_{n}</span> of edges, such that <span class="math inline">G(\mathrm{tgt})(e_{i}) = G(\mathrm{src})(e_{i+1})</span> for <span class="math inline">i=1,\ldots,n-1</span>. We say that the path goes from <span class="math inline">G(\mathrm{src})(e_{1})</span> to <span class="math inline">G(\mathrm{tgt})(e_{n})</span>.</p>
 </div>
 <div class="rmenv" title="Example">
 <p>We can make a path from Arad to Bucharest by going</p>
 <p><code>Arad -&gt; Sibiu -&gt; Fagaras -&gt; Bucharest</code></p>
 </div>
 <div class="rmenv" title="Proposition">
-<p>If <span class="math inline">\(G\)</span> is a graph, then given a path <span class="math inline">\(e_{1},\ldots,e_{n}\)</span> from a vertex <span class="math inline">\(a\)</span> to a vertex <span class="math inline">\(b\)</span>, and a path <span class="math inline">\(e_{1}^{\prime},\ldots,e_{m}^{\prime}\)</span> from <span class="math inline">\(b\)</span> to another vertex <span class="math inline">\(c\)</span>, we can construct a path <span class="math inline">\(e_{1},\ldots,e_{n},e_{1}^{\prime},\ldots,e_{m}^{\prime}\)</span> from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>.</p>
+<p>If <span class="math inline">G</span> is a graph, then given a path <span class="math inline">e_{1},\ldots,e_{n}</span> from a vertex <span class="math inline">a</span> to a vertex <span class="math inline">b</span>, and a path <span class="math inline">e_{1}^{\prime},\ldots,e_{m}^{\prime}</span> from <span class="math inline">b</span> to another vertex <span class="math inline">c</span>, we can construct a path <span class="math inline">e_{1},\ldots,e_{n},e_{1}^{\prime},\ldots,e_{m}^{\prime}</span> from <span class="math inline">a</span> to <span class="math inline">b</span>.</p>
 </div>
 <p>When you hear the word “compose” your eyes should light up and think “Oh, is this a category?” And in this case, it is!</p>
 <div class="rmenv" title="Proposition">
-<p>For any graph <span class="math inline">\(G\)</span>, there is a category <span class="math inline">\(\mathrm{Path}(G)\)</span>, where the objects are vertices in <span class="math inline">\(G\)</span> and a morphism from a vertex <span class="math inline">\(a\)</span> to a vertex <span class="math inline">\(b\)</span> is a path from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span> in <span class="math inline">\(G\)</span>. Composition is as it was in the proposition above, i.e.&nbsp;list concatenation, and the identity on a vertex is simply the empty list.</p>
+<p>For any graph <span class="math inline">G</span>, there is a category <span class="math inline">\mathrm{Path}(G)</span>, where the objects are vertices in <span class="math inline">G</span> and a morphism from a vertex <span class="math inline">a</span> to a vertex <span class="math inline">b</span> is a path from <span class="math inline">a</span> to <span class="math inline">b</span> in <span class="math inline">G</span>. Composition is as it was in the proposition above, i.e.&nbsp;list concatenation, and the identity on a vertex is simply the empty list.</p>
 </div>
-<p>Whenever you see something that constructs something from another thing, you should think “is this a functor”? And it turns out that <span class="math inline">\(\mathrm{Path}\)</span> is in fact a functor from the category of graphs to the category of categories. However, in order to write this down properly, we have to define the category of graphs, and we aren’t quite ready to do that yet (we will do it by the end of this lecture, though).</p>
-<p>The category <span class="math inline">\(\mathrm{Path}(G)\)</span> has a special property. Namely, in order to define a functor <span class="math inline">\(F\)</span> from <span class="math inline">\(\mathrm{Path}(G)\)</span> to a category <span class="math inline">\(\mathsf{C}\)</span>, all you have to do is pick an object <span class="math inline">\(F(v)\)</span> <span class="math inline">\(\mathsf{C}\)</span> for every vertex <span class="math inline">\(v \in G(V)\)</span>, and then pick a morphism <span class="math inline">\(F(e) \colon F(G(\mathrm{src})(e)) \to F(G(\mathrm{tgt})(e))\)</span> for every edge <span class="math inline">\(e \in G(E)\)</span>.</p>
-<p>Then where do you send a path <span class="math inline">\(e_{1},\ldots,e_{n}\)</span>? Well, you just send it to the composite morphism <span class="math inline">\(F(e_{n}) \circ \cdots \circ F(e_{1})\)</span>! It turns out that <em>any</em> choice of the <span class="math inline">\(F(e)\)</span> works for this; you get preservation of composition “for free”!</p>
-<p>So it’s particularly easy to define a functor coming out of <span class="math inline">\(\mathrm{Path}(G)\)</span>, and it’s also particularly easy to <em>store</em> such a functor: we just store an object for every vertex of <span class="math inline">\(G\)</span> and a morphism for every edge.</p>
-<p>We call a functor from <span class="math inline">\(\mathrm{Path}(G)\)</span> to <span class="math inline">\(\mathsf{Set}\)</span> an <strong>acset</strong>, pronounced to rhyme with “hatchet”. Other terminology you might see (and the etymology for acset) is C-set or copresheaf. However, this can be confusing because sometimes the “C” in C-set refers to <span class="math inline">\(\mathrm{Path}(G)\)</span>, but sometimes we just use C-set as a word. I like to use “acset on schema C” instead of C-set, because then I can just say “acset” without having to define C first. And copresheaf is just unnecessarily fancy. We say “schema” here, because you can think of <span class="math inline">\(\mathsf{C} = \mathrm{Path}(G)\)</span> as a “database schema”; we’ll see more about this later.</p>
-<p>Strictly speaking, there’s more to an acset than what we just presented; the “a” in acset stands for “attributed”. But we will cover this later; functors from <span class="math inline">\(\mathrm{Path}(G)\)</span> to <span class="math inline">\(\mathsf{Set}\)</span> are a special case of acsets.</p>
+<p>Whenever you see something that constructs something from another thing, you should think “is this a functor”? And it turns out that <span class="math inline">\mathrm{Path}</span> is in fact a functor from the category of graphs to the category of categories. However, in order to write this down properly, we have to define the category of graphs, and we aren’t quite ready to do that yet (we will do it by the end of this lecture, though).</p>
+<p>The category <span class="math inline">\mathrm{Path}(G)</span> has a special property. Namely, in order to define a functor <span class="math inline">F</span> from <span class="math inline">\mathrm{Path}(G)</span> to a category <span class="math inline">\mathsf{C}</span>, all you have to do is pick an object <span class="math inline">F(v)</span> <span class="math inline">\mathsf{C}</span> for every vertex <span class="math inline">v \in G(V)</span>, and then pick a morphism <span class="math inline">F(e) \colon F(G(\mathrm{src})(e)) \to F(G(\mathrm{tgt})(e))</span> for every edge <span class="math inline">e \in G(E)</span>.</p>
+<p>Then where do you send a path <span class="math inline">e_{1},\ldots,e_{n}</span>? Well, you just send it to the composite morphism <span class="math inline">F(e_{n}) \circ \cdots \circ F(e_{1})</span>! It turns out that <em>any</em> choice of the <span class="math inline">F(e)</span> works for this; you get preservation of composition “for free”!</p>
+<p>So it’s particularly easy to define a functor coming out of <span class="math inline">\mathrm{Path}(G)</span>, and it’s also particularly easy to <em>store</em> such a functor: we just store an object for every vertex of <span class="math inline">G</span> and a morphism for every edge.</p>
+<p>We call a functor from <span class="math inline">\mathrm{Path}(G)</span> to <span class="math inline">\mathsf{Set}</span> an <strong>acset</strong>, pronounced to rhyme with “hatchet”. Other terminology you might see (and the etymology for acset) is C-set or copresheaf. However, this can be confusing because sometimes the “C” in C-set refers to <span class="math inline">\mathrm{Path}(G)</span>, but sometimes we just use C-set as a word. I like to use “acset on schema C” instead of C-set, because then I can just say “acset” without having to define C first. And copresheaf is just unnecessarily fancy. We say “schema” here, because you can think of <span class="math inline">\mathsf{C} = \mathrm{Path}(G)</span> as a “database schema”; we’ll see more about this later.</p>
+<p>Strictly speaking, there’s more to an acset than what we just presented; the “a” in acset stands for “attributed”. But we will cover this later; functors from <span class="math inline">\mathrm{Path}(G)</span> to <span class="math inline">\mathsf{Set}</span> are a special case of acsets.</p>
 <p>We will now look at some examples!</p>
 </section>
 <section id="graphs-1" class="level2">
 <h2 class="anchored" data-anchor-id="graphs-1">Graphs</h2>
 <p>First of all, we can go meta and define graphs themselves this way!</p>
-<p>Consider the following graph <span class="math inline">\(G\)</span>.</p>
+<p>Consider the following graph <span class="math inline">G</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="graph_schema.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Graph schema</figcaption><p></p>
 </figure>
 </div>
-<p>We let <span class="math inline">\(\mathsf{Gr} = \mathrm{Path}(G)\)</span>. Then an acset on <span class="math inline">\(\mathsf{Gr}\)</span> is a <strong>graph</strong>. Using graphs to define graphs is pretty trippy, but fortunately we can “close the loop” because our original definition of graph didn’t rely on any of this notation. Notice that we have been using the notation for a functor out of <span class="math inline">\(\mathsf{Gr}\)</span> all along however!</p>
+<p>We let <span class="math inline">\mathsf{Gr} = \mathrm{Path}(G)</span>. Then an acset on <span class="math inline">\mathsf{Gr}</span> is a <strong>graph</strong>. Using graphs to define graphs is pretty trippy, but fortunately we can “close the loop” because our original definition of graph didn’t rely on any of this notation. Notice that we have been using the notation for a functor out of <span class="math inline">\mathsf{Gr}</span> all along however!</p>
 </section>
 <section id="petri-nets" class="level2">
 <h2 class="anchored" data-anchor-id="petri-nets">Petri nets</h2>
-<p>Consider the following graph <span class="math inline">\(G\)</span>.</p>
+<p>Consider the following graph <span class="math inline">G</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="petri_net_schema.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Petri net schema</figcaption><p></p>
 </figure>
 </div>
-<p>We let <span class="math inline">\(\mathsf{Petri} = \mathrm{Path}(G)\)</span>. Then an acset on <span class="math inline">\(\mathsf{Petri}\)</span> is a <strong>petri net</strong>.</p>
+<p>We let <span class="math inline">\mathsf{Petri} = \mathrm{Path}(G)</span>. Then an acset on <span class="math inline">\mathsf{Petri}</span> is a <strong>petri net</strong>.</p>
 <p>Examples of Petri nets:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -358,14 +374,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="wiring-diagrams" class="level2">
 <h2 class="anchored" data-anchor-id="wiring-diagrams">Wiring diagrams</h2>
-<p>Consider the following graph <span class="math inline">\(G\)</span>.</p>
+<p>Consider the following graph <span class="math inline">G</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="directed_port_graph_schema.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Directed port graph schema</figcaption><p></p>
 </figure>
 </div>
-<p>We let <span class="math inline">\(\mathsf{DPG} = \mathrm{Path}(G)\)</span>. Then an acset on <span class="math inline">\(\mathsf{DPG}\)</span> is a <strong>directed port graph</strong>.</p>
+<p>We let <span class="math inline">\mathsf{DPG} = \mathrm{Path}(G)</span>. Then an acset on <span class="math inline">\mathsf{DPG}</span> is a <strong>directed port graph</strong>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="directed_port_graph.png" class="img-fluid figure-img"></p>
@@ -382,13 +398,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="sneak-peak-natural-transformations">Sneak peak: natural transformations</h2>
 <p>We said before that there is a category of graphs. In this part, we will give a definition of a <em>graph homomorphism</em> that will make this precise. It turns out that this comes from a general definition of <em>natural transformation</em>, which can be defined at the level of functors and categories! However, we will only give a hint at what this is, and leave a full exploration of natural transformations to the next lecture.</p>
 <div class="rmenv" title="Definition">
-<p>A <strong>graph homomorphism</strong> <span class="math inline">\(\alpha\)</span> from a graph <span class="math inline">\(G\)</span> to a graph <span class="math inline">\(H\)</span> consists of two maps</p>
+<p>A <strong>graph homomorphism</strong> <span class="math inline">\alpha</span> from a graph <span class="math inline">G</span> to a graph <span class="math inline">H</span> consists of two maps</p>
 <ul>
-<li><span class="math inline">\(\alpha_{V} \colon G(V) \to H(V)\)</span></li>
-<li><span class="math inline">\(\alpha_{E} \colon G(E) \to H(E)\)</span></li>
+<li><span class="math inline">\alpha_{V} \colon G(V) \to H(V)</span></li>
+<li><span class="math inline">\alpha_{E} \colon G(E) \to H(E)</span></li>
 </ul>
-<p>such that <span class="math inline">\(\alpha_{V} \circ G(\mathrm{src}) = H(\mathrm{src}) \circ \alpha_{E}\)</span> and <span class="math inline">\(\alpha_{V} \circ G(\mathrm{tgt}) = H(\mathrm{tgt}) \circ \alpha_{E}\)</span>.</p>
-<p>This means that the graph homomorphism has to “preserve sources and targets”. Just like a functor has to send a morphism from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> to a morphism from <span class="math inline">\(F(A)\)</span> to <span class="math inline">\(F(B)\)</span>, a graph homomorphism has to send an edge from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span> to an edge from <span class="math inline">\(\alpha_V(a)\)</span> to <span class="math inline">\(\alpha_{V}(b)\)</span>.</p>
+<p>such that <span class="math inline">\alpha_{V} \circ G(\mathrm{src}) = H(\mathrm{src}) \circ \alpha_{E}</span> and <span class="math inline">\alpha_{V} \circ G(\mathrm{tgt}) = H(\mathrm{tgt}) \circ \alpha_{E}</span>.</p>
+<p>This means that the graph homomorphism has to “preserve sources and targets”. Just like a functor has to send a morphism from <span class="math inline">A</span> to <span class="math inline">B</span> to a morphism from <span class="math inline">F(A)</span> to <span class="math inline">F(B)</span>, a graph homomorphism has to send an edge from <span class="math inline">a</span> to <span class="math inline">b</span> to an edge from <span class="math inline">\alpha_V(a)</span> to <span class="math inline">\alpha_{V}(b)</span>.</p>
 <p>These conditions can be expressed equivalently as <em>commutative diagrams</em>. Basically, an commutative diagram is a way of writing an equation between composites of morphisms in a category. The equation is that when you compose the morphisms along any path in the diagram, you get the same result.</p>
 <!-- https://q.uiver.app/?q=WzAsNCxbMCwwLCJHKEUpIl0sWzEsMCwiRyhWKSJdLFswLDEsIkgoRSkiXSxbMSwxLCJIKFYpIl0sWzAsMSwiRyhcXG1hdGhybXtzcmN9KSJdLFswLDIsIlxcYWxwaGFfe0V9IiwyXSxbMiwzLCJIKFxcbWF0aHJte3NyY30pIiwyXSxbMSwzLCJcXGFscGhhX1YiXV0= -->
 <iframe class="quiver-embed" src="https://q.uiver.app/?q=WzAsNCxbMCwwLCJHKEUpIl0sWzEsMCwiRyhWKSJdLFswLDEsIkgoRSkiXSxbMSwxLCJIKFYpIl0sWzAsMSwiRyhcXG1hdGhybXtzcmN9KSJdLFswLDIsIlxcYWxwaGFfe0V9IiwyXSxbMiwzLCJIKFxcbWF0aHJte3NyY30pIiwyXSxbMSwzLCJcXGFscGhhX1YiXV0=&amp;embed" width="333" height="304" style="border-radius: 8px; border: none;">
@@ -405,7 +421,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </figure>
 </div>
 <div class="rmenv" title="Example">
-<p>A <strong>three-coloring</strong> of a graph <span class="math inline">\(G\)</span> is a graph homomorphism from <span class="math inline">\(G\)</span> into the graph above. It assigns each vertex of the graph to a color. Notice in a three-coloring, any two vertices connected by an edge must be assigned different colors, because there are no self-edges in the above graph.</p>
+<p>A <strong>three-coloring</strong> of a graph <span class="math inline">G</span> is a graph homomorphism from <span class="math inline">G</span> into the graph above. It assigns each vertex of the graph to a color. Notice in a three-coloring, any two vertices connected by an edge must be assigned different colors, because there are no self-edges in the above graph.</p>
 </div>
 
 
