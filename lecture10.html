@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./lecture11.html" rel="next">
 <link href="./lecture9.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -234,6 +234,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./lecture11.html" class="sidebar-item-text sidebar-link">Lecture 11: Adding and squishing</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -249,7 +254,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#representable-functors" id="toc-representable-functors" class="nav-link active" data-scroll-target="#representable-functors">Representable functors</a></li>
   <li><a href="#computing-representables-with-dynamic-programming" id="toc-computing-representables-with-dynamic-programming" class="nav-link" data-scroll-target="#computing-representables-with-dynamic-programming">Computing representables with dynamic programming</a></li>
   <li><a href="#characterizing-objects-using-c-sets" id="toc-characterizing-objects-using-c-sets" class="nav-link" data-scroll-target="#characterizing-objects-using-c-sets">Characterizing objects using C-sets</a></li>
-  <li><a href="#a-new-perspective-on-coproducts-in-julia" id="toc-a-new-perspective-on-coproducts-in-julia" class="nav-link" data-scroll-target="#a-new-perspective-on-coproducts-in-julia">A new perspective on coproducts in Julia</a></li>
   </ul>
 </nav>
     </div>
@@ -480,36 +484,6 @@ F(x) = \begin{cases}
 <p>However, if we consider a similar situation with the poset <span class="math inline">(\mathbb{R}_{\geq 0}, \leq)</span> instead, then <span class="math inline">F</span> would be representable!</p>
 <p>So we see that representability has many surprising and non-trivial applications.</p>
 </div>
-</section>
-<section id="a-new-perspective-on-coproducts-in-julia" class="level2">
-<h2 class="anchored" data-anchor-id="a-new-perspective-on-coproducts-in-julia">A new perspective on coproducts in Julia</h2>
-<p>We can do the coproduct of two types in Julia like the following</p>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Left{T}</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  val<span class="op">::</span><span class="dt">T</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Right{T}</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  val<span class="op">::</span><span class="dt">T</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> Coproduct{S,T} <span class="op">=</span> <span class="dt">Union</span>{Left{S}, Right{T}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Now, suppose we want to write a function <code>foo</code> out of <code>Coproduct{Int,String}</code> into <code>Int</code> that takes <code>Left(x)</code> to <code>x^2</code> <code>Right(x)</code> to <code>length(x)</code>. We can use Julia’s dispatch system to help us here:</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foo</span>(l<span class="op">::</span><span class="dt">Left{Int}</span>) <span class="op">=</span> l.val<span class="op">^</span><span class="fl">2</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foo</span>(r<span class="op">::</span><span class="dt">Right{String}</span>) <span class="op">=</span> <span class="fu">length</span>(r.val)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>(<span class="fu">foo</span>(<span class="fu">Left</span>(<span class="fl">4</span>)), <span class="fu">foo</span>(<span class="fu">Right</span>(<span class="st">"hello"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>(16, 5)</code></pre>
-</div>
-</div>
-<p>How did we write this function? Well, we wrote <em>two</em> functions, one out of <code>Int</code> and one out of <code>String</code>.</p>
-<p>In general, a function from <code>Coproduct{S,T}</code> to <code>A</code> is given by a function from <code>S</code> to <code>A</code> and a function from <code>T</code> to <code>A</code>.</p>
-<p>The description of coproducts as the representatives of a certain <span class="math inline">\mathsf{C}</span>-set expresses this property exactly.</p>
-<p>Namely, if we work in <span class="math inline">\mathsf{Jul}</span>, the category of Julia types and functions between them, then the functor <span class="math inline">F \colon \mathsf{Jul}\to \mathsf{Set}</span> which sends <code>A</code> to the set of pairs of functions <code>S -&gt; A</code> and <code>T -&gt; A</code> is <em>represented</em> by the type <code>Coproduct{S,T}</code>.</p>
-<p>We’re not going to go over pushouts again in this lecture; we’ll do that next lecture. But now we know how we are going to characterize the pushout of a diagram in a category <span class="math inline">\mathsf{C}</span>: we are going to describe what the maps out of the pushout object look like by writing down a certain <span class="math inline">\mathsf{C}</span>-set, and then we are going to find a representative of that <span class="math inline">\mathsf{C}</span>-set!</p>
 
 
 </section>
@@ -655,8 +629,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./lecture11.html" class="pagination-link">
+        <span class="nav-page-text">Lecture 11: Adding and squishing</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
