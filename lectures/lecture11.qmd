@@ -1,0 +1,159 @@
+# Lecture 11: Adding and squishing {.unnumbered}
+
+{{< include _preamble.qmd >}}
+
+In this lecture, we're going to talk about how to compose objects in a category. A priori, this is weird; aren't we supposed to be composing *morphisms* in a category, not objects? But it turns out that there is a pretty sensible way of doing this.
+
+The idea is the following. In order to compose objects in $\C$, we have to first give a "specification" for what the properties of the composed object should be. This "specification" comes in the form of a $\C$-set (a functor from $\C$ to $\Set$); recall that a $\C$-set abstractly describes the "morphisms out" of a yet-unspecified object in $\C$. We then pick an object in $\C$ and show that it has the right properties, by showing that it is a representative of the $\C$-set we constructed. It turns out that it doesn't matter the specific object we choose, because any two objects that have the same "properties" are isomorphic.
+
+One important thing to emphasize is that given an object $x$ and a functor $F$, there could be several different isomorphisms $y_\C(x) \cong F$. When we say "$x$ is a representative for $F$", we really mean that we have picked a specific isomorphism.
+
+## Coproducts of types in Julia
+
+Let's start with an example.
+
+Coproducts in "a category of types" correspond to sum types, or tagged unions. In Julia:
+
+```{julia}
+struct Left{T}
+  val::T
+end
+
+struct Right{T}
+  val::T
+end
+
+const Coproduct{S,T} = Union{Left{S}, Right{T}}
+```
+
+Now, suppose we want to write a function `foo` out of `Coproduct{Int,String}` into `Int` that takes `Left(x)` to `x^2` and `Right(x)` to `length(x)`. We can use Julia's dispatch system to help us here:
+
+```{julia}
+# | output: true
+ 
+foo(l::Left{Int}) = l.val^2
+foo(r::Right{String}) = length(r.val)
+
+(foo(Left(4)), foo(Right("hello")))
+```
+
+How did we write this function? Well, we wrote *two* functions, one out of `Int` and one out of `String`.
+
+In general, a function from `Coproduct{S,T}` to `A` is given by a function from `S` to `A` and a function from `T` to `A`.
+
+The description of coproducts as the representatives of a certain $\C$-set expresses this property exactly.
+
+Namely, if we work in $\Jul$, the category of Julia types and functions between them, then the functor $F \colon \Jul \to \Set$ which sends `A` to the set of pairs of functions `S -> A` and `T -> A` is *represented* by the type `Coproduct{S,T}`.
+
+Note that we could have use types other than `Coproduct{S,T}` and gotten the same property; for instance we could have used
+
+```julia
+struct TaggedUnion{S,T}
+  tag::Bool
+  val::Union{S,T}
+  function TaggedUnion{S,T}(tag::Bool, x::S) where {S,T}
+    @assert tag == true
+    new(tag, x)
+  end
+  function TaggedUnion{S,T}(tag::Bool, y::T) where {S,T}
+    @assert tag == false
+    new(tag, y)
+  end
+end
+```
+
+Different choices of representing object can have different performance characteristics, but their "external interface" is precisely the same: a map out of the coproduct is equivalent to a map out of each of the two summands.
+
+## Angles and squishing
+
+Very often in programming, we talk about angles. We represent an angle by a real number, measured in radians or degrees. But there's a problem: $\theta$ and $\theta + 2\pi$ represent the same angle! That is, if we rotate something in real life by $\theta$ or if we rotate it by $\theta + 2\pi$, we get the same result at the end (assuming that it can rotate freely, and isn't winding up a spring or something).
+
+One solution for this is to only work with angles in the range $[0,2\pi)$. But this is not ideal for some scenarios; for instance if we are working with a pendulum where the resting angle is $0$, then it is more convenient to have angles in the range $[-\pi,\pi)$, because the pendulum might swing forwards or backwards.
+
+Why can we do this; why are $[0,2\pi)$ and $[-\pi,\pi)$ equally good representations for angles? Can we find a characterization of the properties that $[0,2\pi)$ and $[-\pi,\pi)$ have?
+
+Well, let's go back to thinking about angles as real numbers. A "well-behaved" program which takes an angle $\theta$ as an input should return the same value on $\theta$ and $\theta + 2\pi$. So now we can characterize the functions out of $\mathbb{R}$ that are well behaved as a functor $F$ from $\Set$ to $\Set$. This functor sends a set $X$ to the set of functions $f \colon \R \to X$ such that $f(\theta) = f(\theta + 2\pi)$ for all $\theta \in \R$, which we call the set of functions with period $2\pi$.
+
+$$F(X) = \{ f \colon \R \to X \mid \text{$f$ has period $2\pi$} \}$$
+
+The action of $F$ on morphisms $g \colon X \to Y$ is given by
+
+$$F(g)(f \colon \R \to X) = g \circ f \colon \R \to Y$$
+
+One can check that if $f$ has period $2\pi$ then $g \circ f$ also does.
+
+Then $[0,2\pi)$ and $[-\pi,\pi)$ are both representatives for $F$. More specifically, we can construct isomorphisms between $y_{\Set}([0,2\pi))$ and $F$, and also between $y_{\Set}([-\pi,\pi))$ and $F$. This is because a function out of $[0,2\pi)$ can be extended to a function out of $\R$ with period $2\pi$, a function out of $\R$ with period $2\pi$ can be restricted to $[0,2\pi)$, and going back and forth gets to to the same place. The same holds for functions out of $[-\pi,\pi)$.
+
+We can now do this more abstractly.
+
+Consider two functions $1_\R, p \colon \R \to \R$. $1_\R$ is the identity, so $1_\R(\theta) = \theta$, and then $p(\theta) = \theta + 2\pi$. A function $f \colon \R \to X$ has period $2\pi$ if and only if $f \circ 1_{\R} = f \circ p$. Thus, we could equivalently characterize $F$ by
+
+$$ F(X) = \{ f \colon \R \to X \mid f \circ 1_{\R} = f \circ p \} $$
+
+The advantage of this description is that it relies purely on categorical structure, i.e. composition of morphisms. This leads to the following definition.
+
+:::{.rmenv title="Definition"}
+Let $\C$ be a category, and $A,B$ be objects in $\C$. Then the **coequalizer** of a pair of morphisms $p,q \colon A \to B$ is a representing object for 
+
+$$ F(X) = \{ f \colon B \to X \mid f \circ p = f \circ q \} $$
+:::
+
+If coproducts allow you to "add" together objects in a category, coequalizers allow you to "squish down" objects in a category, like how we squished $\{\ldots, \theta - 2\pi, \theta, \theta + 2\pi, \ldots\}$ to a single point because they all represent the same angle.
+
+It's kind of inconvenient that whenever we have a representative of a functor, we have to lug around a whole natural isomorphism. It turns out that for coequalizers, we can get by with much less data.
+
+:::{.rmenv title="Proposition"}
+If $C$ is the coequalizer of $p,q \colon A \to B$, then there is a map $e \colon B \to C$ such that for any map $f \colon B \to X$ with $f \circ p = f \circ q$, there is a unique map $\tilde{f} \colon C \to X$ such that
+
+```tikzcd
+B \ar["e", rr] \ar["f", dr, swap] & & C \ar["\tilde{f}", dl]\\
+& X
+```
+
+commutes.
+
+Moreover, any such map $e$ gives rise to an isomorphism between the functor
+
+$$ F(X) = \{ f \colon B \to X \mid f \circ p = f \circ q \} $$
+
+and $y_{\C}(C)$.
+
+We call $e$ the **coequalizing morphism**.
+:::
+
+:::{.proof}
+The basic idea is that the map $e \colon B \to C$ corresponds to the identity $1_C \in y_\C(C)(C)$ when we take the isomorphism $F(C) \cong y_{\C}(C)(C)$.
+
+We will return to this in more detail in a future lecture.
+:::
+
+So when we give an instance of a coequalizer, we just have to give an object and coequalizing morphism, which is often more convenient than writing out the whole natural isomorphism.
+
+Returning back to angles, there's a third representative for the coequalizer of $1_\R$ and $p$: the circle $S^1$ defined by
+
+$$ S^{1} = \{z \in \mathbb{C} \mid |z| = 1 \} $$
+
+This is "nicer" because there's no "jump", i.e. when we move off the right side of the interval $[0,2\pi)$, we jump back to the left side, but in the circle we just smoothly move around. The coequalizing morphism is the map $e \colon \R \to S^{1}$, given by $\theta \mapsto e^{i\theta}$.
+
+As sets, there's no difference between $[0,2\pi)$ and $S^{1}$. However, if we instead consider the category of $\Top$ of topological spaces and continuous maps between them (continuous roughly means "no jumps"), then $S^{1}$ and $[0,2\pi)$ are *not* the same!
+
+Specifically, the map $\R \to [0,2\pi)$ is *not* continuous, because we have the "jump" from $2\pi-\epsilon$ to $0$. However, the map $\R \to S^{1}$ is. So the coequalizer of $1_\R$ and $p$ in $\Top$ is $S^{1}$, not $[0,2\pi)$.
+
+
+## Examples to think about if we have time
+
+:::{.rmenv title="Example"}
+In $\mathsf{Mat}$, the category where the objects are natural numbers and the morphisms are matrices, consider the following setup, where $M$ is an arbitrary matrix and $0$ is the zero matrix.
+
+```tikzcd
+n \ar["M", r, shift left] \ar["0", r, shift right, swap] & m
+```
+
+Recall that the rank of $M$ is the dimension of the range of $M$, and let $k$ be the rank. Then the coequalizer of this diagram is $m - k$, with the following coequalizing matrix $m \to (m - k)$.
+
+Let $v_{1},\ldots,v_{k}$ be an orthonormal basis for the range of $M$. Then extend this to an orthonormal basis $v_{1},\ldots,v_{m}$ for all of $\R^{m}$. Then define a matrix $E \colon m \to (m-k)$ by using the row vectors $v_{k+1},\ldots,v_{m}$.
+
+By orthogonality, $E(\alpha_{1} v_{1} + \cdots + \alpha_{k} v_{k}) = 0$. Thus, $EM = 0 = E0$. Moreover, any other matrix $E' \colon m \to l$ such that $E'M = 0$ factors through $E$.
+
+If we have time, we will prove this and also livecode a Julia implementation using the `LinearAlgebra` library to find orthonormal bases.
+:::

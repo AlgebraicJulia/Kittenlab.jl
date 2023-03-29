@@ -58,6 +58,7 @@ $$
 \newcommand{\UPortGraph}{\cat{UPortGraph}}
 \newcommand{\Vect}{\cat{Vect}}
 \newcommand{\Jul}{\cat{Jul}}
+\newcommand{\Top}{\cat{Top}}
 \newcommand{\Pin}{P_{\textrm{in}}}
 \newcommand{\Pout}{P_{\textrm{out}}}
 \newcommand{\Box}{\textrm{Box}}
