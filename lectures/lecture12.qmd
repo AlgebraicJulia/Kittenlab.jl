@@ -1,0 +1,138 @@
+# Lecture 12: That's Yoneda, Babe {.unnumbered}
+
+{{< include _preamble.qmd >}}
+
+Ever since we learned about natural transformations, I've been saying that I'm going to talk about the Yoneda lemma. And finally now we are going to do it.
+
+What is the Yoneda lemma? I think of the Yoneda lemma as a "vibe check" for category theory. We say all the time that in category theory "all that matters" is the morphisms out of or into an object; the Yoneda lemma formalizes this.
+
+The Yoneda lemma also underscores the usefulness of representable functors.
+
+We start to understand the Yoneda lemma via the following seemingly trivial statement:
+
+:::{.rmenv title="Proposition"}
+For any set $A$, there is an isomorphism between elements $a \in A$ and functions $f \colon 1 \to A$. We can write this as
+
+$$ A \cong \Hom_{\Set}(1, A) $$
+:::
+
+If we think about $\Set$ in Julia, a function $1 \to A$ is a single-element vector, with that single element being an element of $A$. The isomorphism is then
+
+```julia
+f(a::A) = [a]
+f_inverse(v::Vector{A}) = v[1]
+```
+
+This is even more obvious if you write it as the algebra 1 equality $A^{1} \cong A$.
+
+The Yoneda lemma extends this triviality beyond sets to $\C$-sets.
+
+We can start to get an intuition for the Yoneda lemma by looking at graphs. Given a graph $G \colon \Gr \to \Set$, we can get the set of vertices of that graph by applying $G$ to $V \in \Gr$ to get $G(V) \in \Set$. However, we can also get the set of vertices by looking at all of the morphisms into $G$ from the single-vertex graph $y_{V}$ (recall that the single-vertex graph is the representable on $V$).
+
+![Picking out a single vertex with a morphism](picking_out_a_single_vertex.svg)
+
+It is not hard to see that there is a bijection between:
+
+- the set of morphisms from $y_{V}$ to $G$
+- $G(V)$
+
+for the same reason that for any set there is a bijection between functions $1 \to A$ and elements of $A$. Namely, given a morphism $\alpha \colon y_{V} \to G$, we get an element $y_{V}(\id_V) \in G(V)$. And given an element $v \in G(V)$, there is a morphism $v^\ast \colon y_V \to G$ given by $\id_V \mapsto v$.
+
+We write this consisely as
+
+$$ G(V) \cong \Hom_{\Set^\Gr}(y_{V}, G) $$
+
+We can do the exact same thing for edges! The edges of $G$ are in bijection with morphisms out of $y_{E}$, where $y_{E}$ is the graph with a single edge and two vertices.
+
+![Picking out a single edge with a morphism](picking_out_a_single_edge.svg)
+
+Given an element $e \in G(E)$, there is a unique morphism $e^{\ast} \colon y_{E} \to G$ given by
+
+$$ \id_E \mapsto e $$
+$$ \src \mapsto G(\src)(e) $$
+$$ \tgt \mapsto G(\tgt)(e) $$
+
+
+Moreover, given any morphism $\alpha \colon y_{E} \to G$, there is an element of $\alpha_{E}(\id_{E}) \in G(E)$.
+
+We write this as
+
+$$ G(E) \cong \Hom_{\Set^{\Gr}}(y_{E}, G) $$
+
+Note that this crucially depends on the *naturality* of the morphism $f \colon y_{E} \to G$. If we had an unnatural morphism, then we wouldn't necessarily have commutation of the square
+
+```tikzcd
+y_{E}(E) \ar[r, "\alpha_E"] \ar[d, "y_{E}(\mathrm{src})", swap] & G(E) \ar[d, "G(\mathrm{src})"] \\
+y_{E}(V) \ar[r, "\alpha_V", swap] & G(V)
+```
+
+so the vertices in $G$ that the endpoints of $\id_{E}$ are sent to would not be determined by where $\id_{E}$ was sent.
+
+Now that we've seen two instances of this pattern, you can probably guess what it looks like in general.
+
+:::{.rmenv title="Lemma"}
+(Yoneda). Given a category $\C$ and a functor $F \colon \C \to \Set$, for every object $X \in \C$ there is an isomorphism
+
+$$ F(X) \cong \Hom_{\Set^{\C}}(y_{X}, F) $$
+:::
+
+:::{.proof}
+We will give a map in each direction, then show they are inverse.
+
+Starting from $x \in F(X)$, we construct $x^{\ast} \colon y_{X} \to F$ by the mapping
+
+$$ f \in y_{X}(Y) = \Hom_{\C}(X,Y) \mapsto F(f)(x) $$
+
+In the other direction, starting from $\alpha \colon y_{X} \to F$, we get $\alpha_{X}(\id_{X}) \in F(X)$.
+
+Now, given $x \in F(X)$,
+
+$$ x^{\ast}_{X}(\id_X) = F(\id_X)(x) = x $$
+
+There is one more thing to show. Starting with $\alpha \colon y_{X} \to F$, consider the naturality square for $f \in y_{X}(Y)$.
+
+```tikzcd
+y_{X}(X) \ar[r, "\alpha_X"] \ar[d, "y_{X}(f)", swap] & G(X) \ar[d, "F(f)"] \\
+y_{X}(Y) \ar[r, "\alpha_Y", swap] & G(Y)
+```
+
+Let's follow the path of $\id_{X} \in y_{X}(X)$. Following the lower path, we get 
+
+$$ (\alpha_{Y} \circ y_{X}(f))(\id_{X}) = \alpha_{Y}(y_{X}(f)(\id_{X})) = \alpha_{Y}(\id_{X} \circ f) = \alpha_{Y}(f) $$
+
+Following the upper path, we get
+
+$$ (F(f) \circ \alpha_X)(\id_X) = F(f)(\alpha_X(\id_X)) $$
+
+Therefore,
+
+$$ \alpha_Y(f) = F(f)(\alpha_X(\id_X)) $$
+
+This says precisely that where $f$ goes is wholly determined by where $\id_{X}$ goes, just like where $\src$ and $\tgt$ went was wholly determined by where $\id_{E}$ went! And more specifically,
+
+$$(\alpha_{X}(\id_{X}))^{\ast} = \alpha$$
+
+Thus, we have our desired bijection 
+
+$$ F(X) \cong \Hom_{\Set^{\C}}(y_{X}, F) $$
+:::
+
+The feeling that this seems like total abstract nonsense is a valid feeling at this point. It's very much a tautology in the same way that $A \cong A^{1}$ is, except it's confusing because there's more stuff going on (incidentally, can you now see how $A \cong A^{1}$ is a corollary of the Yoneda lemma?)
+
+But this actually turns out to be an extremely useful device. One application is something that I've been using a lot; the fact that $y_{X} \cong y_{Y}$ if and only if $X \cong Y$. In fact, we can show something stronger.
+
+:::{.rmenv title="Corollary"}
+Given $X,Y \in \C$, there is a bijection $\Hom_{\C}(Y,X) \cong \Hom_{\Set^{\C}}(y_{X}, y_{Y})$.
+:::
+
+With the Yoneda lemma, this is a very fast proof!
+
+:::{.proof}
+$$ \Hom_{\C}(X,Y) \cong y_{X}(Y) \cong \Hom_{\Set^{\C}}(y_{Y}, y_{X}) $$
+:::
+
+As an application of this, $\Hom_{\Gr}(E,V) \cong \Hom_{\Set^{\Gr}}(y_{V}, y_{E})$. You can see this because there are two morphisms $E \to V$, and then two morphisms from $y_{V}$ to $y_{E}$.
+
+The point is that any isomorphism in $\Hom_{\Set^{\C}}(y_{Y}, y_{X})$ must also show up as an isomorphism in $\Hom_{\C}(X,Y)$.
+
+To state this more formally, we can talk about $y$ as a *functor* from $\C$ to $\Set^{\C}$. However, because of the flipping around of $\Hom_{\C}(Y,X) \cong \Hom_{\Set^{\C}}(y_{X}, y_{Y})$, this actually should be a *contravariant functor*, and we haven't gotten to discussing duality yet. So we will leave off here for now!
