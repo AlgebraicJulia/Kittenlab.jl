@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kittenlab lecture notes - Lecture 12: That’s Yoneda, Babe</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./lecture11.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+<link rel="stylesheet" href="main.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Lecture 12: That’s Yoneda, Babe</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Kittenlab lecture notes</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture1.html" class="sidebar-item-text sidebar-link">Lecture 1: Formal Math</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture2.html" class="sidebar-item-text sidebar-link">Lecture 2: The Category Theory of Finite Sets</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture3.html" class="sidebar-item-text sidebar-link">Lecture 3: Category Theory</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture4.html" class="sidebar-item-text sidebar-link">Lecture 4: Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture5.html" class="sidebar-item-text sidebar-link">Lecture 5: A Variety of Categories and Functors</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture6.html" class="sidebar-item-text sidebar-link">Lecture 6: Path categories and functors as data structures</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture7.html" class="sidebar-item-text sidebar-link">Lecture 7: Natural Transformations</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture8.html" class="sidebar-item-text sidebar-link">Lecture 8: Universal Mapping Properties</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture9.html" class="sidebar-item-text sidebar-link">Lecture 9: Colimits</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture10.html" class="sidebar-item-text sidebar-link">Lecture 10: Representables revisited</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture11.html" class="sidebar-item-text sidebar-link">Lecture 11: Adding and squishing</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lecture12.html" class="sidebar-item-text sidebar-link active">Lecture 12: That’s Yoneda, Babe</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 12: That’s Yoneda, Babe</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="hidden">
+<p>$$ </p>
+<!-- Math: categories -->
+<!-- Math: graphs -->
+<p>$$</p>
+</div>
+<p>Ever since we learned about natural transformations, I’ve been saying that I’m going to talk about the Yoneda lemma. And finally now we are going to do it.</p>
+<p>What is the Yoneda lemma? I think of the Yoneda lemma as a “vibe check” for category theory. We say all the time that in category theory “all that matters” is the morphisms out of or into an object; the Yoneda lemma formalizes this.</p>
+<p>The Yoneda lemma also underscores the usefulness of representable functors.</p>
+<p>We start to understand the Yoneda lemma via the following seemingly trivial statement:</p>
+<div class="rmenv" title="Proposition">
+<p>For any set <span class="math inline">A</span>, there is an isomorphism between elements <span class="math inline">a \in A</span> and functions <span class="math inline">f \colon 1 \to A</span>. We can write this as</p>
+<p><span class="math display"> A \cong \operatorname{Hom}_{\mathsf{Set}}(1, A) </span></p>
+</div>
+<p>If we think about <span class="math inline">\mathsf{Set}</span> in Julia, a function <span class="math inline">1 \to A</span> is a single-element vector, with that single element being an element of <span class="math inline">A</span>. The isomorphism is then</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(a<span class="op">::</span><span class="dt">A</span>) <span class="op">=</span> [a]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f_inverse</span>(v<span class="op">::</span><span class="dt">Vector{A}</span>) <span class="op">=</span> v[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is even more obvious if you write it as the algebra 1 equality <span class="math inline">A^{1} \cong A</span>.</p>
+<p>The Yoneda lemma extends this triviality beyond sets to <span class="math inline">\mathsf{C}</span>-sets.</p>
+<p>We can start to get an intuition for the Yoneda lemma by looking at graphs. Given a graph <span class="math inline">G \colon \mathsf{Gr}\to \mathsf{Set}</span>, we can get the set of vertices of that graph by applying <span class="math inline">G</span> to <span class="math inline">V \in \mathsf{Gr}</span> to get <span class="math inline">G(V) \in \mathsf{Set}</span>. However, we can also get the set of vertices by looking at all of the morphisms into <span class="math inline">G</span> from the single-vertex graph <span class="math inline">y_{V}</span> (recall that the single-vertex graph is the representable on <span class="math inline">V</span>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="picking_out_a_single_vertex.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Picking out a single vertex with a morphism</figcaption><p></p>
+</figure>
+</div>
+<p>It is not hard to see that there is a bijection between:</p>
+<ul>
+<li>the set of morphisms from <span class="math inline">y_{V}</span> to <span class="math inline">G</span></li>
+<li><span class="math inline">G(V)</span></li>
+</ul>
+<p>for the same reason that for any set there is a bijection between functions <span class="math inline">1 \to A</span> and elements of <span class="math inline">A</span>. Namely, given a morphism <span class="math inline">\alpha \colon y_{V} \to G</span>, we get an element <span class="math inline">y_{V}(\operatorname{id}_V) \in G(V)</span>. And given an element <span class="math inline">v \in G(V)</span>, there is a morphism <span class="math inline">v^\ast \colon y_V \to G</span> given by <span class="math inline">\operatorname{id}_V \mapsto v</span>.</p>
+<p>We write this consisely as</p>
+<p><span class="math display"> G(V) \cong \operatorname{Hom}_{\mathsf{Set}^\mathsf{Gr}}(y_{V}, G) </span></p>
+<p>We can do the exact same thing for edges! The edges of <span class="math inline">G</span> are in bijection with morphisms out of <span class="math inline">y_{E}</span>, where <span class="math inline">y_{E}</span> is the graph with a single edge and two vertices.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="picking_out_a_single_edge.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Picking out a single edge with a morphism</figcaption><p></p>
+</figure>
+</div>
+<p>Given an element <span class="math inline">e \in G(E)</span>, there is a unique morphism <span class="math inline">e^{\ast} \colon y_{E} \to G</span> given by</p>
+<p><span class="math display"> \operatorname{id}_E \mapsto e </span> <span class="math display"> \operatorname{src}\mapsto G(\operatorname{src})(e) </span> <span class="math display"> \operatorname{tgt}\mapsto G(\operatorname{tgt})(e) </span></p>
+<p>Moreover, given any morphism <span class="math inline">\alpha \colon y_{E} \to G</span>, there is an element of <span class="math inline">\alpha_{E}(\operatorname{id}_{E}) \in G(E)</span>.</p>
+<p>We write this as</p>
+<p><span class="math display"> G(E) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{Gr}}}(y_{E}, G) </span></p>
+<p>Note that this crucially depends on the <em>naturality</em> of the morphism <span class="math inline">f \colon y_{E} \to G</span>. If we had an unnatural morphism, then we wouldn’t necessarily have commutation of the square</p>
+<div class="tikzcd">
+<img src="tikz/74e1a3fae35a332def418058842caa0b129834a0.svg" class="img-fluid">
+</div>
+<p>so the vertices in <span class="math inline">G</span> that the endpoints of <span class="math inline">\operatorname{id}_{E}</span> are sent to would not be determined by where <span class="math inline">\operatorname{id}_{E}</span> was sent.</p>
+<p>Now that we’ve seen two instances of this pattern, you can probably guess what it looks like in general.</p>
+<div class="rmenv" title="Lemma">
+<p>(Yoneda). Given a category <span class="math inline">\mathsf{C}</span> and a functor <span class="math inline">F \colon \mathsf{C}\to \mathsf{Set}</span>, for every object <span class="math inline">X \in \mathsf{C}</span> there is an isomorphism</p>
+<p><span class="math display"> F(X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, F) </span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We will give a map in each direction, then show they are inverse.</p>
+<p>Starting from <span class="math inline">x \in F(X)</span>, we construct <span class="math inline">x^{\ast} \colon y_{X} \to F</span> by the mapping</p>
+<p><span class="math display"> f \in y_{X}(Y) = \operatorname{Hom}_{\mathsf{C}}(X,Y) \mapsto F(f)(x) </span></p>
+<p>In the other direction, starting from <span class="math inline">\alpha \colon y_{X} \to F</span>, we get <span class="math inline">\alpha_{X}(\operatorname{id}_{X}) \in F(X)</span>.</p>
+<p>Now, given <span class="math inline">x \in F(X)</span>,</p>
+<p><span class="math display"> x^{\ast}_{X}(\operatorname{id}_X) = F(\operatorname{id}_X)(x) = x </span></p>
+<p>There is one more thing to show. Starting with <span class="math inline">\alpha \colon y_{X} \to F</span>, consider the naturality square for <span class="math inline">f \in y_{X}(Y)</span>.</p>
+<div class="tikzcd">
+<img src="tikz/007b9e068cbf54dfbf15866af681f133a96fa846.svg" class="img-fluid">
+</div>
+<p>Let’s follow the path of <span class="math inline">\operatorname{id}_{X} \in y_{X}(X)</span>. Following the lower path, we get</p>
+<p><span class="math display"> (\alpha_{Y} \circ y_{X}(f))(\operatorname{id}_{X}) = \alpha_{Y}(y_{X}(f)(\operatorname{id}_{X})) = \alpha_{Y}(\operatorname{id}_{X} \circ f) = \alpha_{Y}(f) </span></p>
+<p>Following the upper path, we get</p>
+<p><span class="math display"> (F(f) \circ \alpha_X)(\operatorname{id}_X) = F(f)(\alpha_X(\operatorname{id}_X)) </span></p>
+<p>Therefore,</p>
+<p><span class="math display"> \alpha_Y(f) = F(f)(\alpha_X(\operatorname{id}_X)) </span></p>
+<p>This says precisely that where <span class="math inline">f</span> goes is wholly determined by where <span class="math inline">\operatorname{id}_{X}</span> goes, just like where <span class="math inline">\operatorname{src}</span> and <span class="math inline">\operatorname{tgt}</span> went was wholly determined by where <span class="math inline">\operatorname{id}_{E}</span> went! And more specifically,</p>
+<p><span class="math display">(\alpha_{X}(\operatorname{id}_{X}))^{\ast} = \alpha</span></p>
+<p>Thus, we have our desired bijection</p>
+<p><span class="math display"> F(X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, F) </span></p>
+</div>
+<p>The feeling that this seems like total abstract nonsense is a valid feeling at this point. It’s very much a tautology in the same way that <span class="math inline">A \cong A^{1}</span> is, except it’s confusing because there’s more stuff going on (incidentally, can you now see how <span class="math inline">A \cong A^{1}</span> is a corollary of the Yoneda lemma?)</p>
+<p>But this actually turns out to be an extremely useful device. One application is something that I’ve been using a lot; the fact that <span class="math inline">y_{X} \cong y_{Y}</span> if and only if <span class="math inline">X \cong Y</span>. In fact, we can show something stronger.</p>
+<div class="rmenv" title="Corollary">
+<p>Given <span class="math inline">X,Y \in \mathsf{C}</span>, there is a bijection <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(Y,X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, y_{Y})</span>.</p>
+</div>
+<p>With the Yoneda lemma, this is a very fast proof!</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span><span class="math display"> \operatorname{Hom}_{\mathsf{C}}(X,Y) \cong y_{X}(Y) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{Y}, y_{X}) </span></p>
+</div>
+<p>As an application of this, <span class="math inline">\operatorname{Hom}_{\mathsf{Gr}}(E,V) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{Gr}}}(y_{V}, y_{E})</span>. You can see this because there are two morphisms <span class="math inline">E \to V</span>, and then two morphisms from <span class="math inline">y_{V}</span> to <span class="math inline">y_{E}</span>.</p>
+<p>The point is that any isomorphism in <span class="math inline">\operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{Y}, y_{X})</span> must also show up as an isomorphism in <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(X,Y)</span>.</p>
+<p>To state this more formally, we can talk about <span class="math inline">y</span> as a <em>functor</em> from <span class="math inline">\mathsf{C}</span> to <span class="math inline">\mathsf{Set}^{\mathsf{C}}</span>. However, because of the flipping around of <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(Y,X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, y_{Y})</span>, this actually should be a <em>contravariant functor</em>, and we haven’t gotten to discussing duality yet. So we will leave off here for now!</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lecture11.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 11: Adding and squishing</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
