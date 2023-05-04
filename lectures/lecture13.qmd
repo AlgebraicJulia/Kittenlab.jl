@@ -1,0 +1,106 @@
+# Lecture 13: Products and typed products {.unnumbered}
+
+{{< include _preamble.qmd >}}
+
+## Products
+
+In previous lectures, we covered colimits, which allowed you to take *disjoint unions* and to *glue* things together. In this lecture, we are going to cover *limits*, which allow you to make *tuple types* and to *filter*.
+
+Let's start with an example.
+
+Suppose we are working in the category $\mathsf{FinSet}$, and we implement it with
+
+```{julia}
+struct FinSet
+  n::Int
+end
+
+struct FinFunction
+  dom::FinSet
+  codom::FinSet
+  values::Vector{Int}
+end
+```
+
+Given two finite sets $A$ and $B$, we want to make a finite set $A \times B$, such that an element of $A \times B$ consists precisely of an element of $A$ along with an element of $B$. Well, the elements of any finite set in our representation are just natural numbers. So how do we make a natural number represent two natural numbers? This is the same problem encountered when trying to store a matrix in linear memory, and we will use a similar solution.
+
+Namely, if $A = \{1, \ldots, n\}$ and $B = \{1, \ldots, m\}$, then we can make $A \times B = \{1, \ldots, mn\}$. Then for $k \in A \times B$, we get its two components as $\mathrm{div}(k, m) + 1 \in A$ and $\mathrm{rem}(k, m) + 1 \in B$. Conversely, given $i \in A$, $j \in B$, we get $(i - 1) m + j \in A \times B$.
+
+We formalize this construction using the idea of a *product*. Just like we characterized coproducts using maps *out* of them, we characterize products using maps *in* to them.
+
+In order to do this properly, we need to talk about duals. But it will be easier to motivate duals once we have products, so let's talk about products first.
+
+:::{.rmenv title="Definition"}
+Let $\C$ be a category, and let $A,B$ be objects of $\C$. The *product* of $A,B$ (if it exists) is then any object $A \times B$ along with morphisms $\pi_1 \colon A \times B \to A$, $\pi_2 \colon A \times B \to B$, such that for any object $C$ with morphisms $f \colon C \to A$, $g \colon C \to B$, there is a unique map $\langle f, g \rangle \colon C \to A \times B$ such that the diagram below commutes.
+
+(fill in diagram)
+
+If products exist for all pairs of objects, then we say that $\C$ has products.
+:::
+
+:::{.rmenv title="Example"}
+The "category" of Julia types and functions between them has products. The product of types `A` and `B` is `Tuple{A,B}`, whose elements are of the form `(a,b)` for `a::A`, `b::B`.
+:::
+
+:::{.rmenv title="Example"}
+The category of graphs has products. The product of two graphs $G$ and $H$ has
+
+$$ (G \times H)(V) = G(V) \times H(V) $$
+$$ (G \times H)(E) = G(E) \times H(E) $$
+$$ (G \times H)(\src)((e_1, e_2)) = (G(\src)(e_1), H(\src)(e_2)) $$
+$$ (G \times H)(\tgt)((e_1, e_2)) = (G(\tgt)(e_1), H(\tgt)(e_2)) $$
+:::
+
+:::{.rmenv title="Example"}
+(product of interval graphs)
+
+(product of path graphs on interval)
+:::
+
+:::{.rmenv title="Example"}
+The poset of subsets of a given set has products. The product of two subsets is their intersection.
+:::
+
+## Typed objects
+
+We're now going to consider products in a special type of category.
+
+:::{.rmenv title="Definition"}
+Let $T$ be a set. A **typed set** with types in $T$ is a set $A$ along with a map $t \colon A \to T$. If $(A,t)$, $(A', t')$ are typed sets, then a morphism between them is a function $f \colon A \to A'$ such that for all $a \in A$, $t(a) = t'(f(a))$.
+
+Or in other words, the following commutes
+
+```tikzcd
+A \ar[rr, "f"] \ar[dr, "t"] && A' \ar[dl, "t'"] \\
+& T
+```
+:::
+
+:::{.rmenv title="Example"}
+Let $T = \{a,b,c\}$. Then ...
+:::
+
+:::{.rmenv title="Definition"}
+Given a category $\C$ and an object $T \in \C$, let $\C/T$ be the category where the objects are pairs $(A, t \colon A \to T)$ and the morphisms are commuting triangles
+
+```tikzcd
+A \ar[rr, "f"] \ar[dr, "t"] && A' \ar[dl, "t'"] \\
+& T
+```
+:::
+
+:::{.rmenv title="Example"}
+RegNets as typed graphs
+:::
+
+:::{.rmenv title="Example"}
+Typed Petri nets
+:::
+
+## Typed products
+
+:::{.rmenv title="Example"}
+Let's work out what the product in $\mathsf{FinSet}/T$ is.
+:::
+
+Formal definition of typed product/pullback
