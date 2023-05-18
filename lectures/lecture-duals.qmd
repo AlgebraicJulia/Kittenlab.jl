@@ -1,0 +1,9 @@
+
+## Duals
+
+In a category, every morphism has a domain and codomain. But these are just words. I could just swap the definition of domain and codomain, and formally everything would look the same! Of course, it's important that different people agree on a convention, like how morphisms in $\mathsf{Set}$ take elements of their domain to elements of their codomain rather than the other way around. But as long as you are clear about it, you can swap things around. This is known as "taking the opposite category".
+
+:::{#def-dual}
+In 
+:::
+
