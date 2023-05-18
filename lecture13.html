@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Kittenlab lecture notes - References</title>
+<title>Kittenlab lecture notes - Lecture 13: Products and typed products</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +64,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./lecture14.html" rel="prev">
+<link href="./lecture14.html" rel="next">
+<link href="./lecture12.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -79,6 +95,22 @@ div.csl-indent {
   }
 }</script>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="main.css">
 </head>
@@ -93,7 +125,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lecture13.html">Lecture 13: Products and typed products</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -198,7 +230,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture13.html" class="sidebar-item-text sidebar-link">
+  <a href="./lecture13.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Lecture 13: Products and typed products</span></a>
   </div>
 </li>
@@ -210,7 +242,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -220,14 +252,22 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#products" id="toc-products" class="nav-link active" data-scroll-target="#products">Products</a></li>
+  <li><a href="#typed-objects" id="toc-typed-objects" class="nav-link" data-scroll-target="#typed-objects">Typed objects</a></li>
+  <li><a href="#typed-products" id="toc-typed-products" class="nav-link" data-scroll-target="#typed-products">Typed products</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title">Lecture 13: Products and typed products</h1>
 </div>
 
 
@@ -242,11 +282,87 @@ div.csl-indent {
 
 </header>
 
-<div id="refs" role="list" style="display: none">
-
+<div class="hidden">
+<p>$$ </p>
+<!-- Math: categories -->
+<!-- Math: graphs -->
+<p>$$</p>
 </div>
+<section id="products" class="level2">
+<h2 class="anchored" data-anchor-id="products">Products</h2>
+<p>In previous lectures, we covered colimits, which allowed you to take <em>disjoint unions</em> and to <em>glue</em> things together. In this lecture, we are going to cover <em>limits</em>, which allow you to make <em>tuple types</em> and to <em>filter</em>.</p>
+<p>Let’s start with an example.</p>
+<p>Suppose we are working in the category <span class="math inline">\mathsf{FinSet}</span>, and we implement it with</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> FinSet</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  n<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> FinFunction</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  dom<span class="op">::</span><span class="dt">FinSet</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  codom<span class="op">::</span><span class="dt">FinSet</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  values<span class="op">::</span><span class="dt">Vector{Int}</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Given two finite sets <span class="math inline">A</span> and <span class="math inline">B</span>, we want to make a finite set <span class="math inline">A \times B</span>, such that an element of <span class="math inline">A \times B</span> consists precisely of an element of <span class="math inline">A</span> along with an element of <span class="math inline">B</span>. Well, the elements of any finite set in our representation are just natural numbers. So how do we make a natural number represent two natural numbers? This is the same problem encountered when trying to store a matrix in linear memory, and we will use a similar solution.</p>
+<p>Namely, if <span class="math inline">A = \{1, \ldots, n\}</span> and <span class="math inline">B = \{1, \ldots, m\}</span>, then we can make <span class="math inline">A \times B = \{1, \ldots, mn\}</span>. Then for <span class="math inline">k \in A \times B</span>, we get its two components as <span class="math inline">\mathrm{div}(k, m) + 1 \in A</span> and <span class="math inline">\mathrm{rem}(k, m) + 1 \in B</span>. Conversely, given <span class="math inline">i \in A</span>, <span class="math inline">j \in B</span>, we get <span class="math inline">(i - 1) m + j \in A \times B</span>.</p>
+<p>We formalize this construction using the idea of a <em>product</em>. Just like we characterized coproducts using maps <em>out</em> of them, we characterize products using maps <em>in</em> to them.</p>
+<p>In order to do this properly, we need to talk about duals. But it will be easier to motivate duals once we have products, so let’s talk about products first.</p>
+<div class="rmenv" title="Definition">
+<p>Let <span class="math inline">\mathsf{C}</span> be a category, and let <span class="math inline">A,B</span> be objects of <span class="math inline">\mathsf{C}</span>. The <em>product</em> of <span class="math inline">A,B</span> (if it exists) is then any object <span class="math inline">A \times B</span> along with morphisms <span class="math inline">\pi_1 \colon A \times B \to A</span>, <span class="math inline">\pi_2 \colon A \times B \to B</span>, such that for any object <span class="math inline">C</span> with morphisms <span class="math inline">f \colon C \to A</span>, <span class="math inline">g \colon C \to B</span>, there is a unique map <span class="math inline">\langle f, g \rangle \colon C \to A \times B</span> such that the diagram below commutes.</p>
+<p>(fill in diagram)</p>
+<p>If products exist for all pairs of objects, then we say that <span class="math inline">\mathsf{C}</span> has products.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>The “category” of Julia types and functions between them has products. The product of types <code>A</code> and <code>B</code> is <code>Tuple{A,B}</code>, whose elements are of the form <code>(a,b)</code> for <code>a::A</code>, <code>b::B</code>.</p>
+</div>
+<div class="rmenv" title="Example">
+<p>The category of graphs has products. The product of two graphs <span class="math inline">G</span> and <span class="math inline">H</span> has</p>
+<p><span class="math display"> (G \times H)(V) = G(V) \times H(V) </span> <span class="math display"> (G \times H)(E) = G(E) \times H(E) </span> <span class="math display"> (G \times H)(\operatorname{src})((e_1, e_2)) = (G(\operatorname{src})(e_1), H(\operatorname{src})(e_2)) </span> <span class="math display"> (G \times H)(\operatorname{tgt})((e_1, e_2)) = (G(\operatorname{tgt})(e_1), H(\operatorname{tgt})(e_2)) </span></p>
+</div>
+<div class="rmenv" title="Example">
+<p>(product of interval graphs)</p>
+<p>(product of path graphs on interval)</p>
+</div>
+<div class="rmenv" title="Example">
+<p>The poset of subsets of a given set has products. The product of two subsets is their intersection.</p>
+</div>
+</section>
+<section id="typed-objects" class="level2">
+<h2 class="anchored" data-anchor-id="typed-objects">Typed objects</h2>
+<p>We’re now going to consider products in a special type of category.</p>
+<div class="rmenv" title="Definition">
+<p>Let <span class="math inline">T</span> be a set. A <strong>typed set</strong> with types in <span class="math inline">T</span> is a set <span class="math inline">A</span> along with a map <span class="math inline">t \colon A \to T</span>. If <span class="math inline">(A,t)</span>, <span class="math inline">(A', t')</span> are typed sets, then a morphism between them is a function <span class="math inline">f \colon A \to A'</span> such that for all <span class="math inline">a \in A</span>, <span class="math inline">t(a) = t'(f(a))</span>.</p>
+<p>Or in other words, the following commutes</p>
+<div class="tikzcd">
+<img src="tikz/92f4b5947ed34bdd5ec87025a43f9d35dcc1aea2.svg" class="img-fluid">
+</div>
+</div>
+<div class="rmenv" title="Example">
+<p>Let <span class="math inline">T = \{a,b,c\}</span>. Then …</p>
+</div>
+<div class="rmenv" title="Definition">
+<p>Given a category <span class="math inline">\mathsf{C}</span> and an object <span class="math inline">T \in \mathsf{C}</span>, let <span class="math inline">\mathsf{C}/T</span> be the category where the objects are pairs <span class="math inline">(A, t \colon A \to T)</span> and the morphisms are commuting triangles</p>
+<div class="tikzcd">
+<img src="tikz/92f4b5947ed34bdd5ec87025a43f9d35dcc1aea2.svg" class="img-fluid">
+</div>
+</div>
+<div class="rmenv" title="Example">
+<p>RegNets as typed graphs</p>
+</div>
+<div class="rmenv" title="Example">
+<p>Typed Petri nets</p>
+</div>
+</section>
+<section id="typed-products" class="level2">
+<h2 class="anchored" data-anchor-id="typed-products">Typed products</h2>
+<div class="rmenv" title="Example">
+<p>Let’s work out what the product in <span class="math inline">\mathsf{FinSet}/T</span> is.</p>
+</div>
+<p>Formal definition of typed product/pullback</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -484,11 +600,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./lecture14.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 14: Relations</span>
+      <a href="./lecture12.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 12: That’s Yoneda, Babe</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./lecture14.html" class="pagination-link">
+        <span class="nav-page-text">Lecture 14: Relations</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -2,7 +2,7 @@
 div.proof:after {
   content: "\25A2";
   float: right;
-  margin-top: -3.4rem;
+  margin-top: -2.75rem;
 }
 
 .rmenv,
@@ -72,4 +72,18 @@ div.c-set td {
 
 div.c-set .fndef tr:first-of-type {
   background: #f8f8f8;
+}
+
+span.theorem-title {
+  margin-right: 0.5em;
+}
+
+div.theorem {
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  padding-top: 0.75em;
+  padding-bottom: 0em;
+  border: 1px solid black;
+  box-shadow: 5px 5px 5px gray;
+  margin-bottom: 1em;
 }
