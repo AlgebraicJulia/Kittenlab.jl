@@ -67,6 +67,7 @@ We can implement this isomorphism in Julia.
 
 ```{julia}
 # | output: true
+import Pkg; Pkg.activate(".")
 include("../src/Kittenlab.jl")
 using .Kittenlab.FinSets
 using .Kittenlab.Categories

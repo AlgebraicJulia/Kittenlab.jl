@@ -7,6 +7,7 @@ In this lecture, we are finally going to start using the Kittenlab.jl library. W
 We start by giving the Julia definition of category that we will be using now.
 
 ```{julia}
+import Pkg; Pkg.activate(".")
 include("../src/Categories.jl")
 using .Categories
 ```

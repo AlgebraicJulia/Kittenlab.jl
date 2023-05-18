@@ -5,6 +5,7 @@ In this lecture, we are going to give examples of categories and functors, so th
 This lecture is going to really start picking up steam from the previous lectures. But I believe in you; you can handle it!
 
 ```{julia}
+import Pkg; Pkg.activate(".")
 include("../src/Categories.jl")
 include("../src/FinSets.jl")
 
