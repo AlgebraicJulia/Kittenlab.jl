@@ -134,7 +134,7 @@ A .&& B
 Functions can act on subsets in a number of ways. Suppose that we have a function $f \colon X \to Y$, and a subset $\chi \colon Y \to \mathbb{B}$. Then we can simply compose to get a subset $\chi \circ f \colon X \to \mathbb{B}$. 
 
 :::{#def-pullback}
-Given a function $f \colon X \to Y$ and a subset $\chi \colon Y \to \mathbb{X}$, the **pullback** $f^\ast(\chi)$ is defined to be $\chi \circ f$.
+Given a function $f \colon X \to Y$ and a subset $\chi \colon Y \to \mathbb{B}$, the **pullback** $f^\ast(\chi)$ is defined to be $\chi \circ f$.
 :::
 
 This is called "pulling back" because in the subobject picture this corresponds to a categorical pullback operation. Sometimes this is also called the **preimage**.
@@ -159,7 +159,7 @@ $$(f^\ast(\chi))(x) = \chi(f(x)) = [x \geq x^2] = [0 \leq x \leq 1]$$
 :::{#exm-pullback-surj}
 Consider the function $f \colon \mathbb{R}^3 \to \mathbb{R}^2$ defined by $f(x,y,z) = (x,z)$. Then pulling back $\chi$ from @exm-equations gives us the subset
 
-$$(f^\ast(\chi))(x,y,z) = [x \geq z^2]$$
+$$(f^\ast(\chi))(x,y,z) = [z \geq x^2]$$
 
 Note that this subset does not depend on $y$, because changing the value of $y$ doesn't affect the value of $f(x,y,z)$.
 :::
