@@ -1,4 +1,4 @@
-# Lecture 10: Applied Colimits {.unnumbered}
+# Lecture 15: Applied Colimits {.unnumbered}
 
 {{< include _preamble.qmd >}}
 
