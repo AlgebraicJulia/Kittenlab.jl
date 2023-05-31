@@ -1,10 +1,12 @@
-# Lecture 15: Applied Colimits {.unnumbered}
+# Lecture 15: Cospans {.unnumbered}
 
 {{< include _preamble.qmd >}}
 
-Our goal for the next couple lectures is to learn how to compose *open graphs*.
+In the previous lecture, we learned about the category of relations, and we thought about subsets as a way of modeling the semantics of a system; a system consists of a universum and a behavior set. We are now going to start to think about syntax for systems.
 
-:::{.rmenv title="Definition"}
+Our goal for the next couple lectures is to learn how to compose *open graphs*. Along the way, we will end up learning category theory tools for doing a variety of other things, but open graphs are the end goal.
+
+:::{#def-open-graph}
 An **open graph** is a graph $G$ along with an input set $I$ and an output set $O$ and maps $i \colon I \to G(V)$, $o \colon O \to G(V)$.
 :::
 
@@ -14,7 +16,16 @@ We want to make a category where the objects are finite sets and the morphisms a
 
 We are going to build up the technology for this category in parts. The first step is defining what a *cospan category* is. The second step is going to generalize this.
 
-:::{.rmenv title="Definition"}
+One way of a thinking about a relation $R \subset X \times Y$ is that it is a *span*
+
+```tikzcd
+& R \ar[dl] \ar[dr] \\
+X && Y
+```
+
+There is a general principle that "syntax and semantics are dual", which we won't go into too far today, but it shows up in the fact that we are going to think about *cospans* today, as given in the next definition.
+
+:::{#def-cospan}
 A **cospan** in a category $\C$ from an object $X \in \C$ to an object $Y \in \C$ is a diagram of the form
 ```tikzcd
 & A \\
@@ -22,7 +33,20 @@ X \ar[ur, "f"] && Y \ar[ul, "g"']
 ```
 :::
 
-:::{.rmenv title="Definition"}
+::: {#fig-uwd-cospan layout-ncol=2 layout-valign="bottom"}
+
+![Cospan style](uwd_fincospan_equiv.svg){width=500px}
+
+![Undirected wiring diagram style](uwd.svg){width=500px}
+
+Two styles of drawing an undirected wiring diagram
+:::
+
+:::{#exm-fincospan}
+We can visualize a cospan in $\mathsf{FinSet}$ in two different ways, as shown in @fig-uwd-cospan.
+:::
+
+:::{#def-cospan-category}
 Let $\C$ be a category that has pushouts. Then define the category $\Csp(\C)$ in the following way. The objects of $\Csp(\C)$ are the objects of $\C$, and a morphism from $X$ to $Y$ is a cospan from $X$ to $Y$. Composition of two cospans
 
 ```tikzcd
@@ -67,7 +91,7 @@ We have to redefine $\Csp(\C)$. There are two ways of doing this. One is that we
 
 The second way is to make a morphism from $X$ to $Y$ be an *equivalence class* of cospans.
 
-:::{.rmenv title="Definition"}
+:::{#def-cospan-equivalent}
 The two cospans
 
 ```tikzcd
@@ -95,7 +119,7 @@ commutes.
 
 We then redefine $\Csp(\C)$.
 
-:::{.rmenv title="Definition"}
+:::{#def-cospan-category-for-real}
 The category $\Csp(\C)$ has as objects, objects of $\C$, and as morphisms *equivalence classes* of cospans.
 
 Given two morphisms $E_{1} \colon X \to Y$ and $E_{2} \colon Y \to Z$, we compose them by picking a cospan from $E_{1}$, a cospan from $E_{2}$, taking their pushout, and then taking the equivalence class of all morphisms equivalent to that pushout.
@@ -103,7 +127,7 @@ Given two morphisms $E_{1} \colon X \to Y$ and $E_{2} \colon Y \to Z$, we compos
 
 There's something very important that we have to check for this to work: we have to check that composing equivalent cospans give equivalent results! Proving this will enable us to flex some of our theoretical muscles for pushouts.
 
-:::{.rmenv title="Proposition"}
+:::{#def-welldefinedness}
 Suppose that we have the following commuting diagram:
 
 ```tikzcd
@@ -185,7 +209,7 @@ F(\bullet_1) \ar[ur, "\alpha_{\bullet_1}"] && F(\bullet_2) \ar[ul, "\alpha_{\bul
 
 Now, I claim that if we can show that $F$ and $F'$ are naturally isomorphic functors, then the pushout of $F$ and the pushout of $F'$ will be isomorphic as well.
 
-This is because if $F \cong F'$, then $\Hom_{C^{\mathsf{D}}}(F, \Delta-) \cong \Hom_{C^{\mathsf{D}}}(F', \Delta-)$, and representing objects of isomorphic functors are isomorphic. I'm not sure if we've proved that explicitly by now; it's a consequence of the Yoneda lemma, but it should be intuitive!
+This is because if $F \cong F'$, then $\Hom_{C^{\mathsf{D}}}(F, \Delta-) \cong \Hom_{C^{\mathsf{D}}}(F', \Delta-)$, and representing objects of isomorphic functors are isomorphic (that's Yoneda, baby!).
 
 To show that $F$ and $F'$ are naturally isomorphic, we must construct a natural isomorphism. This consists of an isomorphism $F(x) \cong F'(x)$ for each $x \in \mathsf{D}$, chosen to satisfy the naturality condition. But we are given exactly what we need by our assumption! Namely, we make the following natural isomorphism:
 
