@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Kittenlab lecture notes - Lecture 12: That’s Yoneda, Babe</title>
+<title>Kittenlab lecture notes - Lecture 15: Cospans</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -64,8 +30,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./lecture13.html" rel="next">
-<link href="./lecture11.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./lecture14.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -125,7 +91,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lecture12.html">Lecture 12: That’s Yoneda, Babe</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lecture15.html">Lecture 15: Cospans</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -224,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture12.html" class="sidebar-item-text sidebar-link active">
+  <a href="./lecture12.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lecture 12: That’s Yoneda, Babe</span></a>
   </div>
 </li>
@@ -242,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lecture15.html" class="sidebar-item-text sidebar-link">
+  <a href="./lecture15.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Lecture 15: Cospans</span></a>
   </div>
 </li>
@@ -265,7 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lecture 12: That’s Yoneda, Babe</h1>
+<h1 class="title">Lecture 15: Cospans</h1>
 </div>
 
 
@@ -286,90 +252,154 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Math: graphs -->
 <p>$$</p>
 </div>
-<p>Ever since we learned about natural transformations, I’ve been saying that I’m going to talk about the Yoneda lemma. And finally now we are going to do it.</p>
-<p>What is the Yoneda lemma? I think of the Yoneda lemma as a “vibe check” for category theory. We say all the time that in category theory “all that matters” is the morphisms out of or into an object; the Yoneda lemma formalizes this.</p>
-<p>The Yoneda lemma also underscores the usefulness of representable functors.</p>
-<p>We start to understand the Yoneda lemma via the following seemingly trivial statement:</p>
-<div class="rmenv" title="Proposition">
-<p>For any set <span class="math inline">A</span>, there is an isomorphism between elements <span class="math inline">a \in A</span> and functions <span class="math inline">f \colon 1 \to A</span>. We can write this as</p>
-<p><span class="math display"> A \cong \operatorname{Hom}_{\mathsf{Set}}(1, A) </span></p>
+<p>In the previous lecture, we learned about the category of relations, and we thought about subsets as a way of modeling the semantics of a system; a system consists of a universum and a behavior set. We are now going to start to think about syntax for systems.</p>
+<p>Our goal for the next couple lectures is to learn how to compose <em>open graphs</em>. Along the way, we will end up learning category theory tools for doing a variety of other things, but open graphs are the end goal.</p>
+<div id="def-open-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 </strong></span>An <strong>open graph</strong> is a graph <span class="math inline">G</span> along with an input set <span class="math inline">I</span> and an output set <span class="math inline">O</span> and maps <span class="math inline">i \colon I \to G(V)</span>, <span class="math inline">o \colon O \to G(V)</span>.</p>
 </div>
-<p>If we think about <span class="math inline">\mathsf{Set}</span> in Julia, a function <span class="math inline">1 \to A</span> is a single-element vector, with that single element being an element of <span class="math inline">A</span>. The isomorphism is then</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(a<span class="op">::</span><span class="dt">A</span>) <span class="op">=</span> [a]</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f_inverse</span>(v<span class="op">::</span><span class="dt">Vector{A}</span>) <span class="op">=</span> v[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This is even more obvious if you write it as the algebra 1 equality <span class="math inline">A^{1} \cong A</span>.</p>
-<p>The Yoneda lemma extends this triviality beyond sets to <span class="math inline">\mathsf{C}</span>-sets.</p>
-<p>We can start to get an intuition for the Yoneda lemma by looking at graphs. Given a graph <span class="math inline">G \colon \mathsf{Gr}\to \mathsf{Set}</span>, we can get the set of vertices of that graph by applying <span class="math inline">G</span> to <span class="math inline">V \in \mathsf{Gr}</span> to get <span class="math inline">G(V) \in \mathsf{Set}</span>. However, we can also get the set of vertices by looking at all of the morphisms into <span class="math inline">G</span> from the single-vertex graph <span class="math inline">y_{V}</span> (recall that the single-vertex graph is the representable on <span class="math inline">V</span>).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="picking_out_a_single_vertex.svg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Picking out a single vertex with a morphism</figcaption>
+<p><img src="open_graph.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">An Open Graph</figcaption>
 </figure>
 </div>
-<p>It is not hard to see that there is a bijection between:</p>
-<ul>
-<li>the set of morphisms from <span class="math inline">y_{V}</span> to <span class="math inline">G</span></li>
-<li><span class="math inline">G(V)</span></li>
-</ul>
-<p>for the same reason that for any set there is a bijection between functions <span class="math inline">1 \to A</span> and elements of <span class="math inline">A</span>. Namely, given a morphism <span class="math inline">\alpha \colon y_{V} \to G</span>, we get an element <span class="math inline">y_{V}(\operatorname{id}_V) \in G(V)</span>. And given an element <span class="math inline">v \in G(V)</span>, there is a morphism <span class="math inline">v^\ast \colon y_V \to G</span> given by <span class="math inline">\operatorname{id}_V \mapsto v</span>.</p>
-<p>We write this consisely as</p>
-<p><span class="math display"> G(V) \cong \operatorname{Hom}_{\mathsf{Set}^\mathsf{Gr}}(y_{V}, G) </span></p>
-<p>We can do the exact same thing for edges! The edges of <span class="math inline">G</span> are in bijection with morphisms out of <span class="math inline">y_{E}</span>, where <span class="math inline">y_{E}</span> is the graph with a single edge and two vertices.</p>
+<p>We want to make a category where the objects are finite sets and the morphisms are open graphs between the finite sets.</p>
+<p>We are going to build up the technology for this category in parts. The first step is defining what a <em>cospan category</em> is. The second step is going to generalize this.</p>
+<p>One way of a thinking about a relation <span class="math inline">R \subset X \times Y</span> is that it is a <em>span</em></p>
+<div class="tikzcd">
+<img src="tikz/2d8eb8a8355324605e3630c3c44d5e8ae5c8ad82.svg" class="img-fluid">
+</div>
+<p>There is a general principle that “syntax and semantics are dual”, which we won’t go into too far today, but it shows up in the fact that we are going to think about <em>cospans</em> today, as given in the next definition.</p>
+<div id="def-cospan" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2 </strong></span>A <strong>cospan</strong> in a category <span class="math inline">\mathsf{C}</span> from an object <span class="math inline">X \in \mathsf{C}</span> to an object <span class="math inline">Y \in \mathsf{C}</span> is a diagram of the form</p>
+<div class="tikzcd">
+<img src="tikz/0ed268054fb1727ca788d701d87a2e6a2ae94ca8.svg" class="img-fluid">
+</div>
+</div>
+<div id="fig-uwd-cospan" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-bottom">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="picking_out_a_single_edge.svg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Picking out a single edge with a morphism</figcaption>
+<p><img src="uwd_fincospan_equiv.svg" class="img-fluid figure-img" width="500"></p>
+<figcaption class="figure-caption">Cospan style</figcaption>
 </figure>
 </div>
-<p>Given an element <span class="math inline">e \in G(E)</span>, there is a unique morphism <span class="math inline">e^{\ast} \colon y_{E} \to G</span> given by</p>
-<p><span class="math display"> \operatorname{id}_E \mapsto e </span> <span class="math display"> \operatorname{src}\mapsto G(\operatorname{src})(e) </span> <span class="math display"> \operatorname{tgt}\mapsto G(\operatorname{tgt})(e) </span></p>
-<p>Moreover, given any morphism <span class="math inline">\alpha \colon y_{E} \to G</span>, there is an element of <span class="math inline">\alpha_{E}(\operatorname{id}_{E}) \in G(E)</span>.</p>
-<p>We write this as</p>
-<p><span class="math display"> G(E) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{Gr}}}(y_{E}, G) </span></p>
-<p>Note that this crucially depends on the <em>naturality</em> of the morphism <span class="math inline">f \colon y_{E} \to G</span>. If we had an unnatural morphism, then we wouldn’t necessarily have commutation of the square</p>
-<div class="tikzcd">
-<img src="tikz/74e1a3fae35a332def418058842caa0b129834a0.svg" class="img-fluid">
 </div>
-<p>so the vertices in <span class="math inline">G</span> that the endpoints of <span class="math inline">\operatorname{id}_{E}</span> are sent to would not be determined by where <span class="math inline">\operatorname{id}_{E}</span> was sent.</p>
-<p>Now that we’ve seen two instances of this pattern, you can probably guess what it looks like in general.</p>
-<div class="rmenv" title="Lemma">
-<p>(Yoneda). Given a category <span class="math inline">\mathsf{C}</span> and a functor <span class="math inline">F \colon \mathsf{C}\to \mathsf{Set}</span>, for every object <span class="math inline">X \in \mathsf{C}</span> there is an isomorphism</p>
-<p><span class="math display"> F(X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, F) </span></p>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="uwd.svg" class="img-fluid figure-img" width="500"></p>
+<figcaption class="figure-caption">Undirected wiring diagram style</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Two styles of drawing an undirected wiring diagram</figcaption><p></p>
+</figure>
+</div>
+<div id="exm-fincospan" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1 </strong></span>We can visualize a cospan in <span class="math inline">\mathsf{FinSet}</span> in two different ways, as shown in <a href="#fig-uwd-cospan">Figure&nbsp;<span>1</span></a>.</p>
+</div>
+<div id="def-cospan-category" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3 </strong></span>Let <span class="math inline">\mathsf{C}</span> be a category that has pushouts. Then define the category <span class="math inline">\operatorname{Csp}(\mathsf{C})</span> in the following way. The objects of <span class="math inline">\operatorname{Csp}(\mathsf{C})</span> are the objects of <span class="math inline">\mathsf{C}</span>, and a morphism from <span class="math inline">X</span> to <span class="math inline">Y</span> is a cospan from <span class="math inline">X</span> to <span class="math inline">Y</span>. Composition of two cospans</p>
+<div class="tikzcd">
+<img src="tikz/58848ad6d113a6f01d790fbe3e5e05f443c64e9b.svg" class="img-fluid">
+</div>
+<p>is given by the pushout</p>
+<div class="tikzcd">
+<img src="tikz/fe644e5ad62ced8abb8f944260cd70e4560aa2b0.svg" class="img-fluid">
+</div>
+</div>
+<p>What is the identity in this category? I claim that the identity on <span class="math inline">X</span> is</p>
+<div class="tikzcd">
+<img src="tikz/0ec64dcf679d03d054ce45da8efa771f3555dbfe.svg" class="img-fluid">
+</div>
+<p>Let’s prove that this is the case. Suppose that we have another cospan</p>
+<div class="tikzcd">
+<img src="tikz/0ed268054fb1727ca788d701d87a2e6a2ae94ca8.svg" class="img-fluid">
+</div>
+<p>Then their composition is</p>
+<div class="tikzcd">
+<img src="tikz/7aa39fe46c2a270908fadce79104715e52f1a40f.svg" class="img-fluid">
+</div>
+<p>I want to show that <span class="math inline">A = X +_{X} A</span>, and that the two upper morphisms are <span class="math inline">f</span> and <span class="math inline">1_A</span> respectively.</p>
+<p>Immediately here, alarm bells should be going off in your head. Showing that two objects in a category are equal is almost always the wrong thing to do! Instead, one should show that two objects are <em>isomorphic</em>. But in this case, these “objects” are serving the purpose of morphisms, and morphisms need to be equal “on the nose”! So what do we do?</p>
+<p>We have to redefine <span class="math inline">\operatorname{Csp}(\mathsf{C})</span>. There are two ways of doing this. One is that we can consider a notion of morphism between morphism, which gets us into bicategories. But we choose to not walk that route today.</p>
+<p>The second way is to make a morphism from <span class="math inline">X</span> to <span class="math inline">Y</span> be an <em>equivalence class</em> of cospans.</p>
+<div id="def-cospan-equivalent" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4 </strong></span>The two cospans</p>
+<div class="tikzcd">
+<img src="tikz/0ed268054fb1727ca788d701d87a2e6a2ae94ca8.svg" class="img-fluid">
+</div>
+<p>and</p>
+<div class="tikzcd">
+<img src="tikz/ed5d5a885b232d2e5d20dcee55d27d8c0c73d8a1.svg" class="img-fluid">
+</div>
+<p>are <strong>equivalent</strong> when there exists an isomorphism <span class="math inline">\phi \colon A \to A'</span> such that</p>
+<div class="tikzcd">
+<img src="tikz/53aa431823c67ac3e7c6b617fc03abe5d2f1b835.svg" class="img-fluid">
+</div>
+<p>commutes.</p>
+</div>
+<p>We then redefine <span class="math inline">\operatorname{Csp}(\mathsf{C})</span>.</p>
+<div id="def-cospan-category-for-real" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5 </strong></span>The category <span class="math inline">\operatorname{Csp}(\mathsf{C})</span> has as objects, objects of <span class="math inline">\mathsf{C}</span>, and as morphisms <em>equivalence classes</em> of cospans.</p>
+<p>Given two morphisms <span class="math inline">E_{1} \colon X \to Y</span> and <span class="math inline">E_{2} \colon Y \to Z</span>, we compose them by picking a cospan from <span class="math inline">E_{1}</span>, a cospan from <span class="math inline">E_{2}</span>, taking their pushout, and then taking the equivalence class of all morphisms equivalent to that pushout.</p>
+</div>
+<p>There’s something very important that we have to check for this to work: we have to check that composing equivalent cospans give equivalent results! Proving this will enable us to flex some of our theoretical muscles for pushouts.</p>
+<div id="def-welldefinedness" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 6 </strong></span>Suppose that we have the following commuting diagram:</p>
+<div class="tikzcd">
+<img src="tikz/fd216c5ab47e30a8caee9955da0b038f4ffd9d31.svg" class="img-fluid">
+</div>
+<p>where <span class="math inline">\phi</span> and <span class="math inline">\psi</span> are isomorphisms. Then there is an isomorphism <span class="math inline">\phi +_Y \psi \colon A +_Y B \to A' +_Y B'</span> such that the diagram</p>
+<div class="tikzcd">
+<img src="tikz/a9e45ca4e32ac2b6c973499269f50646341a494c.svg" class="img-fluid">
+</div>
+<p>commutes.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>We will give a map in each direction, then show they are inverse.</p>
-<p>Starting from <span class="math inline">x \in F(X)</span>, we construct <span class="math inline">x^{\ast} \colon y_{X} \to F</span> by the mapping</p>
-<p><span class="math display"> f \in y_{X}(Y) = \operatorname{Hom}_{\mathsf{C}}(X,Y) \mapsto F(f)(x) </span></p>
-<p>In the other direction, starting from <span class="math inline">\alpha \colon y_{X} \to F</span>, we get <span class="math inline">\alpha_{X}(\operatorname{id}_{X}) \in F(X)</span>.</p>
-<p>Now, given <span class="math inline">x \in F(X)</span>,</p>
-<p><span class="math display"> x^{\ast}_{X}(\operatorname{id}_X) = F(\operatorname{id}_X)(x) = x </span></p>
-<p>There is one more thing to show. Starting with <span class="math inline">\alpha \colon y_{X} \to F</span>, consider the naturality square for <span class="math inline">f \in y_{X}(Y)</span>.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>This is our first big serious proof in category theory, so before we get started, let’s just make sure we understand where we are and where we’re going.</p>
+<p>The diagrams above look big and scary, but when we chunk them, they aren’t so bad. We have two pairs of equivalent cospans: two equivalent cospans between <span class="math inline">X</span> and <span class="math inline">Y</span>, and two equivalent cospans between <span class="math inline">Y</span> and <span class="math inline">Z</span>. Then we’ve composed each one, to get the top and bottom of the diagram, and finally the curved arrow is an isomorphism between the composed cospans.</p>
+<p>Often in proofs like this, it is hard to know where to start. One good thing to do is to go back to definitions.</p>
+<p>Let <span class="math inline">\mathsf{D}</span> be the category that looks like this</p>
 <div class="tikzcd">
-<img src="tikz/007b9e068cbf54dfbf15866af681f133a96fa846.svg" class="img-fluid">
+<img src="tikz/af641fa3823b822163367502216861d27670a463.svg" class="img-fluid">
 </div>
-<p>Let’s follow the path of <span class="math inline">\operatorname{id}_{X} \in y_{X}(X)</span>. Following the lower path, we get</p>
-<p><span class="math display"> (\alpha_{Y} \circ y_{X}(f))(\operatorname{id}_{X}) = \alpha_{Y}(y_{X}(f)(\operatorname{id}_{X})) = \alpha_{Y}(\operatorname{id}_{X} \circ f) = \alpha_{Y}(f) </span></p>
-<p>Following the upper path, we get</p>
-<p><span class="math display"> (F(f) \circ \alpha_X)(\operatorname{id}_X) = F(f)(\alpha_X(\operatorname{id}_X)) </span></p>
-<p>Therefore,</p>
-<p><span class="math display"> \alpha_Y(f) = F(f)(\alpha_X(\operatorname{id}_X)) </span></p>
-<p>This says precisely that where <span class="math inline">f</span> goes is wholly determined by where <span class="math inline">\operatorname{id}_{X}</span> goes, just like where <span class="math inline">\operatorname{src}</span> and <span class="math inline">\operatorname{tgt}</span> went was wholly determined by where <span class="math inline">\operatorname{id}_{E}</span> went! And more specifically,</p>
-<p><span class="math display">(\alpha_{X}(\operatorname{id}_{X}))^{\ast} = \alpha</span></p>
-<p>Thus, we have our desired bijection</p>
-<p><span class="math display"> F(X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, F) </span></p>
+<p>Let <span class="math inline">F, F'</span> be functors from <span class="math inline">\mathsf{D}</span> into <span class="math inline">\mathsf{C}</span> that send</p>
+<div class="tikzcd">
+<img src="tikz/63fb5fd59e05fbbe20abeca3290c0cd360c6964d.svg" class="img-fluid">
 </div>
-<p>The feeling that this seems like total abstract nonsense is a valid feeling at this point. It’s very much a tautology in the same way that <span class="math inline">A \cong A^{1}</span> is, except it’s confusing because there’s more stuff going on (incidentally, can you now see how <span class="math inline">A \cong A^{1}</span> is a corollary of the Yoneda lemma?)</p>
-<p>But this actually turns out to be an extremely useful device. One application is something that I’ve been using a lot; the fact that <span class="math inline">y_{X} \cong y_{Y}</span> if and only if <span class="math inline">X \cong Y</span>. In fact, we can show something stronger.</p>
-<div class="rmenv" title="Corollary">
-<p>Given <span class="math inline">X,Y \in \mathsf{C}</span>, there is a bijection <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(Y,X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, y_{Y})</span>.</p>
+<p>to</p>
+<div class="tikzcd">
+<img src="tikz/67442965d4b4d6263ec83dc19ed78db133822e2f.svg" class="img-fluid">
 </div>
-<p>With the Yoneda lemma, this is a very fast proof!</p>
-<div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span><span class="math display"> \operatorname{Hom}_{\mathsf{C}}(X,Y) \cong y_{X}(Y) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{Y}, y_{X}) </span></p>
+<p>and</p>
+<div class="tikzcd">
+<img src="tikz/9ddd0bbb3b35b801ec9c7de1dc745af93bb84492.svg" class="img-fluid">
 </div>
-<p>As an application of this, <span class="math inline">\operatorname{Hom}_{\mathsf{Gr}}(E,V) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{Gr}}}(y_{V}, y_{E})</span>. You can see this because there are two morphisms <span class="math inline">E \to V</span>, and then two morphisms from <span class="math inline">y_{V}</span> to <span class="math inline">y_{E}</span>.</p>
-<p>The point is that any isomorphism in <span class="math inline">\operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{Y}, y_{X})</span> must also show up as an isomorphism in <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(X,Y)</span>.</p>
-<p>To state this more formally, we can talk about <span class="math inline">y</span> as a <em>functor</em> from <span class="math inline">\mathsf{C}</span> to <span class="math inline">\mathsf{Set}^{\mathsf{C}}</span>. However, because of the flipping around of <span class="math inline">\operatorname{Hom}_{\mathsf{C}}(Y,X) \cong \operatorname{Hom}_{\mathsf{Set}^{\mathsf{C}}}(y_{X}, y_{Y})</span>, this actually should be a <em>contravariant functor</em>, and we haven’t gotten to discussing duality yet. So we will leave off here for now!</p>
+<p>respectively.</p>
+<p>Then recall that the <em>pushout</em> of the diagram <span class="math inline">F</span> is a representing object for the functor</p>
+<p><span class="math inline">X \mapsto \operatorname{Hom}_{\mathsf{C}^{\mathsf{D}}}(F, \Delta X)</span></p>
+<p>which sends an object <span class="math inline">X</span> to the set of natural transformations from <span class="math inline">F</span> to the constant functor at <span class="math inline">X</span>, i.e.&nbsp;commuting diagrams</p>
+<div class="tikzcd">
+<img src="tikz/14a8bd3e342a22391c611167cfb7ecd87dacb2aa.svg" class="img-fluid">
+</div>
+<p>which are the same as commuting squares</p>
+<div class="tikzcd">
+<img src="tikz/e2401e0c1d95ef90f6cd4417b6d29ded8197967a.svg" class="img-fluid">
+</div>
+<p>Now, I claim that if we can show that <span class="math inline">F</span> and <span class="math inline">F'</span> are naturally isomorphic functors, then the pushout of <span class="math inline">F</span> and the pushout of <span class="math inline">F'</span> will be isomorphic as well.</p>
+<p>This is because if <span class="math inline">F \cong F'</span>, then <span class="math inline">\operatorname{Hom}_{C^{\mathsf{D}}}(F, \Delta-) \cong \operatorname{Hom}_{C^{\mathsf{D}}}(F', \Delta-)</span>, and representing objects of isomorphic functors are isomorphic (that’s Yoneda, baby!).</p>
+<p>To show that <span class="math inline">F</span> and <span class="math inline">F'</span> are naturally isomorphic, we must construct a natural isomorphism. This consists of an isomorphism <span class="math inline">F(x) \cong F'(x)</span> for each <span class="math inline">x \in \mathsf{D}</span>, chosen to satisfy the naturality condition. But we are given exactly what we need by our assumption! Namely, we make the following natural isomorphism:</p>
+<div class="tikzcd">
+<img src="tikz/cb90d7720c691aeddf9b58541e759a88960016c9.svg" class="img-fluid">
+</div>
+<p>Now, through what some might call “abstract nonsense”, we have summoned an isomorphism from <span class="math inline">A +_{Y} B</span> to <span class="math inline">A' +_{Y} B'</span>: we will call this isomorphism <span class="math inline">\phi +_{Y} \psi</span>.</p>
+<p>This is not enough though: we still have to show that the whole diagram commutes! Unfortunately, I can’t think of a slick way to do this quickly, so instead I will summarize the strategy. Basically, you have to trace through the proof that isomorphic functors give isomorphic representing objects, and you will see that the construction of the isomorphism shows that this should commute.</p>
+</div>
 
 
 
@@ -609,13 +639,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./lecture11.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 11: Adding and squishing</span>
+      <a href="./lecture14.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 14: Relations</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./lecture13.html" class="pagination-link">
-        <span class="nav-page-text">Lecture 13: Products and typed products</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
